@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Godot generated data
+.godot/
+.import/
+
+# Godot export files and local presets
+export.cfg
+export_presets.cfg
+exports/
+export/
+builds/
+build/
+
+# Godot Android export workspace
+android/
+
+# Godot C# generated data
+.mono/
+bin/
+obj/
+
+# Local editor folders
+.vscode/
+.idea/
