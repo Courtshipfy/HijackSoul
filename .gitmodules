@@ -1,0 +1,4 @@
+[submodule "third_party/NarrRail-Godot-Plugin"]
+	path = third_party/NarrRail-Godot-Plugin
+	url = https://github.com/Courtshipfy/NarrRail-Godot-Plugin.git
+	branch = main
