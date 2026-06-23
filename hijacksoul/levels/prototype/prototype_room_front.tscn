@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://dqnxgig1rpyx8"]
+
+[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
+[ext_resource type="Script" uid="uid://bk34yd4otcbsn" path="res://modules/interaction/interactive_object.gd" id="2_interactive_object"]
+[ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 24
+font_color = Color(0.92, 0.9, 0.82, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font_color = Color(0.8, 0.78, 0.7, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_object"]
+size = Vector2(160, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(96, 240)
+
+[node name="PrototypeRoomFront" type="Node2D" unique_id=1989307710]
+script = ExtResource("1_room_view")
+view_id = "prototype.room_front"
+scene_path = "res://levels/prototype/prototype_room_front.tscn"
+
+[node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=811022756]
+layer = -10
+
+[node name="Background" type="ColorRect" parent="ScreenLayer" unique_id=1298015267]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.13, 0.12, 0.105, 1)
+
+[node name="Title" type="Label" parent="ScreenLayer" unique_id=1997460547]
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 520.0
+offset_bottom = 76.0
+text = "Prototype Room"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="Hint" type="Label" parent="ScreenLayer" unique_id=17650644]
+offset_left = 48.0
+offset_top = 78.0
+offset_right = 720.0
+offset_bottom = 108.0
+text = "Click the test object to run the first interaction chain."
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="ObjectLayer" type="Node2D" parent="." unique_id=1398628971]
+
+[node name="TestObject" type="Area2D" parent="ObjectLayer" unique_id=923442592]
+position = Vector2(640, 360)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_front.test_object"
+display_name = "Test Object"
+hover_text = "Test Object"
+default_actions = Array[Dictionary]([{
+"flag_id": "prototype_clicked",
+"type": "set_flag",
+"value": true
+}, {
+"item_id": "prototype_token",
+"type": "pickup_item"
+}, {
+"message": "Obtained prototype_token",
+"type": "show_toast"
+}])
+
+[node name="Block" type="Polygon2D" parent="ObjectLayer/TestObject" unique_id=149341250]
+color = Color(0.62, 0.49, 0.28, 1)
+polygon = PackedVector2Array(-80, -60, 80, -60, 80, 60, -80, 60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TestObject" unique_id=104593777]
+shape = SubResource("RectangleShape2D_object")
+
+[node name="ExitToLeftView" type="Area2D" parent="ObjectLayer" unique_id=1717655515]
+position = Vector2(1178, 360)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_front.exit_left_view"
+display_name = "Left View"
+hover_text = "Look left"
+default_actions = Array[Dictionary]([{
+"scene_path": "res://levels/prototype/prototype_room_left.tscn",
+"type": "change_view",
+"view_id": "prototype.room_left"
+}])
+
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/ExitToLeftView" unique_id=1320242636]
+color = Color(0.25, 0.43, 0.58, 0.82)
+polygon = PackedVector2Array(-48, -120, 48, -80, 48, 80, -48, 120)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToLeftView" unique_id=988292392]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=1330575709]
+script = ExtResource("3_debug_hud")
+
+[node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=667272440]
+unique_name_in_owner = true
+offset_left = 48.0
+offset_top = 600.0
+offset_right = 820.0
+offset_bottom = 690.0
+text = "debug state"
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="ToastLabel" type="Label" parent="PrototypeDebugHud" unique_id=541488197]
+unique_name_in_owner = true
+offset_left = 880.0
+offset_top = 624.0
+offset_right = 1220.0
+offset_bottom = 672.0
+text = "toast"
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 2
+
+[node name="TooltipLabel" type="Label" parent="PrototypeDebugHud" unique_id=612831301]
+unique_name_in_owner = true
+offset_left = 520.0
+offset_top = 640.0
+offset_right = 760.0
+offset_bottom = 674.0
+text = "tooltip"
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 1

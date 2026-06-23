@@ -1,0 +1,129 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
+[ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="2_interactive_object"]
+[ext_resource type="Script" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 24
+font_color = Color(0.92, 0.9, 0.82, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font_size = 16
+font_color = Color(0.8, 0.78, 0.7, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(96, 240)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_note"]
+size = Vector2(180, 100)
+
+[node name="PrototypeRoomLeft" type="Node2D"]
+script = ExtResource("1_room_view")
+view_id = "prototype.room_left"
+scene_path = "res://levels/prototype/prototype_room_left.tscn"
+
+[node name="ScreenLayer" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="Background" type="ColorRect" parent="ScreenLayer"]
+mouse_filter = 2
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.09, 0.12, 0.14, 1)
+
+[node name="Title" type="Label" parent="ScreenLayer"]
+mouse_filter = 2
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 520.0
+offset_bottom = 76.0
+text = "Prototype Room - Left View"
+label_settings = SubResource("LabelSettings_title")
+
+[node name="Hint" type="Label" parent="ScreenLayer"]
+mouse_filter = 2
+offset_left = 48.0
+offset_top = 78.0
+offset_right = 760.0
+offset_bottom = 108.0
+text = "Hover and click the left edge to return."
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="ObjectLayer" type="Node2D" parent="."]
+
+[node name="ExitToFrontView" type="Area2D" parent="ObjectLayer"]
+position = Vector2(102, 360)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_left.exit_front_view"
+display_name = "Front View"
+hover_text = "Look forward"
+default_actions = Array[Dictionary]([{
+"scene_path": "res://levels/prototype/prototype_room_front.tscn",
+"type": "change_view",
+"view_id": "prototype.room_front"
+}])
+
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/ExitToFrontView"]
+color = Color(0.25, 0.43, 0.58, 0.82)
+polygon = PackedVector2Array(48, -120, -48, -80, -48, 80, 48, 120)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToFrontView"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="WallNote" type="Area2D" parent="ObjectLayer"]
+position = Vector2(640, 350)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_left.wall_note"
+display_name = "Wall Note"
+hover_text = "Read note"
+default_actions = Array[Dictionary]([{
+"type": "set_flag",
+"flag_id": "prototype_note_read",
+"value": true
+}, {
+"type": "show_toast",
+"message": "Read wall note"
+}])
+
+[node name="NoteBlock" type="Polygon2D" parent="ObjectLayer/WallNote"]
+color = Color(0.68, 0.67, 0.52, 1)
+polygon = PackedVector2Array(-90, -50, 90, -50, 90, 50, -90, 50)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/WallNote"]
+shape = SubResource("RectangleShape2D_note")
+
+[node name="PrototypeDebugHud" type="CanvasLayer" parent="."]
+script = ExtResource("3_debug_hud")
+
+[node name="StateLabel" type="Label" parent="PrototypeDebugHud"]
+unique_name_in_owner = true
+offset_left = 48.0
+offset_top = 600.0
+offset_right = 820.0
+offset_bottom = 690.0
+mouse_filter = 2
+text = "debug state"
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="ToastLabel" type="Label" parent="PrototypeDebugHud"]
+unique_name_in_owner = true
+offset_left = 880.0
+offset_top = 624.0
+offset_right = 1220.0
+offset_bottom = 672.0
+mouse_filter = 2
+text = "toast"
+horizontal_alignment = 2
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="TooltipLabel" type="Label" parent="PrototypeDebugHud"]
+unique_name_in_owner = true
+offset_left = 520.0
+offset_top = 640.0
+offset_right = 760.0
+offset_bottom = 674.0
+mouse_filter = 2
+text = "tooltip"
+horizontal_alignment = 1
+label_settings = SubResource("LabelSettings_hint")

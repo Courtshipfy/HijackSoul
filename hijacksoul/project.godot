@@ -11,11 +11,19 @@ config_version=5
 [application]
 
 config/name="hijacksoul"
+run/main_scene="res://levels/prototype/prototype_room_front.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
+EventBus="*res://autoload/event_bus.gd"
+GameState="*res://autoload/game_state.gd"
+SaveManager="*res://autoload/save_manager.gd"
+SceneFlowManager="*res://autoload/scene_flow_manager.gd"
+InventoryManager="*res://autoload/inventory_manager.gd"
+ActionRunner="*res://modules/interaction/action_runner.gd"
+InteractionManager="*res://modules/interaction/interaction_manager.gd"
 SceneManager="*uid://j20v4cg7v8m1"
 
 [editor_plugins]
