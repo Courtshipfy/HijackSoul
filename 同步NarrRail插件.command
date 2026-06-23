@@ -67,6 +67,31 @@ if [[ $sync_status -ne 0 ]]; then
 fi
 
 echo
+echo "Normalizing plugin text files to LF line endings..."
+find "$PLUGIN_TARGET" -type f \( \
+  -name "*.gd" -o \
+  -name "*.uid" -o \
+  -name "*.cfg" -o \
+  -name "*.import" -o \
+  -name "*.tres" -o \
+  -name "*.tscn" -o \
+  -name "*.json" -o \
+  -name "*.md" -o \
+  -name "*.txt" -o \
+  -name "*.yaml" -o \
+  -name "*.yml" \
+\) -exec perl -0pi -e 's/\r\n/\n/g' {} +
+normalize_status=$?
+
+if [[ $normalize_status -ne 0 ]]; then
+  echo
+  echo "Failed to normalize plugin line endings."
+  echo
+  read "reply?鎸夊洖杞﹂敭鍏抽棴绐楀彛..."
+  exit $normalize_status
+fi
+
+echo
 echo "NarrRail 插件同步完成。当前 submodule 提交:"
 git -C "$SUBMODULE_PATH" --no-pager log -1 --oneline
 echo

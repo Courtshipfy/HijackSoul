@@ -54,6 +54,17 @@ if %ROBOCOPY_STATUS% GEQ 8 (
 )
 
 echo.
+echo Normalizing plugin text files to LF line endings...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$extensions = '.gd','.uid','.cfg','.import','.tres','.tscn','.json','.md','.txt','.yaml','.yml'; $crlf = [string][char]13 + [string][char]10; $lf = [string][char]10; Get-ChildItem -LiteralPath '%PLUGIN_TARGET%' -Recurse -File | Where-Object { $extensions -contains $_.Extension.ToLowerInvariant() } | ForEach-Object { $text = [IO.File]::ReadAllText($_.FullName); if ($text.Contains($crlf)) { $text = $text.Replace($crlf, $lf); [IO.File]::WriteAllText($_.FullName, $text, [Text.UTF8Encoding]::new($false)) } }"
+if errorlevel 1 (
+    echo.
+    echo Failed to normalize plugin line endings.
+    echo.
+    pause
+    exit /b 1
+)
+
+echo.
 echo NarrRail 插件同步完成。当前 submodule 提交:
 git -C "%SUBMODULE_PATH%" --no-pager log -1 --oneline
 echo.
