@@ -1,0 +1,113 @@
+extends Node
+
+const PROTOTYPE_SCENE := "res://levels/prototype/prototype_room_front.tscn"
+const LEFT_SCENE := "res://levels/prototype/prototype_room_left.tscn"
+
+func _ready() -> void:
+	call_deferred("_run")
+
+func _run() -> void:
+	var scene: Node = load(PROTOTYPE_SCENE).instantiate()
+	add_child(scene)
+	await get_tree().process_frame
+
+	var object: Node = scene.get_node("ObjectLayer/TestObject")
+	var interaction_manager: Node = get_tree().root.get_node("InteractionManager")
+	await interaction_manager.request_interaction({
+		"object": object,
+		"object_id": "prototype.room_front.test_object",
+		"display_name": "Test Object"
+	})
+	await get_tree().process_frame
+
+	var game_state: Node = get_tree().root.get_node("GameState")
+	var inventory: Node = get_tree().root.get_node("InventoryManager")
+
+	if game_state.get_flag("prototype_clicked", false) != true:
+		push_error("Expected prototype_clicked flag to be true.")
+		get_tree().quit(1)
+		return
+
+	if not inventory.has_item("prototype_token"):
+		push_error("Expected inventory to contain prototype_token.")
+		get_tree().quit(1)
+		return
+
+	var object_state: Dictionary = game_state.get_object_state("prototype.room_front.test_object")
+	if not bool(object_state.get("picked", false)):
+		push_error("Expected test object picked state to be saved.")
+		get_tree().quit(1)
+		return
+
+	if not FileAccess.file_exists("user://autosave.json"):
+		push_error("Expected autosave file to be created.")
+		get_tree().quit(1)
+		return
+
+	var key_object: Node = scene.get_node("ObjectLayer/PrototypeKey")
+	await interaction_manager.request_interaction({
+		"object": key_object,
+		"object_id": "prototype.room_front.prototype_key",
+		"display_name": "Prototype Key"
+	})
+	await get_tree().process_frame
+
+	if not inventory.has_item("prototype_key"):
+		push_error("Expected inventory to contain prototype_key.")
+		get_tree().quit(1)
+		return
+
+	inventory.select_item("prototype_key")
+	var left_scene: Node = load(LEFT_SCENE).instantiate()
+	add_child(left_scene)
+	await get_tree().process_frame
+
+	var box_object: Node = left_scene.get_node("ObjectLayer/LockedBox")
+	await interaction_manager.request_interaction({
+		"object": box_object,
+		"object_id": "prototype.room_left.locked_box",
+		"display_name": "Locked Box"
+	})
+	await get_tree().process_frame
+
+	if inventory.has_item("prototype_key"):
+		push_error("Expected prototype_key to be consumed by locked box.")
+		get_tree().quit(1)
+		return
+
+	if game_state.get_flag("prototype_box_opened", false) != true:
+		push_error("Expected prototype_box_opened flag to be true.")
+		get_tree().quit(1)
+		return
+
+	var story_bridge: Node = get_tree().root.get_node("StoryBridge")
+	var dialogue_lines: Array[String] = []
+	story_bridge.dialogue_line_requested.connect(func(payload: Dictionary):
+		dialogue_lines.append(String(payload.get("textKey", "")))
+	)
+
+	var note_object: Node = left_scene.get_node("ObjectLayer/WallNote")
+	await interaction_manager.request_interaction({
+		"object": note_object,
+		"object_id": "prototype.room_left.wall_note",
+		"display_name": "Wall Note"
+	})
+	await get_tree().process_frame
+
+	if dialogue_lines.is_empty() or dialogue_lines[0] != "The paper is brittle.":
+		push_error("Expected NarrRail dialogue line from WallNote.")
+		get_tree().quit(1)
+		return
+
+	story_bridge.next()
+	await get_tree().process_frame
+	story_bridge.next()
+	await get_tree().process_frame
+
+	if game_state.get_flag("prototype_note_story_seen", false) != true:
+		push_error("Expected NarrRail emitted event to set prototype_note_story_seen.")
+		get_tree().quit(1)
+		return
+
+	print("interaction_smoke_runner passed")
+	get_tree().quit(0)

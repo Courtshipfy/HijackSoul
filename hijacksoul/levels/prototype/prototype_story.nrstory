@@ -1,0 +1,42 @@
+meta:
+  schemaVersion: 1
+  storyId: prototype_story
+  entryNodeId: N_WallNote
+
+variables: []
+
+nodes:
+  - nodeId: N_WallNote
+    nodeType: MultiDialogue
+    multiDialogue:
+      speakerId: Note
+      lines:
+        - textKey: The paper is brittle.
+        - textKey: Someone has written a warning on the wall.
+    dialogue: {}
+    choices: []
+    enterActions: []
+    exitActions: []
+
+  - nodeId: N_Event
+    nodeType: EmitEvent
+    eventId: prototype_note_story_seen
+
+  - nodeId: N_End
+    nodeType: End
+
+edges:
+  - sourceNodeId: N_WallNote
+    targetNodeId: N_Event
+    priority: 0
+    condition:
+      logic: All
+      terms: []
+
+  - sourceNodeId: N_Event
+    targetNodeId: N_End
+    priority: 0
+    condition:
+      logic: All
+      terms: []
+
