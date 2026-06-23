@@ -44,6 +44,31 @@ func _run() -> void:
 		get_tree().quit(1)
 		return
 
+	var resource_object_script: Script = load("res://modules/interaction/interactive_object.gd")
+	var set_flag_action_script: Script = load("res://modules/interaction/actions/set_flag_action.gd")
+	var resource_object: Node = resource_object_script.new()
+	var resource_action: Resource = set_flag_action_script.new()
+	resource_object.object_id = "prototype.room_front.resource_action_object"
+	resource_object.display_name = "Resource Action Object"
+	resource_action.flag_id = "prototype_resource_action_clicked"
+	resource_action.value = true
+	var resource_actions: Array[Resource] = [resource_action]
+	resource_object.default_action_resources = resource_actions
+	scene.get_node("ObjectLayer").add_child(resource_object)
+	await get_tree().process_frame
+
+	await interaction_manager.request_interaction({
+		"object": resource_object,
+		"object_id": "prototype.room_front.resource_action_object",
+		"display_name": "Resource Action Object"
+	})
+	await get_tree().process_frame
+
+	if game_state.get_flag("prototype_resource_action_clicked", false) != true:
+		push_error("Expected Resource action to set prototype_resource_action_clicked.")
+		get_tree().quit(1)
+		return
+
 	var key_object: Node = scene.get_node("ObjectLayer/PrototypeKey")
 	await interaction_manager.request_interaction({
 		"object": key_object,
@@ -81,6 +106,15 @@ func _run() -> void:
 		return
 
 	var story_bridge: Node = get_tree().root.get_node("StoryBridge")
+	if story_bridge.resolve_story_path("test_story") != "res://narrrail_stories/HijackSoul_Stories/Stories/test_story.tres":
+		push_error("Expected StoryBridge to resolve test_story to synced .tres resource.")
+		get_tree().quit(1)
+		return
+	if story_bridge.resolve_story_path("train_draft") != "res://narrrail_stories/HijackSoul_Stories/Stories/train_draft.tres":
+		push_error("Expected StoryBridge to resolve train_draft to synced .tres resource.")
+		get_tree().quit(1)
+		return
+
 	var dialogue_lines: Array[String] = []
 	story_bridge.dialogue_line_requested.connect(func(payload: Dictionary):
 		dialogue_lines.append(String(payload.get("textKey", "")))

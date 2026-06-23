@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://modules/interaction/puzzle_entry_object.gd" id="1_puzzle_entry"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puzzle_entry"]
+size = Vector2(128, 96)
+
+[node name="PuzzleEntryObject" type="Area2D"]
+script = ExtResource("1_puzzle_entry")
+display_name = "Puzzle Entry"
+hover_text = "Open puzzle"
+hotspot_size = Vector2(128, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_puzzle_entry")

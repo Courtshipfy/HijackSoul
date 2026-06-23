@@ -6,8 +6,19 @@ signal hover_started(object_id: String)
 signal hover_ended(object_id: String)
 signal interaction_requested(payload: Dictionary)
 
+enum ObjectKind {
+	CUSTOM,
+	INSPECT,
+	PICKUP,
+	VIEW_EXIT,
+	STORY_TRIGGER,
+	PUZZLE_ENTRY,
+	LOCKED
+}
+
 @export_group("Identity")
 @export var object_id: String = ""
+@export var object_kind: ObjectKind = ObjectKind.CUSTOM
 @export var display_name: String = ""
 @export var hover_text: String = ""
 @export var save_enabled: bool = true
@@ -42,6 +53,8 @@ signal interaction_requested(payload: Dictionary)
 		_sync_editor_nodes()
 
 @export_group("Actions")
+@export var default_action_resources: Array[Resource] = []
+@export var item_interaction_resources: Array[Resource] = []
 @export var default_actions: Array[Dictionary] = []
 @export var item_interactions: Array[Dictionary] = []
 @export var visible_condition: Dictionary = {}
@@ -49,7 +62,14 @@ signal interaction_requested(payload: Dictionary)
 @export var story_event_on_click: String = ""
 @export var pickup_item_id: String = ""
 @export var target_view_id: String = ""
+@export_file("*.tscn") var target_scene_path: String = ""
 @export var puzzle_id: String = ""
+@export_multiline var toast_message: String = ""
+@export var required_item_id: String = ""
+@export_multiline var missing_item_toast_message: String = ""
+@export var consume_required_item: bool = false
+@export var set_flag_on_success: String = ""
+@export var state_on_success: String = ""
 @export var auto_build_actions: bool = true
 
 var current_state: String = ""
@@ -77,17 +97,29 @@ func is_interaction_enabled() -> bool:
 	return interaction_enabled and visible
 
 func get_actions_for_item(item_id: String) -> Array:
+	var context := {"object_id": object_id, "selected_item_id": item_id}
+	for branch in item_interaction_resources:
+		if branch == null:
+			continue
+		if not branch.has_method("to_actions"):
+			continue
+		if String(branch.get("item_id")) == item_id:
+			return branch.call("to_actions", context)
+
 	for branch in item_interactions:
 		if typeof(branch) != TYPE_DICTIONARY:
 			continue
 		if String(branch.get("item_id", "")) == item_id:
 			return (branch.get("actions", []) as Array).duplicate(true)
 
+	if not default_action_resources.is_empty():
+		return _actions_from_resources(default_action_resources, context)
+
 	if not default_actions.is_empty():
 		return default_actions.duplicate(true)
 
 	if auto_build_actions:
-		return _build_default_actions()
+		return _build_default_actions(item_id)
 
 	return []
 
@@ -130,16 +162,50 @@ func save_object_state(extra_state: Dictionary = {}) -> void:
 		state[key] = extra_state[key]
 	game_state.set_object_state(object_id, state)
 
-func _build_default_actions() -> Array:
+func _actions_from_resources(resources: Array[Resource], context: Dictionary = {}) -> Array:
 	var actions: Array = []
+	for action in resources:
+		if action == null:
+			continue
+		if not action.has_method("to_action"):
+			continue
+		var action_data: Dictionary = action.call("to_action", context)
+		if not action_data.is_empty():
+			actions.append(action_data)
+	return actions
+
+func _build_default_actions(selected_item_id: String = "") -> Array:
+	var actions: Array = []
+	if not required_item_id.is_empty():
+		if selected_item_id != required_item_id:
+			var message := missing_item_toast_message
+			if message.is_empty():
+				message = "This needs another item."
+			return [{"type": "show_toast", "message": message}]
+		if consume_required_item:
+			actions.append({"type": "remove_item", "item_id": required_item_id})
+
 	if not story_event_on_click.is_empty():
 		actions.append({"type": "emit_story_event", "event_id": story_event_on_click})
 	if not pickup_item_id.is_empty():
 		actions.append({"type": "pickup_item", "item_id": pickup_item_id})
 	if not target_view_id.is_empty():
-		actions.append({"type": "change_view", "view_id": target_view_id})
+		var action := {"type": "change_view", "view_id": target_view_id}
+		if not target_scene_path.is_empty():
+			action["scene_path"] = target_scene_path
+		actions.append(action)
 	if not puzzle_id.is_empty():
 		actions.append({"type": "open_puzzle", "puzzle_id": puzzle_id})
+	if not set_flag_on_success.is_empty():
+		actions.append({"type": "set_flag", "flag_id": set_flag_on_success, "value": true})
+	if not state_on_success.is_empty():
+		actions.append({
+			"type": "set_object_state",
+			"object_id": object_id,
+			"state": {"state": state_on_success}
+		})
+	if not toast_message.is_empty():
+		actions.append({"type": "show_toast", "message": toast_message})
 	return actions
 
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -153,6 +219,7 @@ func _request_interaction() -> void:
 		"object_id": object_id,
 		"display_name": display_name,
 		"hover_text": hover_text,
+		"object_kind": ObjectKind.keys()[object_kind],
 		"state": current_state
 	}
 	interaction_requested.emit(payload)
