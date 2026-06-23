@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://modules/interaction/locked_object.gd" id="1_locked"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_locked"]
+size = Vector2(128, 96)
+
+[node name="LockedObject" type="Area2D"]
+script = ExtResource("1_locked")
+display_name = "Locked Object"
+hover_text = "Use item"
+hotspot_size = Vector2(128, 96)
+toast_message = "It is locked."
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_locked")

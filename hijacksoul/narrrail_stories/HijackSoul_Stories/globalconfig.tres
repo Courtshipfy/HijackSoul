@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="NarrRailGlobalConfigResource" format=3 uid="uid://yo0ge72lihro"]
+
+[ext_resource type="Script" uid="uid://c0pl80jer3u1w" path="res://addons/narrrail/narrrail_global_config_resource.gd" id="1_wva4y"]
+
+[resource]
+script = ExtResource("1_wva4y")
+preset_speakers = [{
+"id": "小红"
+}, {
+"id": "我"
+}, {
+"displayName": "boy",
+"id": "101"
+}]
+config_data = {
+"meta": {
+"configType": "GlobalConfig",
+"schemaVersion": 1
+},
+"presetSpeakers": [{
+"id": "小红"
+}, {
+"id": "我"
+}, {
+"displayName": "boy",
+"id": "101"
+}],
+"variables": []
+}
+source_path = "/Users/courtship/Projects/HijackSoul_Stories/globalconfig.nrstory"

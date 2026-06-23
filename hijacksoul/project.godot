@@ -37,6 +37,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/csv-data-importer/plugin.cfg", "res://addons/narrrail/plugin.cfg", "res://addons/scene_manager/plugin.cfg")
 
+[narrrail]
+
+story_repository_path="/Users/courtship/Projects/HijackSoul_Stories"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

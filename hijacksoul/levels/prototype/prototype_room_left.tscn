@@ -1,19 +1,20 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://bdo2uqnr00473"]
 
-[ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
-[ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="2_interactive_object"]
-[ext_resource type="Script" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
+[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
+[ext_resource type="Script" uid="uid://3u1mp3rdjttc" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
+[ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
+[ext_resource type="Script" uid="uid://dti1q1q7xtdro" path="res://modules/interaction/story_trigger_object.gd" id="4_story_trigger_object"]
+[ext_resource type="Script" uid="uid://c243iuo5ceo1p" path="res://modules/interaction/locked_object.gd" id="5_locked_object"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 24
 font_color = Color(0.92, 0.9, 0.82, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
-font_size = 16
 font_color = Color(0.8, 0.78, 0.7, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(96, 240)
+size = Vector2(112, 280)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_note"]
 size = Vector2(180, 100)
@@ -21,22 +22,21 @@ size = Vector2(180, 100)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_box"]
 size = Vector2(160, 120)
 
-[node name="PrototypeRoomLeft" type="Node2D"]
+[node name="PrototypeRoomLeft" type="Node2D" unique_id=1415883330]
 script = ExtResource("1_room_view")
 view_id = "prototype.room_left"
 scene_path = "res://levels/prototype/prototype_room_left.tscn"
 
-[node name="ScreenLayer" type="CanvasLayer" parent="."]
+[node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=519110502]
 layer = -10
 
-[node name="Background" type="ColorRect" parent="ScreenLayer"]
-mouse_filter = 2
+[node name="Background" type="ColorRect" parent="ScreenLayer" unique_id=69845171]
 offset_right = 1280.0
 offset_bottom = 720.0
+mouse_filter = 2
 color = Color(0.09, 0.12, 0.14, 1)
 
-[node name="Title" type="Label" parent="ScreenLayer"]
-mouse_filter = 2
+[node name="Title" type="Label" parent="ScreenLayer" unique_id=1218518387]
 offset_left = 48.0
 offset_top = 36.0
 offset_right = 520.0
@@ -44,8 +44,7 @@ offset_bottom = 76.0
 text = "Prototype Room - Left View"
 label_settings = SubResource("LabelSettings_title")
 
-[node name="Hint" type="Label" parent="ScreenLayer"]
-mouse_filter = 2
+[node name="Hint" type="Label" parent="ScreenLayer" unique_id=785248558]
 offset_left = 48.0
 offset_top = 78.0
 offset_right = 760.0
@@ -53,117 +52,93 @@ offset_bottom = 108.0
 text = "Hover and click the left edge to return."
 label_settings = SubResource("LabelSettings_hint")
 
-[node name="ObjectLayer" type="Node2D" parent="."]
+[node name="ObjectLayer" type="Node2D" parent="." unique_id=710579114]
 
-[node name="ExitToFrontView" type="Area2D" parent="ObjectLayer"]
+[node name="ExitToFrontView" type="Area2D" parent="ObjectLayer" unique_id=984706671]
 position = Vector2(102, 360)
-script = ExtResource("2_interactive_object")
+script = ExtResource("2_view_exit_object")
 object_id = "prototype.room_left.exit_front_view"
+object_kind = 3
 display_name = "Front View"
 hover_text = "Look forward"
 hotspot_size = Vector2(112, 280)
-default_actions = Array[Dictionary]([{
-"scene_path": "res://levels/prototype/prototype_room_front.tscn",
-"type": "change_view",
-"view_id": "prototype.room_front"
-}])
+target_view_id = "prototype.room_front"
+target_scene_path = "res://levels/prototype/prototype_room_front.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/ExitToFrontView"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/ExitToFrontView" unique_id=1952159483]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(48, -120, -48, -80, -48, 80, 48, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToFrontView"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToFrontView" unique_id=103945851]
 shape = SubResource("RectangleShape2D_exit")
 
-[node name="WallNote" type="Area2D" parent="ObjectLayer"]
+[node name="WallNote" type="Area2D" parent="ObjectLayer" unique_id=512484759]
 position = Vector2(640, 350)
-script = ExtResource("2_interactive_object")
+script = ExtResource("4_story_trigger_object")
 object_id = "prototype.room_left.wall_note"
+object_kind = 4
 display_name = "Wall Note"
 hover_text = "Read note"
 hotspot_size = Vector2(180, 100)
-default_actions = Array[Dictionary]([{
-"type": "emit_story_event",
-"event_id": "inspect_wall_note"
-}])
+story_event_on_click = "train_draft"
 
-[node name="NoteBlock" type="Polygon2D" parent="ObjectLayer/WallNote"]
+[node name="NoteBlock" type="Polygon2D" parent="ObjectLayer/WallNote" unique_id=1554243296]
 color = Color(0.68, 0.67, 0.52, 1)
 polygon = PackedVector2Array(-90, -50, 90, -50, 90, 50, -90, 50)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/WallNote"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/WallNote" unique_id=1356330700]
 shape = SubResource("RectangleShape2D_note")
 
-[node name="LockedBox" type="Area2D" parent="ObjectLayer"]
+[node name="LockedBox" type="Area2D" parent="ObjectLayer" unique_id=281629010]
 position = Vector2(850, 455)
-script = ExtResource("2_interactive_object")
+script = ExtResource("5_locked_object")
 object_id = "prototype.room_left.locked_box"
+object_kind = 6
 display_name = "Locked Box"
 hover_text = "Open box"
 hotspot_size = Vector2(160, 120)
-default_actions = Array[Dictionary]([{
-"message": "The box is locked.",
-"type": "show_toast"
-}])
-item_interactions = Array[Dictionary]([{
-"actions": [{
-"item_id": "prototype_key",
-"type": "remove_item"
-}, {
-"object_id": "prototype.room_left.locked_box",
-"state": {
-"state": "open"
-},
-"type": "set_object_state"
-}, {
-"flag_id": "prototype_box_opened",
-"type": "set_flag",
-"value": true
-}, {
-"message": "Opened the locked box.",
-"type": "show_toast"
-}],
-"item_id": "prototype_key"
-}])
+toast_message = "Opened the locked box."
+required_item_id = "prototype_key"
+missing_item_toast_message = "The box is locked."
+consume_required_item = true
+set_flag_on_success = "prototype_box_opened"
+state_on_success = "open"
 
-[node name="BoxBlock" type="Polygon2D" parent="ObjectLayer/LockedBox"]
+[node name="BoxBlock" type="Polygon2D" parent="ObjectLayer/LockedBox" unique_id=1820353342]
 color = Color(0.42, 0.32, 0.22, 1)
 polygon = PackedVector2Array(-80, -60, 80, -60, 80, 60, -80, 60)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/LockedBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/LockedBox" unique_id=572879692]
 shape = SubResource("RectangleShape2D_box")
 
-[node name="PrototypeDebugHud" type="CanvasLayer" parent="."]
+[node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
 script = ExtResource("3_debug_hud")
 
-[node name="StateLabel" type="Label" parent="PrototypeDebugHud"]
+[node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=1431213428]
 unique_name_in_owner = true
 offset_left = 48.0
 offset_top = 600.0
 offset_right = 820.0
 offset_bottom = 690.0
-mouse_filter = 2
 text = "debug state"
 label_settings = SubResource("LabelSettings_hint")
 
-[node name="ToastLabel" type="Label" parent="PrototypeDebugHud"]
+[node name="ToastLabel" type="Label" parent="PrototypeDebugHud" unique_id=1221980192]
 unique_name_in_owner = true
 offset_left = 880.0
 offset_top = 624.0
 offset_right = 1220.0
 offset_bottom = 672.0
-mouse_filter = 2
 text = "toast"
-horizontal_alignment = 2
 label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 2
 
-[node name="TooltipLabel" type="Label" parent="PrototypeDebugHud"]
+[node name="TooltipLabel" type="Label" parent="PrototypeDebugHud" unique_id=67704312]
 unique_name_in_owner = true
 offset_left = 520.0
 offset_top = 640.0
 offset_right = 760.0
 offset_bottom = 674.0
-mouse_filter = 2
 text = "tooltip"
-horizontal_alignment = 1
 label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 1
