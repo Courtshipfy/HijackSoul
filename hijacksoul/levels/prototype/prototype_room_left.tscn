@@ -18,6 +18,9 @@ size = Vector2(96, 240)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_note"]
 size = Vector2(180, 100)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_box"]
+size = Vector2(160, 120)
+
 [node name="PrototypeRoomLeft" type="Node2D"]
 script = ExtResource("1_room_view")
 view_id = "prototype.room_left"
@@ -58,6 +61,7 @@ script = ExtResource("2_interactive_object")
 object_id = "prototype.room_left.exit_front_view"
 display_name = "Front View"
 hover_text = "Look forward"
+hotspot_size = Vector2(112, 280)
 default_actions = Array[Dictionary]([{
 "scene_path": "res://levels/prototype/prototype_room_front.tscn",
 "type": "change_view",
@@ -77,13 +81,10 @@ script = ExtResource("2_interactive_object")
 object_id = "prototype.room_left.wall_note"
 display_name = "Wall Note"
 hover_text = "Read note"
+hotspot_size = Vector2(180, 100)
 default_actions = Array[Dictionary]([{
-"type": "set_flag",
-"flag_id": "prototype_note_read",
-"value": true
-}, {
-"type": "show_toast",
-"message": "Read wall note"
+"type": "emit_story_event",
+"event_id": "inspect_wall_note"
 }])
 
 [node name="NoteBlock" type="Polygon2D" parent="ObjectLayer/WallNote"]
@@ -92,6 +93,45 @@ polygon = PackedVector2Array(-90, -50, 90, -50, 90, 50, -90, 50)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/WallNote"]
 shape = SubResource("RectangleShape2D_note")
+
+[node name="LockedBox" type="Area2D" parent="ObjectLayer"]
+position = Vector2(850, 455)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_left.locked_box"
+display_name = "Locked Box"
+hover_text = "Open box"
+hotspot_size = Vector2(160, 120)
+default_actions = Array[Dictionary]([{
+"message": "The box is locked.",
+"type": "show_toast"
+}])
+item_interactions = Array[Dictionary]([{
+"actions": [{
+"item_id": "prototype_key",
+"type": "remove_item"
+}, {
+"object_id": "prototype.room_left.locked_box",
+"state": {
+"state": "open"
+},
+"type": "set_object_state"
+}, {
+"flag_id": "prototype_box_opened",
+"type": "set_flag",
+"value": true
+}, {
+"message": "Opened the locked box.",
+"type": "show_toast"
+}],
+"item_id": "prototype_key"
+}])
+
+[node name="BoxBlock" type="Polygon2D" parent="ObjectLayer/LockedBox"]
+color = Color(0.42, 0.32, 0.22, 1)
+polygon = PackedVector2Array(-80, -60, 80, -60, 80, 60, -80, 60)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/LockedBox"]
+shape = SubResource("RectangleShape2D_box")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="."]
 script = ExtResource("3_debug_hud")

@@ -15,7 +15,10 @@ font_color = Color(0.8, 0.78, 0.7, 1)
 size = Vector2(160, 120)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
-size = Vector2(96, 240)
+size = Vector2(112, 280)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_key"]
+size = Vector2(120, 72)
 
 [node name="PrototypeRoomFront" type="Node2D" unique_id=1989307710]
 script = ExtResource("1_room_view")
@@ -55,6 +58,7 @@ script = ExtResource("2_interactive_object")
 object_id = "prototype.room_front.test_object"
 display_name = "Test Object"
 hover_text = "Test Object"
+hotspot_size = Vector2(160, 120)
 default_actions = Array[Dictionary]([{
 "flag_id": "prototype_clicked",
 "type": "set_flag",
@@ -75,11 +79,12 @@ polygon = PackedVector2Array(-80, -60, 80, -60, 80, 60, -80, 60)
 shape = SubResource("RectangleShape2D_object")
 
 [node name="ExitToLeftView" type="Area2D" parent="ObjectLayer" unique_id=1717655515]
-position = Vector2(1178, 360)
+position = Vector2(1084, 360)
 script = ExtResource("2_interactive_object")
 object_id = "prototype.room_front.exit_left_view"
 display_name = "Left View"
 hover_text = "Look left"
+hotspot_size = Vector2(112, 280)
 default_actions = Array[Dictionary]([{
 "scene_path": "res://levels/prototype/prototype_room_left.tscn",
 "type": "change_view",
@@ -92,6 +97,28 @@ polygon = PackedVector2Array(-48, -120, 48, -80, 48, 80, -48, 120)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToLeftView" unique_id=988292392]
 shape = SubResource("RectangleShape2D_exit")
+
+[node name="PrototypeKey" type="Area2D" parent="ObjectLayer" unique_id=211276887]
+position = Vector2(430, 500)
+script = ExtResource("2_interactive_object")
+object_id = "prototype.room_front.prototype_key"
+display_name = "Prototype Key"
+hover_text = "Pick up key"
+hotspot_size = Vector2(120, 72)
+default_actions = Array[Dictionary]([{
+"item_id": "prototype_key",
+"type": "pickup_item"
+}, {
+"message": "Obtained prototype_key",
+"type": "show_toast"
+}])
+
+[node name="KeyBlock" type="Polygon2D" parent="ObjectLayer/PrototypeKey" unique_id=1213473299]
+color = Color(0.88, 0.74, 0.28, 1)
+polygon = PackedVector2Array(-55, -16, 18, -16, 18, -32, 55, -32, 55, 32, 18, 32, 18, 16, -55, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/PrototypeKey" unique_id=215462888]
+shape = SubResource("RectangleShape2D_key")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=1330575709]
 script = ExtResource("3_debug_hud")

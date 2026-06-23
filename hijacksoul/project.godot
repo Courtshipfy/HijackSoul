@@ -22,9 +22,16 @@ GameState="*res://autoload/game_state.gd"
 SaveManager="*res://autoload/save_manager.gd"
 SceneFlowManager="*res://autoload/scene_flow_manager.gd"
 InventoryManager="*res://autoload/inventory_manager.gd"
+StoryBridge="*res://autoload/story_bridge.gd"
 ActionRunner="*res://modules/interaction/action_runner.gd"
 InteractionManager="*res://modules/interaction/interaction_manager.gd"
 SceneManager="*uid://j20v4cg7v8m1"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 

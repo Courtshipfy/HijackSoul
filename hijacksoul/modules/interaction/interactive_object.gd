@@ -1,3 +1,4 @@
+@tool
 extends Area2D
 class_name InteractiveObject
 
@@ -5,11 +6,42 @@ signal hover_started(object_id: String)
 signal hover_ended(object_id: String)
 signal interaction_requested(payload: Dictionary)
 
+@export_group("Identity")
 @export var object_id: String = ""
 @export var display_name: String = ""
 @export var hover_text: String = ""
 @export var save_enabled: bool = true
 @export var default_state: String = "default"
+
+@export_group("Visual")
+@export var sprite_texture: Texture2D:
+	set(value):
+		sprite_texture = value
+		_sync_editor_nodes()
+@export var sprite_offset: Vector2 = Vector2.ZERO:
+	set(value):
+		sprite_offset = value
+		_sync_editor_nodes()
+@export var sprite_scale: Vector2 = Vector2.ONE:
+	set(value):
+		sprite_scale = value
+		_sync_editor_nodes()
+@export var sprite_modulate: Color = Color.WHITE:
+	set(value):
+		sprite_modulate = value
+		_sync_editor_nodes()
+
+@export_group("Hotspot")
+@export var hotspot_size: Vector2 = Vector2(64, 64):
+	set(value):
+		hotspot_size = value.max(Vector2.ONE)
+		_sync_editor_nodes()
+@export var hotspot_offset: Vector2 = Vector2.ZERO:
+	set(value):
+		hotspot_offset = value
+		_sync_editor_nodes()
+
+@export_group("Actions")
 @export var default_actions: Array[Dictionary] = []
 @export var item_interactions: Array[Dictionary] = []
 @export var visible_condition: Dictionary = {}
@@ -25,6 +57,10 @@ var interaction_enabled: bool = true
 var _default_modulate: Color = Color.WHITE
 
 func _ready() -> void:
+	_sync_editor_nodes()
+	if Engine.is_editor_hint():
+		return
+
 	add_to_group("interactive_object")
 	current_state = default_state
 	_default_modulate = modulate
@@ -150,3 +186,25 @@ func _on_object_state_changed(changed_object_id: String, state: Dictionary) -> v
 	if changed_object_id != object_id:
 		return
 	apply_object_state(state)
+
+func _sync_editor_nodes() -> void:
+	if not is_inside_tree():
+		return
+
+	var sprite := get_node_or_null("Sprite2D") as Sprite2D
+	if sprite != null:
+		sprite.texture = sprite_texture
+		sprite.offset = sprite_offset
+		sprite.scale = sprite_scale
+		sprite.modulate = sprite_modulate
+
+	var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision == null:
+		return
+	collision.position = hotspot_offset
+
+	var rect_shape := collision.shape as RectangleShape2D
+	if rect_shape == null:
+		rect_shape = RectangleShape2D.new()
+		collision.shape = rect_shape
+	rect_shape.size = hotspot_size
