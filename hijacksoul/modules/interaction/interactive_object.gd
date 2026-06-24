@@ -18,7 +18,10 @@ enum ObjectKind {
 
 @export_group("Identity")
 @export var object_id: String = ""
-@export var object_kind: ObjectKind = ObjectKind.CUSTOM
+@export var object_kind: ObjectKind = ObjectKind.CUSTOM:
+	set(value):
+		object_kind = value
+		notify_property_list_changed()
 @export var display_name: String = ""
 @export var hover_text: String = ""
 @export var save_enabled: bool = true
@@ -76,6 +79,84 @@ var current_state: String = ""
 var interaction_enabled: bool = true
 var _default_modulate: Color = Color.WHITE
 
+const _ACTION_PROPERTIES := {
+	"default_action_resources": true,
+	"item_interaction_resources": true,
+	"default_actions": true,
+	"item_interactions": true,
+	"visible_condition": true,
+	"enabled_condition": true,
+	"story_event_on_click": true,
+	"pickup_item_id": true,
+	"target_view_id": true,
+	"target_scene_path": true,
+	"puzzle_id": true,
+	"toast_message": true,
+	"required_item_id": true,
+	"missing_item_toast_message": true,
+	"consume_required_item": true,
+	"set_flag_on_success": true,
+	"state_on_success": true,
+	"auto_build_actions": true
+}
+
+const _ACTION_PROPERTIES_BY_KIND := {
+	ObjectKind.CUSTOM: {
+		"default_action_resources": true,
+		"item_interaction_resources": true,
+		"default_actions": true,
+		"item_interactions": true,
+		"visible_condition": true,
+		"enabled_condition": true,
+		"story_event_on_click": true,
+		"pickup_item_id": true,
+		"target_view_id": true,
+		"target_scene_path": true,
+		"puzzle_id": true,
+		"toast_message": true,
+		"required_item_id": true,
+		"missing_item_toast_message": true,
+		"consume_required_item": true,
+		"set_flag_on_success": true,
+		"state_on_success": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.INSPECT: {
+		"toast_message": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.PICKUP: {
+		"pickup_item_id": true,
+		"toast_message": true,
+		"set_flag_on_success": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.VIEW_EXIT: {
+		"target_view_id": true,
+		"target_scene_path": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.STORY_TRIGGER: {
+		"story_event_on_click": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.PUZZLE_ENTRY: {
+		"puzzle_id": true,
+		"toast_message": true,
+		"set_flag_on_success": true,
+		"auto_build_actions": true
+	},
+	ObjectKind.LOCKED: {
+		"required_item_id": true,
+		"missing_item_toast_message": true,
+		"consume_required_item": true,
+		"set_flag_on_success": true,
+		"state_on_success": true,
+		"toast_message": true,
+		"auto_build_actions": true
+	}
+}
+
 func _ready() -> void:
 	_sync_editor_nodes()
 	if Engine.is_editor_hint():
@@ -92,6 +173,17 @@ func _ready() -> void:
 	if game_state != null and game_state.has_signal("object_state_changed"):
 		game_state.object_state_changed.connect(_on_object_state_changed)
 	restore_from_game_state()
+
+func _validate_property(property: Dictionary) -> void:
+	var property_name := String(property.get("name", ""))
+	if not _ACTION_PROPERTIES.has(property_name):
+		return
+
+	var visible_properties: Dictionary = _ACTION_PROPERTIES_BY_KIND.get(object_kind, {})
+	if visible_properties.has(property_name):
+		return
+
+	property["usage"] = PROPERTY_USAGE_STORAGE
 
 func is_interaction_enabled() -> bool:
 	return interaction_enabled and visible
