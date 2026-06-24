@@ -12,11 +12,6 @@ const OUTER_MARGIN := 24.0
 var _toast_timer: SceneTreeTimer
 var _inventory_panel: PanelContainer
 var _inventory_list: VBoxContainer
-var _dialogue_panel: PanelContainer
-var _dialogue_speaker_label: Label
-var _dialogue_text_label: Label
-var _dialogue_next_button: Button
-var _dialogue_choice_list: VBoxContainer
 
 func _ready() -> void:
 	var bus := get_tree().root.get_node_or_null("EventBus")
@@ -52,9 +47,8 @@ func _ready() -> void:
 	_toast_label.visible = false
 	_tooltip_label.visible = false
 	_build_inventory_panel()
-	_build_dialogue_panel()
 	_apply_fixed_layout()
-	_connect_story_bridge()
+	_connect_story_errors()
 	_refresh_state()
 
 func _on_toast_requested(message: String, _payload: Dictionary) -> void:
@@ -117,46 +111,6 @@ func _build_inventory_panel() -> void:
 	_inventory_list.add_theme_constant_override("separation", 8)
 	margin.add_child(_inventory_list)
 
-func _build_dialogue_panel() -> void:
-	_dialogue_panel = PanelContainer.new()
-	_dialogue_panel.name = "DialoguePanel"
-	_dialogue_panel.visible = false
-	add_child(_dialogue_panel)
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 18)
-	margin.add_theme_constant_override("margin_top", 14)
-	margin.add_theme_constant_override("margin_right", 18)
-	margin.add_theme_constant_override("margin_bottom", 14)
-	_dialogue_panel.add_child(margin)
-
-	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 8)
-	margin.add_child(root)
-
-	_dialogue_speaker_label = Label.new()
-	_dialogue_speaker_label.text = ""
-	root.add_child(_dialogue_speaker_label)
-
-	_dialogue_text_label = Label.new()
-	_dialogue_text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_dialogue_text_label.custom_minimum_size = Vector2(720, 48)
-	root.add_child(_dialogue_text_label)
-
-	var bottom_row := HBoxContainer.new()
-	bottom_row.alignment = BoxContainer.ALIGNMENT_END
-	root.add_child(bottom_row)
-
-	_dialogue_choice_list = VBoxContainer.new()
-	_dialogue_choice_list.add_theme_constant_override("separation", 6)
-	bottom_row.add_child(_dialogue_choice_list)
-
-	_dialogue_next_button = Button.new()
-	_dialogue_next_button.text = "Next"
-	_dialogue_next_button.custom_minimum_size = Vector2(96, 34)
-	_dialogue_next_button.pressed.connect(_on_dialogue_next_pressed)
-	bottom_row.add_child(_dialogue_next_button)
-
 func _apply_fixed_layout() -> void:
 	_inventory_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	_inventory_panel.position = Vector2(CONTENT_RIGHT, 0)
@@ -175,10 +129,6 @@ func _apply_fixed_layout() -> void:
 	_toast_label.size = Vector2(360, 36)
 	_toast_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_toast_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-	_dialogue_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	_dialogue_panel.position = Vector2(176, DESIGN_SIZE.y - 188.0)
-	_dialogue_panel.size = Vector2(760, 132)
 
 func _refresh_inventory_buttons(items: Array[String], selected_item_id: String) -> void:
 	if _inventory_list == null:
@@ -205,50 +155,10 @@ func _on_inventory_button_pressed(item_id: String) -> void:
 	else:
 		inventory.select_item(item_id)
 
-func _connect_story_bridge() -> void:
+func _connect_story_errors() -> void:
 	var story_bridge := get_tree().root.get_node_or_null("StoryBridge")
 	if story_bridge == null:
 		return
-	story_bridge.dialogue_line_requested.connect(_on_dialogue_line_requested)
-	story_bridge.dialogue_choices_requested.connect(_on_dialogue_choices_requested)
-	story_bridge.dialogue_ended.connect(_on_dialogue_ended)
 	story_bridge.story_error.connect(func(message: String):
 		_on_toast_requested(message, {})
 	)
-
-func _on_dialogue_line_requested(payload: Dictionary) -> void:
-	_dialogue_panel.visible = true
-	_dialogue_next_button.visible = true
-	_clear_dialogue_choices()
-	_dialogue_speaker_label.text = String(payload.get("speakerId", ""))
-	_dialogue_text_label.text = String(payload.get("textKey", ""))
-
-func _on_dialogue_choices_requested(choices: Array) -> void:
-	_dialogue_panel.visible = true
-	_dialogue_next_button.visible = false
-	_clear_dialogue_choices()
-	for i in range(choices.size()):
-		var choice: Dictionary = choices[i]
-		var button := Button.new()
-		button.text = String(choice.get("textKey", ""))
-		button.custom_minimum_size = Vector2(220, 32)
-		button.pressed.connect(_on_dialogue_choice_pressed.bind(i))
-		_dialogue_choice_list.add_child(button)
-
-func _on_dialogue_ended() -> void:
-	_dialogue_panel.visible = false
-	_clear_dialogue_choices()
-
-func _on_dialogue_next_pressed() -> void:
-	var story_bridge := get_tree().root.get_node_or_null("StoryBridge")
-	if story_bridge != null:
-		story_bridge.next()
-
-func _on_dialogue_choice_pressed(index: int) -> void:
-	var story_bridge := get_tree().root.get_node_or_null("StoryBridge")
-	if story_bridge != null:
-		story_bridge.choose(index)
-
-func _clear_dialogue_choices() -> void:
-	for child in _dialogue_choice_list.get_children():
-		child.queue_free()

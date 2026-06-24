@@ -67,8 +67,8 @@ static func validate_story(story: Dictionary) -> Array:
 	for i in range(nodes.size()):
 		var node: Dictionary = nodes[i]
 		var node_type := String(node.get("nodeType", ""))
-		if node_type == "EmitEvent" and String(node.get("eventId", "")).strip_edges().is_empty():
-			diagnostics.append(_diag("error", "EMIT_EVENT_ID_EMPTY", "nodes[%d].eventId" % i, "EmitEvent node eventId must not be empty", "Set eventId to the event identifier emitted by this node."))
+		if node_type == "EmitEvent":
+			diagnostics.append_array(_validate_emit_event_fields(node, "nodes[%d]" % i, false))
 		diagnostics.append_array(_validate_node_actions(node, i))
 
 	# Orphan node warning (exclude entry)
@@ -107,10 +107,29 @@ static func _validate_node_actions(node: Dictionary, node_index: int) -> Array:
 					if not action.has("value"):
 						diagnostics.append(_diag("error", "ACTION_VALUE_MISSING", "%s.value" % path, "%s action value is required" % action_type, "Set value to the mutation operand for this action."))
 				"EmitEvent":
-					if String(action.get("eventId", "")).strip_edges().is_empty():
-						diagnostics.append(_diag("error", "ACTION_EVENT_ID_EMPTY", "%s.eventId" % path, "EmitEvent action eventId must not be empty", "Set eventId to the event identifier emitted by this action."))
+					diagnostics.append_array(_validate_emit_event_fields(action, path, true))
 				_:
 					diagnostics.append(_diag("error", "ACTION_TYPE_UNSUPPORTED", "%s.actionType" % path, "Unsupported actionType: %s" % action_type, "Use Set, Add, Subtract, or EmitEvent."))
+	return diagnostics
+
+static func _validate_emit_event_fields(data: Dictionary, path: String, is_action: bool) -> Array:
+	var diagnostics: Array = []
+	var event_type := String(data.get("eventType", "")).strip_edges()
+	var event_id := String(data.get("eventId", "")).strip_edges()
+	if event_type.is_empty():
+		event_type = event_id
+	if data.has("eventId"):
+		var legacy_code := "ACTION_EVENT_ID_LEGACY" if is_action else "EMIT_EVENT_ID_LEGACY"
+		diagnostics.append(_diag("warning", legacy_code, "%s.eventId" % path, "EmitEvent eventId is legacy-compatible", "Prefer eventType and params for new stories."))
+	if event_type.is_empty():
+		if is_action:
+			diagnostics.append(_diag("error", "ACTION_EVENT_TYPE_EMPTY", "%s.eventType" % path, "EmitEvent action eventType must not be empty", "Set eventType to the structured event type emitted by this action."))
+		else:
+			diagnostics.append(_diag("error", "EMIT_EVENT_TYPE_EMPTY", "%s.eventType" % path, "EmitEvent node eventType must not be empty", "Set eventType to the structured event type emitted by this node."))
+	if data.has("params") and typeof(data.get("params")) != TYPE_DICTIONARY:
+		var code := "ACTION_EVENT_PARAMS_TYPE_INVALID" if is_action else "EMIT_EVENT_PARAMS_TYPE_INVALID"
+		var label := "action" if is_action else "node"
+		diagnostics.append(_diag("error", code, "%s.params" % path, "EmitEvent %s params must be an object" % label, "Use a mapping/object for params, or omit params for an empty object."))
 	return diagnostics
 
 static func _variable_ref_name(variable_ref: Dictionary) -> String:

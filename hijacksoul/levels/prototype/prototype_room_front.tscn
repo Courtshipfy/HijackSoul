@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://modules/interaction/pickup_object.gd" id="2_pickup_object"]
 [ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="4_view_exit_object"]
+[ext_resource type="PackedScene" path="res://ui/dialogue/dialogue_bubble_layer.tscn" id="5_dialogue_bubble_layer"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 24
@@ -107,6 +108,8 @@ shape = SubResource("RectangleShape2D_key")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=1330575709]
 script = ExtResource("3_debug_hud")
+
+[node name="DialogueBubbleLayer" parent="." instance=ExtResource("5_dialogue_bubble_layer")]
 
 [node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=667272440]
 unique_name_in_owner = true

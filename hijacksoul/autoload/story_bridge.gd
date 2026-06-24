@@ -147,6 +147,8 @@ func _on_story_event_requested(event_id: String, _payload: Dictionary) -> void:
 
 func _on_narrrail_event_emitted(payload: Dictionary) -> void:
 	var event_id := String(payload.get("eventId", ""))
+	if event_id.is_empty():
+		event_id = String(payload.get("eventType", ""))
 	var actions: Array = narrrail_event_action_map.get(event_id, [])
 	if actions.is_empty():
 		return
