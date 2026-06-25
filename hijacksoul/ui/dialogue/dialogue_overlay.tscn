@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://dov6x1yvtmpxh"]
+
+[ext_resource type="Script" uid="uid://dvb2tmpqcflgt" path="res://ui/dialogue/dialogue_overlay.gd" id="1_dialogue_overlay"]
+
+[node name="DialogueOverlay" type="CanvasLayer" unique_id=1982759684]
+layer = 20
+script = ExtResource("1_dialogue_overlay")
+
+[node name="DialogueStage" type="Control" parent="." unique_id=1067672070]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerBubble" type="PanelContainer" parent="DialogueStage" unique_id=2099213023]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 562.0
+offset_right = 623.0
+offset_bottom = 654.0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="DialogueStage/PlayerBubble" unique_id=2121731644]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="PlayerText" type="Label" parent="DialogueStage/PlayerBubble/Margin" unique_id=1044070184]
+layout_mode = 2
+text = "玩家对话"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NpcBubble" type="PanelContainer" parent="DialogueStage" unique_id=726990319]
+layout_mode = 0
+offset_left = 549.0
+offset_top = 156.0
+offset_right = 909.0
+offset_bottom = 248.0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="DialogueStage/NpcBubble" unique_id=233754520]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Content" type="VBoxContainer" parent="DialogueStage/NpcBubble/Margin" unique_id=201803713]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NpcName" type="Label" parent="DialogueStage/NpcBubble/Margin/Content" unique_id=1775076986]
+layout_mode = 2
+text = "NPC"
+
+[node name="NpcText" type="Label" parent="DialogueStage/NpcBubble/Margin/Content" unique_id=718261425]
+layout_mode = 2
+text = "NPC 对话"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NpcTail" type="ColorRect" parent="DialogueStage" unique_id=805244653]
+layout_mode = 0
+offset_left = 1114.0
+offset_top = 298.0
+offset_right = 1134.0
+offset_bottom = 318.0
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.98, 0.98, 0.94, 0.96)
+
+[node name="NarrationBanner" type="PanelContainer" parent="DialogueStage" unique_id=1357119736]
+layout_mode = 0
+offset_left = 849.0
+offset_top = 405.0
+offset_right = 1245.0
+offset_bottom = 535.0
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="DialogueStage/NarrationBanner" unique_id=1125501936]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 16
+
+[node name="NarrationText" type="Label" parent="DialogueStage/NarrationBanner/Margin" unique_id=1040592584]
+layout_mode = 2
+text = "旁白"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ChoiceLayer" type="Control" parent="DialogueStage" unique_id=1252159179]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

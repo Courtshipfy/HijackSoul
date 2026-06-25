@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://by6qqi3jghac2"]
-
-[ext_resource type="Script" uid="uid://bqliyb75gj4n" path="res://ui/dialogue/dialogue_bubble_layer.gd" id="1_dialogue_bubble_layer"]
-
-[node name="DialogueBubbleLayer" type="CanvasLayer" unique_id=1936447531]
-layer = 20
-script = ExtResource("1_dialogue_bubble_layer")
