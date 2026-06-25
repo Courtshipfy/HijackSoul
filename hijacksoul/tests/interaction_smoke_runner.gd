@@ -116,8 +116,10 @@ func _run() -> void:
 		return
 
 	var dialogue_lines: Array[String] = []
+	var dialogue_speakers: Array[String] = []
 	story_bridge.dialogue_line_requested.connect(func(payload: Dictionary):
 		dialogue_lines.append(String(payload.get("textKey", "")))
+		dialogue_speakers.append(String(payload.get("speakerId", "")))
 	)
 
 	var note_object: Node = left_scene.get_node("ObjectLayer/WallNote")
@@ -137,6 +139,13 @@ func _run() -> void:
 	await get_tree().process_frame
 	story_bridge.next()
 	await get_tree().process_frame
+	story_bridge.next()
+	await get_tree().process_frame
+
+	if dialogue_speakers.slice(0, 4) != ["旁白", "旁白", "女孩", "我"]:
+		push_error("Expected train_draft speakers to route as 旁白, 旁白, 女孩, 我. Got: %s" % str(dialogue_speakers.slice(0, 4)))
+		get_tree().quit(1)
+		return
 
 	print("interaction_smoke_runner passed")
 	get_tree().quit(0)

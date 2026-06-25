@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dqnxgig1rpyx8"]
 
 [ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
-[ext_resource type="Script" path="res://modules/interaction/pickup_object.gd" id="2_pickup_object"]
+[ext_resource type="Script" uid="uid://cfe6dps21v4fg" path="res://modules/interaction/pickup_object.gd" id="2_pickup_object"]
 [ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
-[ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="4_view_exit_object"]
+[ext_resource type="Script" uid="uid://3u1mp3rdjttc" path="res://modules/interaction/view_exit_object.gd" id="4_view_exit_object"]
+[ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="5_dialogue_overlay"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 24
@@ -57,6 +58,7 @@ label_settings = SubResource("LabelSettings_hint")
 position = Vector2(640, 360)
 script = ExtResource("2_pickup_object")
 object_id = "prototype.room_front.test_object"
+object_kind = 2
 display_name = "Test Object"
 hover_text = "Test Object"
 hotspot_size = Vector2(160, 120)
@@ -75,6 +77,7 @@ shape = SubResource("RectangleShape2D_object")
 position = Vector2(1084, 360)
 script = ExtResource("4_view_exit_object")
 object_id = "prototype.room_front.exit_left_view"
+object_kind = 3
 display_name = "Left View"
 hover_text = "Look left"
 hotspot_size = Vector2(112, 280)
@@ -92,6 +95,7 @@ shape = SubResource("RectangleShape2D_exit")
 position = Vector2(430, 500)
 script = ExtResource("2_pickup_object")
 object_id = "prototype.room_front.prototype_key"
+object_kind = 2
 display_name = "Prototype Key"
 hover_text = "Pick up key"
 hotspot_size = Vector2(120, 72)
@@ -136,3 +140,5 @@ offset_bottom = 674.0
 text = "tooltip"
 label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
+
+[node name="DialogueOverlay" parent="." unique_id=1327938013 instance=ExtResource("5_dialogue_overlay")]

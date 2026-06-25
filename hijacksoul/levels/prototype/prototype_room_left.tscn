@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="3_debug_hud"]
 [ext_resource type="Script" uid="uid://dti1q1q7xtdro" path="res://modules/interaction/story_trigger_object.gd" id="4_story_trigger_object"]
 [ext_resource type="Script" uid="uid://c243iuo5ceo1p" path="res://modules/interaction/locked_object.gd" id="5_locked_object"]
+[ext_resource type="PackedScene" path="res://ui/dialogue/dialogue_overlay.tscn" id="6_dialogue_overlay"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 24
@@ -113,6 +114,8 @@ shape = SubResource("RectangleShape2D_box")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
 script = ExtResource("3_debug_hud")
+
+[node name="DialogueOverlay" parent="." instance=ExtResource("6_dialogue_overlay")]
 
 [node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=1431213428]
 unique_name_in_owner = true
