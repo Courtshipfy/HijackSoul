@@ -106,12 +106,8 @@ func _run() -> void:
 		return
 
 	var story_bridge: Node = get_tree().root.get_node("StoryBridge")
-	if story_bridge.resolve_story_path("test_story") != "res://narrrail_stories/HijackSoul_Stories/Stories/test_story.tres":
-		push_error("Expected StoryBridge to resolve test_story to synced .tres resource.")
-		get_tree().quit(1)
-		return
-	if story_bridge.resolve_story_path("train_draft") != "res://narrrail_stories/HijackSoul_Stories/Stories/train_draft.tres":
-		push_error("Expected StoryBridge to resolve train_draft to synced .tres resource.")
+	if story_bridge.resolve_story_path("train_story") != "res://narrrail_stories/HijackSoul_Stories/Stories/train_story.tres":
+		push_error("Expected StoryBridge to resolve train_story to synced .tres resource.")
 		get_tree().quit(1)
 		return
 
@@ -142,8 +138,8 @@ func _run() -> void:
 	story_bridge.next()
 	await get_tree().process_frame
 
-	if dialogue_speakers.slice(0, 4) != ["旁白", "旁白", "女孩", "我"]:
-		push_error("Expected train_draft speakers to route as 旁白, 旁白, 女孩, 我. Got: %s" % str(dialogue_speakers.slice(0, 4)))
+	if dialogue_speakers.slice(0, 4) != ["女孩", "我", "女孩", "我"]:
+		push_error("Expected train_story speakers to route as 女孩, 我, 女孩, 我. Got: %s" % str(dialogue_speakers.slice(0, 4)))
 		get_tree().quit(1)
 		return
 

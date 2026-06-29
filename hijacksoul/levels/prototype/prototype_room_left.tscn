@@ -81,7 +81,7 @@ object_kind = 4
 display_name = "Wall Note"
 hover_text = "Read note"
 hotspot_size = Vector2(270, 150)
-story_event_on_click = "train_draft"
+story_event_on_click = "train_story"
 
 [node name="NoteBlock" type="Polygon2D" parent="ObjectLayer/WallNote" unique_id=1554243296]
 color = Color(0.68, 0.67, 0.52, 1)
