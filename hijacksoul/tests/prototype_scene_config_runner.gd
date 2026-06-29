@@ -46,7 +46,8 @@ func _run() -> void:
 	_assert_hotspot(train, "ObjectLayer/desk", Vector2(1320, 223))
 	_assert_interaction_kind(train, "ObjectLayer/girl", 4)
 	_assert_interaction_kind(train, "ObjectLayer/desk", 1)
-	_assert_story_event(train, "ObjectLayer/girl", "train_draft")
+	_assert_story_event(train, "ObjectLayer/girl", "train_story")
+	_assert_music_player(train, "TrainMusic", "res://music/Sink into the Daylight.ogg")
 	_assert_scene_manager_group_is_absent(train)
 	if train.get_node_or_null("DialogueOverlay") == null:
 		push_error("Train scene is missing DialogueOverlay.")
@@ -104,6 +105,24 @@ func _assert_scene_manager_group_is_absent(root: Node) -> void:
 		return
 	for child in root.get_children():
 		_assert_scene_manager_group_is_absent(child)
+
+func _assert_music_player(root: Node, node_path: NodePath, expected_stream_path: String) -> void:
+	var player := root.get_node_or_null(node_path) as AudioStreamPlayer
+	if player == null:
+		push_error("Expected AudioStreamPlayer at %s." % str(node_path))
+		get_tree().quit(1)
+		return
+	if player.stream == null or player.stream.resource_path != expected_stream_path:
+		push_error("Unexpected music stream on %s: expected %s got %s" % [
+			str(node_path),
+			expected_stream_path,
+			player.stream.resource_path if player.stream != null else ""
+		])
+		get_tree().quit(1)
+		return
+	if not player.autoplay:
+		push_error("Expected %s to autoplay." % str(node_path))
+		get_tree().quit(1)
 
 func _assert_interaction_prefabs() -> void:
 	for prefab_path in INTERACTION_PREFABS:
