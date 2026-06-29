@@ -4,10 +4,44 @@
 [ext_resource type="PackedScene" uid="uid://c71j658w77kwm" path="res://ui/dialogue/player_dialogue_bubble.tscn" id="2_player_dialogue_bubble"]
 [ext_resource type="PackedScene" uid="uid://c24xqw0g1n05q" path="res://ui/dialogue/npc_dialogue_bubble.tscn" id="3_npc_dialogue_bubble"]
 [ext_resource type="PackedScene" path="res://ui/dialogue/narration_banner.tscn" id="4_narration_banner"]
+[ext_resource type="Texture2D" uid="uid://cpga1vu5fqjbe" path="res://assets/ui/dialogue/player_dialogue_bubble.png" id="5_player_dialogue"]
+[ext_resource type="Texture2D" uid="uid://5enkwtlmk3od" path="res://assets/ui/dialogue/npc_dialogue_bubble.png" id="6_npc_dialogue"]
+[ext_resource type="Texture2D" uid="uid://b63jgupm2jaom" path="res://assets/ui/dialogue/narration_card.png" id="7_narration_card"]
+[ext_resource type="Texture2D" uid="uid://cx48ub1nrqcqo" path="res://assets/ui/dialogue/player_choice_button.png" id="8_choice_button"]
+[ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="9_simsun"]
+[ext_resource type="FontFile" uid="uid://casrnrlnqg4xq" path="res://assets/fonts/ui/huakang_fangyuan_w7.ttc" id="10_huakang"]
 
 [node name="DialogueOverlay" type="CanvasLayer" unique_id=1982759684]
 layer = 20
 script = ExtResource("1_dialogue_overlay")
+player_text_color = Color(0.35, 0.29, 0.29, 1)
+player_font_size = 20
+player_background_texture = ExtResource("5_player_dialogue")
+player_text_font = ExtResource("9_simsun")
+player_bubble_size = Vector2(520, 216)
+player_text_margin_left = 46
+player_text_margin_top = 56
+player_text_margin_right = 80
+player_text_margin_bottom = 46
+npc_text_color = Color(0.35, 0.29, 0.29, 1)
+npc_text_font_size = 20
+npc_background_texture = ExtResource("6_npc_dialogue")
+npc_text_font = ExtResource("9_simsun")
+npc_bubble_size = Vector2(520, 216)
+npc_text_margin_left = 40
+npc_text_margin_top = 66
+npc_text_margin_right = 50
+npc_text_margin_bottom = 38
+narration_background_texture = ExtResource("7_narration_card")
+narration_background_color = Color(1, 1, 1, 0)
+narration_text_color = Color(1, 1, 1, 1)
+narration_font_size = 18
+narration_text_font = ExtResource("9_simsun")
+choice_background_texture = ExtResource("8_choice_button")
+choice_text_font = ExtResource("10_huakang")
+choice_text_color = Color(0.55, 0.38, 0.38, 1)
+choice_font_size = 36
+choice_button_size = Vector2(420, 130)
 
 [node name="DialogueStage" type="Control" parent="." unique_id=1067672070]
 layout_mode = 3

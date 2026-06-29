@@ -30,6 +30,17 @@ offset_bottom = 952.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_player_panel")
 
+[node name="BackgroundTexture" type="TextureRect" parent="PlayerBubble"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
 [node name="PlayerText" type="Label" parent="PlayerBubble" unique_id=742136359]
 layout_mode = 0
 offset_left = 16.0

@@ -68,6 +68,34 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 	set(value):
 		player_tail_color = value
 		_refresh_editor_layout()
+@export var player_background_texture: Texture2D:
+	set(value):
+		player_background_texture = value
+		_refresh_editor_layout()
+@export var player_text_font: Font:
+	set(value):
+		player_text_font = value
+		_refresh_editor_layout()
+@export var player_bubble_size := Vector2(520, 216):
+	set(value):
+		player_bubble_size = value.max(Vector2.ONE)
+		_refresh_editor_layout()
+@export var player_text_margin_left := 52:
+	set(value):
+		player_text_margin_left = maxi(0, value)
+		_refresh_editor_layout()
+@export var player_text_margin_top := 52:
+	set(value):
+		player_text_margin_top = maxi(0, value)
+		_refresh_editor_layout()
+@export var player_text_margin_right := 70:
+	set(value):
+		player_text_margin_right = maxi(0, value)
+		_refresh_editor_layout()
+@export var player_text_margin_bottom := 48:
+	set(value):
+		player_text_margin_bottom = maxi(0, value)
+		_refresh_editor_layout()
 @export var npc_bubble_fill := Color(0.98, 0.98, 0.94, 0.96):
 	set(value):
 		npc_bubble_fill = value
@@ -96,6 +124,34 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 	set(value):
 		npc_tail_color = value
 		_refresh_editor_layout()
+@export var npc_background_texture: Texture2D:
+	set(value):
+		npc_background_texture = value
+		_refresh_editor_layout()
+@export var npc_text_font: Font:
+	set(value):
+		npc_text_font = value
+		_refresh_editor_layout()
+@export var npc_bubble_size := Vector2(520, 216):
+	set(value):
+		npc_bubble_size = value.max(Vector2.ONE)
+		_refresh_editor_layout()
+@export var npc_text_margin_left := 42:
+	set(value):
+		npc_text_margin_left = maxi(0, value)
+		_refresh_editor_layout()
+@export var npc_text_margin_top := 62:
+	set(value):
+		npc_text_margin_top = maxi(0, value)
+		_refresh_editor_layout()
+@export var npc_text_margin_right := 52:
+	set(value):
+		npc_text_margin_right = maxi(0, value)
+		_refresh_editor_layout()
+@export var npc_text_margin_bottom := 42:
+	set(value):
+		npc_text_margin_bottom = maxi(0, value)
+		_refresh_editor_layout()
 @export var narration_background_texture: Texture2D:
 	set(value):
 		narration_background_texture = value
@@ -116,6 +172,10 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 	set(value):
 		narration_font_size = maxi(1, value)
 		_refresh_editor_layout()
+@export var narration_text_font: Font:
+	set(value):
+		narration_text_font = value
+		_refresh_editor_layout()
 @export var narration_text_margin_left := 22:
 	set(value):
 		narration_text_margin_left = maxi(0, value)
@@ -131,6 +191,26 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 @export var narration_text_margin_bottom := 16:
 	set(value):
 		narration_text_margin_bottom = maxi(0, value)
+		_refresh_editor_layout()
+@export var choice_background_texture: Texture2D:
+	set(value):
+		choice_background_texture = value
+		_refresh_editor_layout()
+@export var choice_text_font: Font:
+	set(value):
+		choice_text_font = value
+		_refresh_editor_layout()
+@export var choice_text_color := Color(0.53, 0.35, 0.35, 1.0):
+	set(value):
+		choice_text_color = value
+		_refresh_editor_layout()
+@export var choice_font_size := 36:
+	set(value):
+		choice_font_size = maxi(1, value)
+		_refresh_editor_layout()
+@export var choice_button_size := Vector2(420, 130):
+	set(value):
+		choice_button_size = value.max(Vector2.ONE)
 		_refresh_editor_layout()
 
 @export_group("Editor Preview")
@@ -162,10 +242,12 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 @onready var _stage: Control = $DialogueStage
 @onready var _player_group: Control = $DialogueStage/PlayerDialogueBubble
 @onready var _player_panel: Panel = $DialogueStage/PlayerDialogueBubble/PlayerBubble
+@onready var _player_background_texture: TextureRect = $DialogueStage/PlayerDialogueBubble/PlayerBubble/BackgroundTexture
 @onready var _player_label: Label = $DialogueStage/PlayerDialogueBubble/PlayerBubble/PlayerText
 @onready var _player_tail: ColorRect = $DialogueStage/PlayerDialogueBubble/PlayerTail
 @onready var _npc_group: Control = $DialogueStage/NpcDialogueBubble
 @onready var _npc_panel: Panel = $DialogueStage/NpcDialogueBubble/NpcBubble
+@onready var _npc_background_texture: TextureRect = $DialogueStage/NpcDialogueBubble/NpcBubble/BackgroundTexture
 @onready var _npc_name_label: Label = $DialogueStage/NpcDialogueBubble/NpcBubble/NpcName
 @onready var _npc_text_label: Label = $DialogueStage/NpcDialogueBubble/NpcBubble/NpcText
 @onready var _npc_tail: ColorRect = $DialogueStage/NpcDialogueBubble/NpcTail
@@ -204,7 +286,9 @@ func _apply_fixed_theme() -> void:
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_choice_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_player_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_player_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_npc_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_npc_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_background_color.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -301,6 +385,9 @@ func _show_npc_line(speaker: String, text: String) -> void:
 
 func _position_npc_bubble(speaker: String) -> void:
 	var position: Vector2 = _speaker_positions.get(speaker, _default_npc_position)
+	if npc_background_texture != null:
+		_npc_panel.position = position
+		return
 	var side := _normalized_side(String(_speaker_sides.get(speaker, npc_tail_side)))
 	var tail_position: Vector2 = position + NPC_TAIL_OFFSET_BY_SIDE.get(side, NPC_TAIL_OFFSET_BY_SIDE["right"])
 	_npc_tail.position = tail_position
@@ -317,12 +404,31 @@ func _position_npc_bubble(speaker: String) -> void:
 			_npc_panel.position = Vector2(tail_position.x - (_npc_panel.size.x - NPC_RIGHT_TAIL_EDGE_OVERLAP), position.y)
 
 func _fit_player_bubble() -> void:
+	if player_background_texture != null:
+		_player_panel.position = Vector2(player_tail_center.x - player_bubble_size.x * 0.72, player_bubble_top)
+		_player_panel.size = player_bubble_size
+		_player_label.position = Vector2(player_text_margin_left, player_text_margin_top)
+		_player_label.size = Vector2(
+			maxf(1.0, player_bubble_size.x - player_text_margin_left - player_text_margin_right),
+			maxf(1.0, player_bubble_size.y - player_text_margin_top - player_text_margin_bottom)
+		)
+		return
 	var width: float = _bubble_width_for_text(_player_label, _player_label.text, PLAYER_BUBBLE_MIN_WIDTH, PLAYER_TEXT_INSET.x * 2.0)
 	_player_panel.position = Vector2(player_tail_center.x - width * 0.5, player_bubble_top)
 	_player_panel.size.x = width
 	_player_label.size.x = maxf(1.0, width - PLAYER_TEXT_INSET.x * 2.0)
 
 func _fit_npc_bubble() -> void:
+	if npc_background_texture != null:
+		_npc_panel.size = npc_bubble_size
+		_npc_name_label.visible = false
+		_npc_text_label.position = Vector2(npc_text_margin_left, npc_text_margin_top)
+		_npc_text_label.size = Vector2(
+			maxf(1.0, npc_bubble_size.x - npc_text_margin_left - npc_text_margin_right),
+			maxf(1.0, npc_bubble_size.y - npc_text_margin_top - npc_text_margin_bottom)
+		)
+		return
+	_npc_name_label.visible = true
 	var text_width: float = _bubble_width_for_text(_npc_text_label, _npc_text_label.text, NPC_BUBBLE_MIN_WIDTH, NPC_TEXT_INSET.x * 2.0)
 	var name_width: float = _bubble_width_for_text(_npc_name_label, _npc_name_label.text, NPC_BUBBLE_MIN_WIDTH, NPC_TEXT_INSET.x * 2.0)
 	var width: float = maxf(text_width, name_width)
@@ -337,41 +443,60 @@ func _bubble_width_for_text(label: Label, text: String, min_width: float, horizo
 	return clampf(ceil(text_width + horizontal_padding), min_width, BUBBLE_MAX_WIDTH)
 
 func _add_choice_button(index: int, text: String) -> void:
+	var horizontal_gap := 40.0
+	var vertical_gap := 18.0
+	var columns := 2
+	var total_width := choice_button_size.x * columns + horizontal_gap
+	var start_x := (_stage.size.x - total_width) * 0.5
+	if _stage.size.x <= 0:
+		start_x = 500.0
+	var start_y := 720.0
 	var slots := [
-		Vector2(170, 558),
-		Vector2(430, 520),
-		Vector2(704, 558),
-		Vector2(948, 524)
+		Vector2(start_x, start_y),
+		Vector2(start_x + choice_button_size.x + horizontal_gap, start_y),
+		Vector2(start_x, start_y + choice_button_size.y + vertical_gap),
+		Vector2(start_x + choice_button_size.x + horizontal_gap, start_y + choice_button_size.y + vertical_gap)
 	]
 	var button := Button.new()
 	button.name = "ChoiceBubble%d" % index
 	button.text = text
-	button.position = slots[index % slots.size()] + Vector2(0, 48 * int(index / slots.size()))
-	button.size = Vector2(210, 50)
-	button.custom_minimum_size = Vector2(210, 50)
+	button.position = slots[index % slots.size()] + Vector2(0, (choice_button_size.y + vertical_gap) * int(index / slots.size()))
+	button.size = choice_button_size
+	button.custom_minimum_size = choice_button_size
 	button.clip_text = true
 	button.focus_mode = Control.FOCUS_ALL
 	button.pressed.connect(_on_choice_pressed.bind(index))
 
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0.82, 0.04, 0.07, 0.96)
-	normal.border_color = Color(0.82, 0.04, 0.07, 1.0)
-	normal.set_border_width_all(2)
-	normal.corner_radius_top_left = 3
-	normal.corner_radius_top_right = 3
-	normal.corner_radius_bottom_left = 3
-	normal.corner_radius_bottom_right = 3
-	var hover: StyleBoxFlat = normal.duplicate()
-	hover.bg_color = normal.bg_color.lightened(0.08)
-	var pressed: StyleBoxFlat = normal.duplicate()
-	pressed.bg_color = normal.bg_color.darkened(0.12)
+	var normal: StyleBox
+	var hover: StyleBox
+	var pressed: StyleBox
+	if choice_background_texture != null:
+		normal = _choice_texture_style(choice_background_texture, Color.WHITE)
+		hover = _choice_texture_style(choice_background_texture, Color(1.08, 1.08, 1.08, 1.0))
+		pressed = _choice_texture_style(choice_background_texture, Color(0.92, 0.92, 0.92, 1.0))
+	else:
+		var flat := StyleBoxFlat.new()
+		flat.bg_color = Color(0.82, 0.04, 0.07, 0.96)
+		flat.border_color = Color(0.82, 0.04, 0.07, 1.0)
+		flat.set_border_width_all(2)
+		flat.corner_radius_top_left = 3
+		flat.corner_radius_top_right = 3
+		flat.corner_radius_bottom_left = 3
+		flat.corner_radius_bottom_right = 3
+		normal = flat
+		hover = flat.duplicate()
+		(hover as StyleBoxFlat).bg_color = flat.bg_color.lightened(0.08)
+		pressed = flat.duplicate()
+		(pressed as StyleBoxFlat).bg_color = flat.bg_color.darkened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)
 	button.add_theme_stylebox_override("pressed", pressed)
-	button.add_theme_color_override("font_color", Color.WHITE)
-	button.add_theme_color_override("font_hover_color", Color.WHITE)
-	button.add_theme_color_override("font_pressed_color", Color.WHITE)
-	button.add_theme_font_size_override("font_size", 16)
+	button.add_theme_color_override("font_color", choice_text_color)
+	button.add_theme_color_override("font_hover_color", choice_text_color)
+	button.add_theme_color_override("font_pressed_color", choice_text_color.darkened(0.12))
+	button.add_theme_font_size_override("font_size", choice_font_size)
+	if choice_text_font != null:
+		button.add_theme_font_override("font", choice_text_font)
 	_choice_layer.add_child(button)
 
 	if index == 0:
@@ -434,20 +559,34 @@ func _apply_scene_layout() -> void:
 func _apply_scene_style() -> void:
 	_apply_panel_style(_player_panel, player_bubble_fill, player_bubble_border)
 	_apply_panel_style(_npc_panel, npc_bubble_fill, npc_bubble_border)
+	_player_background_texture.texture = player_background_texture
+	_player_background_texture.visible = player_background_texture != null
+	_npc_background_texture.texture = npc_background_texture
+	_npc_background_texture.visible = npc_background_texture != null
 	_player_label.add_theme_color_override("font_color", player_text_color)
 	_player_label.add_theme_font_size_override("font_size", player_font_size)
+	if player_text_font != null:
+		_player_label.add_theme_font_override("font", player_text_font)
 	_npc_name_label.add_theme_color_override("font_color", npc_name_color)
 	_npc_name_label.add_theme_font_size_override("font_size", npc_name_font_size)
+	if npc_text_font != null:
+		_npc_name_label.add_theme_font_override("font", npc_text_font)
 	_npc_text_label.add_theme_color_override("font_color", npc_text_color)
 	_npc_text_label.add_theme_font_size_override("font_size", npc_text_font_size)
+	if npc_text_font != null:
+		_npc_text_label.add_theme_font_override("font", npc_text_font)
 	_player_tail.color = player_tail_color
+	_player_tail.visible = player_background_texture == null
 	_npc_tail.color = npc_tail_color
+	_npc_tail.visible = npc_background_texture == null
 	_narration_background_color.color = narration_background_color
 	_narration_background_texture.texture = narration_background_texture
 	_narration_background_texture.modulate = narration_texture_modulate
 	_narration_background_texture.visible = narration_background_texture != null
 	_narration_label.add_theme_color_override("font_color", narration_text_color)
 	_narration_label.add_theme_font_size_override("font_size", narration_font_size)
+	if narration_text_font != null:
+		_narration_label.add_theme_font_override("font", narration_text_font)
 	_narration_margin.add_theme_constant_override("margin_left", narration_text_margin_left)
 	_narration_margin.add_theme_constant_override("margin_top", narration_text_margin_top)
 	_narration_margin.add_theme_constant_override("margin_right", narration_text_margin_right)
@@ -463,6 +602,17 @@ func _apply_panel_style(panel: Panel, fill: Color, border: Color) -> void:
 	style.corner_radius_bottom_left = 4
 	style.corner_radius_bottom_right = 4
 	panel.add_theme_stylebox_override("panel", style)
+
+func _choice_texture_style(texture: Texture2D, modulate: Color) -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	style.modulate_color = modulate
+	style.draw_center = true
+	style.content_margin_left = 34
+	style.content_margin_top = 18
+	style.content_margin_right = 34
+	style.content_margin_bottom = 18
+	return style
 
 func _apply_editor_preview() -> void:
 	if not _node_refs_ready():
@@ -493,10 +643,12 @@ func _node_refs_ready() -> bool:
 	return _stage != null \
 		and _player_group != null \
 		and _player_panel != null \
+		and _player_background_texture != null \
 		and _player_label != null \
 		and _player_tail != null \
 		and _npc_group != null \
 		and _npc_panel != null \
+		and _npc_background_texture != null \
 		and _npc_name_label != null \
 		and _npc_text_label != null \
 		and _npc_tail != null \

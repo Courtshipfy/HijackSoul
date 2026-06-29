@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
 [ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
 [ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="9_train_music"]
-[ext_resource type="Texture2D" uid="uid://dyqr6v7pjcjag" path="res://arts/train/narration_card.png" id="10_narration_card"]
+[ext_resource type="Texture2D" uid="uid://b63jgupm2jaom" path="res://assets/ui/dialogue/narration_card.png" id="10_narration_card"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ti6s8"]
 resource_local_to_scene = true
