@@ -3,10 +3,12 @@
 [ext_resource type="Script" path="res://modules/interaction/story_trigger_object.gd" id="1_story_trigger"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_story_trigger"]
+resource_local_to_scene = true
 size = Vector2(128, 96)
 
 [node name="StoryTriggerObject" type="Area2D"]
 script = ExtResource("1_story_trigger")
+object_kind = 4
 display_name = "Story Trigger"
 hover_text = "Inspect"
 hotspot_size = Vector2(128, 96)

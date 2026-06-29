@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://bpgc6uujodga3"]
+
+[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_fr42t"]
+[ext_resource type="Texture2D" uid="uid://dsxjwct3naobw" path="res://arts/train/8D5E6E3CE12DF4E789BE3921397E8211.png" id="2_6b7q7"]
+[ext_resource type="Texture2D" uid="uid://bmi6h6umveufl" path="res://arts/train/338F5AA995AEBF79121E9FE967EEAF79.png" id="2_train_background"]
+[ext_resource type="PackedScene" uid="uid://dv7l2settdbon" path="res://modules/interaction/prefabs/inspect_object.tscn" id="3_o1hdh"]
+[ext_resource type="Texture2D" uid="uid://bn8slxe7krk7j" path="res://arts/train/BA7F37276F41DD4A53EBD45748CEB013.png" id="4_fr42t"]
+[ext_resource type="Texture2D" uid="uid://b4cw3n35mewgp" path="res://arts/train/6FD7F6A83DAD17452424E59CD3E94BC5.png" id="5_left_window_view"]
+[ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="5_m4isg"]
+[ext_resource type="PackedScene" path="res://modules/interaction/prefabs/story_trigger_object.tscn" id="6_story_trigger"]
+[ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
+[ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m4isg"]
+resource_local_to_scene = true
+size = Vector2(520, 760)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g7hjf"]
+resource_local_to_scene = true
+size = Vector2(400, 250)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ti6s8"]
+resource_local_to_scene = true
+size = Vector2(393, 770)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfkm3"]
+resource_local_to_scene = true
+size = Vector2(1320, 223)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font_color = Color(0.8, 0.78, 0.7, 1)
+
+[node name="Train" type="Node2D" unique_id=1415883330]
+script = ExtResource("1_fr42t")
+view_id = "train"
+scene_path = "res://scenes/train.tscn"
+
+[node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=519110502]
+layer = -10
+
+[node name="LeftWindowViewVisual" type="Sprite2D" parent="ScreenLayer" unique_id=1035006168]
+position = Vector2(960, 540)
+scale = Vector2(0.82317, 0.82317)
+texture = ExtResource("5_left_window_view")
+
+[node name="RightWindowViewVisual" type="Sprite2D" parent="ScreenLayer" unique_id=1833412738]
+position = Vector2(960, 540)
+scale = Vector2(0.82317, 0.82317)
+texture = ExtResource("8_right_window_view")
+
+[node name="Background" type="TextureRect" parent="ScreenLayer" unique_id=69845171]
+offset_right = 1920.0
+offset_bottom = 1080.0
+mouse_filter = 2
+texture = ExtResource("2_6b7q7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ObjectLayer" type="Node2D" parent="." unique_id=710579114]
+
+[node name="left_window_view" parent="ObjectLayer" unique_id=1722916672 instance=ExtResource("3_o1hdh")]
+position = Vector2(960, 540)
+object_id = "train.left_window_view"
+display_name = "左侧窗景"
+hover_text = "查看"
+hotspot_size = Vector2(520, 760)
+hotspot_offset = Vector2(-740, -5)
+toast_message = "窗外的原野被列车拉成一片柔和的光。"
+
+[node name="CollisionShape2D" parent="ObjectLayer/left_window_view" index="1" unique_id=783993008]
+position = Vector2(-740, -5)
+shape = SubResource("RectangleShape2D_m4isg")
+
+[node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("3_o1hdh")]
+position = Vector2(960, 540)
+object_id = "train.right_window_view"
+display_name = "右侧窗景"
+hover_text = "查看"
+hotspot_size = Vector2(400, 250)
+hotspot_offset = Vector2(755, -405)
+toast_message = "另一侧的窗外掠过明亮的田野。"
+
+[node name="CollisionShape2D" parent="ObjectLayer/right_window_view" index="1" unique_id=783993008]
+position = Vector2(755, -405)
+shape = SubResource("RectangleShape2D_g7hjf")
+
+[node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
+position = Vector2(1080, 536)
+object_id = "train.girl"
+display_name = "女孩"
+hover_text = "交谈"
+sprite_texture = ExtResource("2_train_background")
+sprite_scale = Vector2(0.8, 0.8)
+hotspot_size = Vector2(393, 770)
+hotspot_offset = Vector2(146, -75)
+story_event_on_click = "train_story"
+
+[node name="Sprite2D" parent="ObjectLayer/girl" index="0"]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("2_train_background")
+
+[node name="CollisionShape2D" parent="ObjectLayer/girl" index="1"]
+position = Vector2(146, -75)
+shape = SubResource("RectangleShape2D_ti6s8")
+metadata/_interactive_collision_shape_unique = true
+
+[node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("3_o1hdh")]
+position = Vector2(1038, 549)
+scale = Vector2(1.0399997, 1)
+object_id = "train.desk"
+display_name = "桌子"
+hover_text = "查看"
+sprite_texture = ExtResource("4_fr42t")
+sprite_scale = Vector2(0.8, 0.8)
+hotspot_size = Vector2(1320, 223)
+hotspot_offset = Vector2(190, 418.5)
+
+[node name="Sprite2D" parent="ObjectLayer/desk" index="0" unique_id=667952097]
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("4_fr42t")
+
+[node name="CollisionShape2D" parent="ObjectLayer/desk" index="1" unique_id=783993008]
+position = Vector2(190, 418.5)
+shape = SubResource("RectangleShape2D_tfkm3")
+
+[node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
+script = ExtResource("5_m4isg")
+
+[node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=1431213428]
+unique_name_in_owner = true
+offset_left = 48.0
+offset_top = 994.0
+offset_right = 820.0
+offset_bottom = 1058.0
+text = "debug state"
+label_settings = SubResource("LabelSettings_hint")
+
+[node name="ToastLabel" type="Label" parent="PrototypeDebugHud" unique_id=1221980192]
+unique_name_in_owner = true
+offset_left = 1408.0
+offset_top = 1004.0
+offset_right = 1768.0
+offset_bottom = 1040.0
+text = "toast"
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 2
+
+[node name="TooltipLabel" type="Label" parent="PrototypeDebugHud" unique_id=67704312]
+unique_name_in_owner = true
+offset_left = 520.0
+offset_top = 1008.0
+offset_right = 760.0
+offset_bottom = 1040.0
+text = "tooltip"
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 1
+
+[node name="DialogueOverlay" parent="." unique_id=103514923 instance=ExtResource("7_dialogue_overlay")]
+
+[editable path="ObjectLayer/left_window_view"]
+[editable path="ObjectLayer/right_window_view"]
+[editable path="ObjectLayer/girl"]
+[editable path="ObjectLayer/desk"]

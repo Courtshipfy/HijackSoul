@@ -1,18 +1,23 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dv7l2settdbon"]
 
-[ext_resource type="Script" path="res://modules/interaction/inspect_object.gd" id="1_inspect"]
+[ext_resource type="Script" uid="uid://cuq32f0kg5xce" path="res://modules/interaction/inspect_object.gd" id="1_inspect"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_inspect"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o3gfi"]
+resource_local_to_scene = true
 size = Vector2(96, 96)
 
-[node name="InspectObject" type="Area2D"]
+[node name="InspectObject" type="Area2D" unique_id=1242919155]
 script = ExtResource("1_inspect")
+object_kind = 1
 display_name = "Inspect Object"
 hover_text = "Inspect"
+save_enabled = false
+default_state = ""
 hotspot_size = Vector2(96, 96)
 toast_message = "Nothing unusual."
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=667952097]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_inspect")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=783993008]
+shape = SubResource("RectangleShape2D_o3gfi")
+metadata/_interactive_collision_shape_unique = true
