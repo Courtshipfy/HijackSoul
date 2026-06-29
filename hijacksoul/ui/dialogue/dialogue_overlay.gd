@@ -47,6 +47,92 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 		narration_size = value
 		_refresh_editor_layout()
 
+@export_group("Scene Dialogue Style")
+@export var player_bubble_fill := Color(0.6078117, 0.49399078, 0.37003753, 0.9411765):
+	set(value):
+		player_bubble_fill = value
+		_refresh_editor_layout()
+@export var player_bubble_border := Color(0.01, 0.34, 0.52, 1.0):
+	set(value):
+		player_bubble_border = value
+		_refresh_editor_layout()
+@export var player_text_color := Color.WHITE:
+	set(value):
+		player_text_color = value
+		_refresh_editor_layout()
+@export var player_font_size := 18:
+	set(value):
+		player_font_size = maxi(1, value)
+		_refresh_editor_layout()
+@export var player_tail_color := Color(0.6358052, 0.48747295, 0.27077094, 0.9411765):
+	set(value):
+		player_tail_color = value
+		_refresh_editor_layout()
+@export var npc_bubble_fill := Color(0.98, 0.98, 0.94, 0.96):
+	set(value):
+		npc_bubble_fill = value
+		_refresh_editor_layout()
+@export var npc_bubble_border := Color(0.1, 0.1, 0.1, 1.0):
+	set(value):
+		npc_bubble_border = value
+		_refresh_editor_layout()
+@export var npc_name_color := Color(0.12, 0.12, 0.12, 1.0):
+	set(value):
+		npc_name_color = value
+		_refresh_editor_layout()
+@export var npc_text_color := Color(0.08, 0.08, 0.08, 1.0):
+	set(value):
+		npc_text_color = value
+		_refresh_editor_layout()
+@export var npc_name_font_size := 14:
+	set(value):
+		npc_name_font_size = maxi(1, value)
+		_refresh_editor_layout()
+@export var npc_text_font_size := 18:
+	set(value):
+		npc_text_font_size = maxi(1, value)
+		_refresh_editor_layout()
+@export var npc_tail_color := Color(0.98, 0.98, 0.94, 0.96):
+	set(value):
+		npc_tail_color = value
+		_refresh_editor_layout()
+@export var narration_background_texture: Texture2D:
+	set(value):
+		narration_background_texture = value
+		_refresh_editor_layout()
+@export var narration_background_color := Color(0.04, 0.04, 0.04, 0.72):
+	set(value):
+		narration_background_color = value
+		_refresh_editor_layout()
+@export var narration_texture_modulate := Color.WHITE:
+	set(value):
+		narration_texture_modulate = value
+		_refresh_editor_layout()
+@export var narration_text_color := Color.WHITE:
+	set(value):
+		narration_text_color = value
+		_refresh_editor_layout()
+@export var narration_font_size := 18:
+	set(value):
+		narration_font_size = maxi(1, value)
+		_refresh_editor_layout()
+@export var narration_text_margin_left := 22:
+	set(value):
+		narration_text_margin_left = maxi(0, value)
+		_refresh_editor_layout()
+@export var narration_text_margin_top := 16:
+	set(value):
+		narration_text_margin_top = maxi(0, value)
+		_refresh_editor_layout()
+@export var narration_text_margin_right := 22:
+	set(value):
+		narration_text_margin_right = maxi(0, value)
+		_refresh_editor_layout()
+@export var narration_text_margin_bottom := 16:
+	set(value):
+		narration_text_margin_bottom = maxi(0, value)
+		_refresh_editor_layout()
+
 @export_group("Editor Preview")
 @export var show_editor_preview := true:
 	set(value):
@@ -83,7 +169,10 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 @onready var _npc_name_label: Label = $DialogueStage/NpcDialogueBubble/NpcBubble/NpcName
 @onready var _npc_text_label: Label = $DialogueStage/NpcDialogueBubble/NpcBubble/NpcText
 @onready var _npc_tail: ColorRect = $DialogueStage/NpcDialogueBubble/NpcTail
-@onready var _narration_panel: PanelContainer = $DialogueStage/NarrationBanner
+@onready var _narration_panel: Control = $DialogueStage/NarrationBanner
+@onready var _narration_background_color: ColorRect = $DialogueStage/NarrationBanner/BackgroundColor
+@onready var _narration_background_texture: TextureRect = $DialogueStage/NarrationBanner/BackgroundTexture
+@onready var _narration_margin: MarginContainer = $DialogueStage/NarrationBanner/Margin
 @onready var _narration_label: Label = $DialogueStage/NarrationBanner/Margin/NarrationText
 @onready var _choice_layer: Control = $DialogueStage/ChoiceLayer
 
@@ -95,6 +184,7 @@ var _active := false
 func _ready() -> void:
 	_default_npc_position = npc_bubble_position
 	_apply_fixed_theme()
+	_apply_scene_style()
 	if Engine.is_editor_hint():
 		_apply_editor_preview()
 		return
@@ -116,6 +206,9 @@ func _apply_fixed_theme() -> void:
 	_player_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_npc_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_narration_background_color.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_narration_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_narration_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_prepare_label(_player_label)
 	_prepare_label(_npc_name_label)
 	_prepare_label(_npc_text_label)
@@ -143,7 +236,7 @@ func _connect_stage_input() -> void:
 		_stage.gui_input.connect(callback)
 
 func _on_dialogue_line_requested(payload: Dictionary) -> void:
-	_active = true
+	_begin_dialogue()
 	_stage.mouse_filter = Control.MOUSE_FILTER_STOP
 	_clear_choices()
 
@@ -155,14 +248,14 @@ func _on_dialogue_line_requested(payload: Dictionary) -> void:
 	if _is_player_speaker(speaker):
 		_show_player_line(text)
 	elif _is_narration_speaker(speaker):
-		_show_narration_line(text)
+		_update_narration_line(text)
 	else:
 		_show_npc_line(speaker, text)
 
 func _on_dialogue_choices_requested(choices: Array) -> void:
-	_active = true
+	_begin_dialogue()
 	_stage.mouse_filter = Control.MOUSE_FILTER_STOP
-	_hide_dialogue_panels()
+	_hide_speech_bubbles()
 	_clear_choices()
 
 	for i in range(choices.size()):
@@ -189,18 +282,17 @@ func _on_npc_bubble_position_requested(payload: Dictionary) -> void:
 		_position_npc_bubble(speaker)
 
 func _show_player_line(text: String) -> void:
-	_hide_dialogue_panels()
+	_hide_speech_bubbles()
 	_player_label.text = text
 	_fit_player_bubble()
 	_player_group.visible = true
 
-func _show_narration_line(text: String) -> void:
-	_hide_dialogue_panels()
+func _update_narration_line(text: String) -> void:
 	_narration_label.text = text
 	_narration_panel.visible = true
 
 func _show_npc_line(speaker: String, text: String) -> void:
-	_hide_dialogue_panels()
+	_hide_speech_bubbles()
 	_npc_name_label.text = speaker if not speaker.is_empty() else "NPC"
 	_npc_text_label.text = text
 	_fit_npc_bubble()
@@ -315,13 +407,22 @@ func _hide_all() -> void:
 	_clear_choices()
 
 func _hide_dialogue_panels() -> void:
+	_hide_speech_bubbles()
+	_narration_panel.visible = false
+
+func _hide_speech_bubbles() -> void:
 	_player_group.visible = false
 	_npc_group.visible = false
-	_narration_panel.visible = false
 
 func _clear_choices() -> void:
 	for child in _choice_layer.get_children():
 		child.queue_free()
+
+func _begin_dialogue() -> void:
+	if not _active:
+		_narration_label.text = ""
+	_active = true
+	_narration_panel.visible = true
 
 func _apply_scene_layout() -> void:
 	_player_tail.position = player_tail_center - _player_tail.pivot_offset
@@ -330,9 +431,43 @@ func _apply_scene_layout() -> void:
 	_default_npc_position = npc_bubble_position
 	_position_npc_bubble("")
 
+func _apply_scene_style() -> void:
+	_apply_panel_style(_player_panel, player_bubble_fill, player_bubble_border)
+	_apply_panel_style(_npc_panel, npc_bubble_fill, npc_bubble_border)
+	_player_label.add_theme_color_override("font_color", player_text_color)
+	_player_label.add_theme_font_size_override("font_size", player_font_size)
+	_npc_name_label.add_theme_color_override("font_color", npc_name_color)
+	_npc_name_label.add_theme_font_size_override("font_size", npc_name_font_size)
+	_npc_text_label.add_theme_color_override("font_color", npc_text_color)
+	_npc_text_label.add_theme_font_size_override("font_size", npc_text_font_size)
+	_player_tail.color = player_tail_color
+	_npc_tail.color = npc_tail_color
+	_narration_background_color.color = narration_background_color
+	_narration_background_texture.texture = narration_background_texture
+	_narration_background_texture.modulate = narration_texture_modulate
+	_narration_background_texture.visible = narration_background_texture != null
+	_narration_label.add_theme_color_override("font_color", narration_text_color)
+	_narration_label.add_theme_font_size_override("font_size", narration_font_size)
+	_narration_margin.add_theme_constant_override("margin_left", narration_text_margin_left)
+	_narration_margin.add_theme_constant_override("margin_top", narration_text_margin_top)
+	_narration_margin.add_theme_constant_override("margin_right", narration_text_margin_right)
+	_narration_margin.add_theme_constant_override("margin_bottom", narration_text_margin_bottom)
+
+func _apply_panel_style(panel: Panel, fill: Color, border: Color) -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = border
+	style.set_border_width_all(2)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	panel.add_theme_stylebox_override("panel", style)
+
 func _apply_editor_preview() -> void:
 	if not _node_refs_ready():
 		return
+	_apply_scene_style()
 	_clear_choices()
 	if not show_editor_preview:
 		_hide_dialogue_panels()
@@ -366,6 +501,9 @@ func _node_refs_ready() -> bool:
 		and _npc_text_label != null \
 		and _npc_tail != null \
 		and _narration_panel != null \
+		and _narration_background_color != null \
+		and _narration_background_texture != null \
+		and _narration_margin != null \
 		and _narration_label != null \
 		and _choice_layer != null
 

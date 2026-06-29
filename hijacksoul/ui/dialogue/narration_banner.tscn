@@ -1,28 +1,42 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dhc1h1strgonb"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_narration_panel"]
-bg_color = Color(0.04, 0.04, 0.04, 0.72)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.2, 0.2, 0.2, 0.8)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[node name="NarrationBanner" type="PanelContainer"]
+[node name="NarrationBanner" type="Control"]
 layout_mode = 0
 offset_left = 1413.0
 offset_top = 351.0
 offset_right = 1809.0
 offset_bottom = 481.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_narration_panel")
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.04, 0.04, 0.04, 0.72)
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 22
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 22

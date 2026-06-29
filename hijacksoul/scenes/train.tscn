@@ -11,20 +11,21 @@
 [ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
 [ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
 [ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="9_train_music"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m4isg"]
-resource_local_to_scene = true
-size = Vector2(520, 760)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g7hjf"]
-resource_local_to_scene = true
-size = Vector2(400, 250)
+[ext_resource type="Texture2D" uid="uid://dyqr6v7pjcjag" path="res://arts/train/narration_card.png" id="10_narration_card"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ti6s8"]
 resource_local_to_scene = true
-size = Vector2(393, 770)
+size = Vector2(520, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tfkm3"]
+resource_local_to_scene = true
+size = Vector2(400, 250)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvoe"]
+resource_local_to_scene = true
+size = Vector2(393, 770)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1kvv8"]
 resource_local_to_scene = true
 size = Vector2(1320, 223)
 
@@ -74,7 +75,7 @@ toast_message = "窗外的原野被列车拉成一片柔和的光。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/left_window_view" index="1" unique_id=783993008]
 position = Vector2(-740, -5)
-shape = SubResource("RectangleShape2D_m4isg")
+shape = SubResource("RectangleShape2D_ti6s8")
 
 [node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("3_o1hdh")]
 position = Vector2(960, 540)
@@ -87,7 +88,7 @@ toast_message = "另一侧的窗外掠过明亮的田野。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/right_window_view" index="1" unique_id=783993008]
 position = Vector2(755, -405)
-shape = SubResource("RectangleShape2D_g7hjf")
+shape = SubResource("RectangleShape2D_tfkm3")
 
 [node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
 position = Vector2(1080, 536)
@@ -106,7 +107,7 @@ texture = ExtResource("2_train_background")
 
 [node name="CollisionShape2D" parent="ObjectLayer/girl" index="1"]
 position = Vector2(146, -75)
-shape = SubResource("RectangleShape2D_ti6s8")
+shape = SubResource("RectangleShape2D_bbvoe")
 metadata/_interactive_collision_shape_unique = true
 
 [node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("3_o1hdh")]
@@ -126,7 +127,7 @@ texture = ExtResource("4_fr42t")
 
 [node name="CollisionShape2D" parent="ObjectLayer/desk" index="1" unique_id=783993008]
 position = Vector2(190, 418.5)
-shape = SubResource("RectangleShape2D_tfkm3")
+shape = SubResource("RectangleShape2D_1kvv8")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
 script = ExtResource("5_m4isg")
@@ -161,6 +162,16 @@ label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
 
 [node name="DialogueOverlay" parent="." unique_id=103514923 instance=ExtResource("7_dialogue_overlay")]
+narration_position = Vector2(1518, 112)
+narration_size = Vector2(300, 231)
+narration_background_texture = ExtResource("10_narration_card")
+narration_background_color = Color(1, 1, 1, 0)
+narration_text_color = Color(0.05, 0.045, 0.04, 1)
+narration_font_size = 13
+narration_text_margin_left = 26
+narration_text_margin_top = 44
+narration_text_margin_right = 36
+narration_text_margin_bottom = 36
 
 [editable path="ObjectLayer/left_window_view"]
 [editable path="ObjectLayer/right_window_view"]

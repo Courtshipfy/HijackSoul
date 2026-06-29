@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://d1v3yqthkqb57"]
+
+[ext_resource type="FontFile" uid="uid://c8w8bb4ve6b2f" path="res://assets/fonts/SourceHanSansCN-Regular.otf" id="1_source_han_sans"]
+
+[resource]
+default_font = ExtResource("1_source_han_sans")
+default_font_size = 18

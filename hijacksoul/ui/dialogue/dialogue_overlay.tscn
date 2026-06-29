@@ -22,10 +22,13 @@ mouse_filter = 2
 layout_mode = 1
 
 [node name="PlayerBubble" parent="DialogueStage/PlayerDialogueBubble" index="0" unique_id=1157231623]
-offset_left = 779.0
+offset_left = 745.5
 offset_top = 935.0
-offset_right = 1132.0
+offset_right = 1098.5
 offset_bottom = 1027.0
+
+[node name="PlayerText" parent="DialogueStage/PlayerDialogueBubble/PlayerBubble" index="0" unique_id=742136359]
+text = "玩家对话预览"
 
 [node name="NpcDialogueBubble" parent="DialogueStage" unique_id=346014261 instance=ExtResource("3_npc_dialogue_bubble")]
 layout_mode = 1
@@ -36,11 +39,26 @@ offset_top = 445.0
 offset_right = 797.0
 offset_bottom = 537.0
 
+[node name="NpcName" parent="DialogueStage/NpcDialogueBubble/NpcBubble" index="0" unique_id=1679389401]
+offset_right = 346.0
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="NpcText" parent="DialogueStage/NpcDialogueBubble/NpcBubble" index="1" unique_id=1729519819]
+offset_right = 346.0
+text = "NPC 对话预览"
+
+[node name="NpcTail" parent="DialogueStage/NpcDialogueBubble" index="1" unique_id=1310273835]
+offset_left = 791.0
+offset_top = 483.0
+offset_right = 811.0
+offset_bottom = 503.0
+
 [node name="NarrationBanner" parent="DialogueStage" unique_id=144550745 instance=ExtResource("4_narration_banner")]
 offset_left = 1503.0
 offset_top = 473.0
 offset_right = 1899.0
-offset_bottom = 603.0
+offset_bottom = 655.0
 
 [node name="ChoiceLayer" type="Control" parent="DialogueStage" unique_id=1252159179]
 visible = false
