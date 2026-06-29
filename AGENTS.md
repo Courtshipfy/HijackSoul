@@ -61,6 +61,9 @@ When creating or moving files, also follow `.codex/skills/hijacksoul-file-router
 - `ui/` handles display and input. Do not put gameplay rules there.
 - `levels/` should contain placement and light scene-specific setup, not complex systems.
 - Runtime writes should go to Godot `user://`, not `hijacksoul/data/` or `hijacksoul/assets/`.
+- NarrRail story events must use structured `eventType + params`; do not add new story content with legacy `eventId`.
+- Route NarrRail gameplay reactions through `StoryBridge -> StoryEventRouter -> ActionRunner/EventBus`; keep project-specific event semantics out of `addons/narrrail`.
+- Document new story event types in `hijacksoul/Docs/故事事件协议.md` before adding handlers or story usage.
 
 ## Current Phase
 

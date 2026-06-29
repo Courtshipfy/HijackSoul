@@ -18,25 +18,40 @@ nodes:
     enterActions: []
     exitActions: []
 
-  - nodeId: N_Event
+  - nodeId: N_SetFlag
     nodeType: EmitEvent
-    eventId: prototype_note_story_seen
+    eventType: state.set_flag
+    params:
+      flag_id: prototype_note_story_seen
+      value: true
+
+  - nodeId: N_Toast
+    nodeType: EmitEvent
+    eventType: ui.show_toast
+    params:
+      message: Story event: prototype_note_story_seen
 
   - nodeId: N_End
     nodeType: End
 
 edges:
   - sourceNodeId: N_WallNote
-    targetNodeId: N_Event
+    targetNodeId: N_SetFlag
     priority: 0
     condition:
       logic: All
       terms: []
 
-  - sourceNodeId: N_Event
+  - sourceNodeId: N_SetFlag
+    targetNodeId: N_Toast
+    priority: 0
+    condition:
+      logic: All
+      terms: []
+
+  - sourceNodeId: N_Toast
     targetNodeId: N_End
     priority: 0
     condition:
       logic: All
       terms: []
-

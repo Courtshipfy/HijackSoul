@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_narration_panel"]
+bg_color = Color(0.04, 0.04, 0.04, 0.72)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.2, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="NarrationBanner" type="PanelContainer"]
+layout_mode = 0
+offset_left = 1413.0
+offset_top = 351.0
+offset_right = 1809.0
+offset_bottom = 481.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_narration_panel")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 16
+
+[node name="NarrationText" type="Label" parent="Margin"]
+layout_mode = 2
+text = "旁白"
+vertical_alignment = 1
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18

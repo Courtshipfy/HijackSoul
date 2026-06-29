@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const DESIGN_SIZE := Vector2(1280, 720)
+const DESIGN_SIZE := Vector2(1920, 1080)
 const INVENTORY_WIDTH := 128.0
 const CONTENT_RIGHT := DESIGN_SIZE.x - INVENTORY_WIDTH
 const OUTER_MARGIN := 24.0

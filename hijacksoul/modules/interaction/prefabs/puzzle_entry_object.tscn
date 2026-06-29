@@ -3,10 +3,12 @@
 [ext_resource type="Script" path="res://modules/interaction/puzzle_entry_object.gd" id="1_puzzle_entry"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_puzzle_entry"]
+resource_local_to_scene = true
 size = Vector2(128, 96)
 
 [node name="PuzzleEntryObject" type="Area2D"]
 script = ExtResource("1_puzzle_entry")
+object_kind = 5
 display_name = "Puzzle Entry"
 hover_text = "Open puzzle"
 hotspot_size = Vector2(128, 96)

@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="1_interactive"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_interactive"]
+resource_local_to_scene = true
 size = Vector2(64, 64)
 
 [node name="InteractiveObject" type="Area2D"]

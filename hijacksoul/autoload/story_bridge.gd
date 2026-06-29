@@ -12,19 +12,12 @@ const DIRECT_STORY_LOADER_SCRIPT := "res://addons/narrrail/importer/nrstory_load
 const SESSION_SCRIPT := "res://addons/narrrail/runtime/narrrail_session.gd"
 const SETTING_STORY_RESOURCE_ROOT := "narrrail/story_resource_root"
 const DEFAULT_STORY_RESOURCE_ROOT := "res://narrrail_stories"
-const EVENT_SET_NPC_BUBBLE_POSITION := "dialogue.set_npc_bubble_position"
+const STORY_EVENT_ROUTER_NODE := "StoryEventRouter"
 
 @export var story_event_map: Dictionary = {
 	"inspect_wall_note": DEFAULT_STORY_PATH
 }
 @export var story_resource_root: String = DEFAULT_STORY_RESOURCE_ROOT
-
-@export var narrrail_event_action_map: Dictionary = {
-	"prototype_note_story_seen": [
-		{"type": "set_flag", "flag_id": "prototype_note_story_seen", "value": true},
-		{"type": "show_toast", "message": "Story event: prototype_note_story_seen"}
-	]
-}
 
 var _session: RefCounted
 var _active_story_path: String = ""
@@ -34,6 +27,9 @@ func _ready() -> void:
 	var bus := _event_bus()
 	if bus != null:
 		bus.story_event_requested.connect(_on_story_event_requested)
+		bus.dialogue_npc_bubble_position_requested.connect(func(payload: Dictionary):
+			dialogue_npc_bubble_position_requested.emit(payload)
+		)
 
 func start_story(story_path: String, initial_variables: Dictionary = {}) -> bool:
 	var load_result := _load_story_data(story_path)
@@ -148,46 +144,15 @@ func _on_story_event_requested(event_id: String, _payload: Dictionary) -> void:
 	start_story(story_path)
 
 func _on_narrrail_event_emitted(payload: Dictionary) -> void:
-	var event_id := String(payload.get("eventId", ""))
-	if event_id.is_empty():
-		event_id = String(payload.get("eventType", ""))
-	if event_id == EVENT_SET_NPC_BUBBLE_POSITION:
-		_emit_npc_bubble_position_event(payload)
-		return
-	var actions: Array = narrrail_event_action_map.get(event_id, [])
-	if actions.is_empty():
-		return
-	var runner := get_tree().root.get_node_or_null("ActionRunner")
-	if runner != null:
-		await runner.run_actions(actions, {"story_event_id": event_id, "save_reason": "story_event"})
-
-func _emit_npc_bubble_position_event(payload: Dictionary) -> void:
-	var params: Dictionary = {}
-	if typeof(payload.get("params", {})) == TYPE_DICTIONARY:
-		params = (payload.get("params", {}) as Dictionary).duplicate(true)
-
-	var speaker_id := String(params.get("speakerId", params.get("speaker_id", ""))).strip_edges()
-	var position: Variant = _event_position_from_params(params)
-	if position == null:
-		_raise_error("NarrRail event '%s' requires params.x and params.y." % EVENT_SET_NPC_BUBBLE_POSITION)
+	var router := get_tree().root.get_node_or_null(STORY_EVENT_ROUTER_NODE)
+	if router == null:
+		_raise_error("StoryEventRouter autoload is missing.")
 		return
 
-	dialogue_npc_bubble_position_requested.emit({
-		"speakerId": speaker_id,
-		"position": position,
-		"side": String(params.get("side", "right")).strip_edges()
-	})
-
-func _event_position_from_params(params: Dictionary) -> Variant:
-	if params.has("x") and params.has("y"):
-		return Vector2(float(params.get("x")), float(params.get("y")))
-
-	if typeof(params.get("position", {})) == TYPE_DICTIONARY:
-		var position_params: Dictionary = params.get("position", {})
-		if position_params.has("x") and position_params.has("y"):
-			return Vector2(float(position_params.get("x")), float(position_params.get("y")))
-
-	return null
+	var handled: bool = await router.handle_event(payload)
+	if not handled:
+		var event_type := String(payload.get("eventType", payload.get("eventId", ""))).strip_edges()
+		_raise_error("NarrRail story event failed: %s" % event_type)
 
 func _raise_error(message: String) -> void:
 	story_error.emit(message)

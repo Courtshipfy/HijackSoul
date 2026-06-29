@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://c24xqw0g1n05q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npc_panel"]
+bg_color = Color(0.98, 0.98, 0.94, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1, 0.1, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="NpcDialogueBubble" type="Control" unique_id=1761294995]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NpcBubble" type="Panel" parent="." unique_id=1850627669]
+layout_mode = 0
+offset_left = 550.0
+offset_top = 369.0
+offset_right = 910.0
+offset_bottom = 461.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_npc_panel")
+
+[node name="NpcName" type="Label" parent="NpcBubble" unique_id=1679389401]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 332.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_font_sizes/font_size = 14
+text = "NPC"
+
+[node name="NpcText" type="Label" parent="NpcBubble" unique_id=1729519819]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 36.0
+offset_right = 332.0
+offset_bottom = 82.0
+theme_override_colors/font_color = Color(0.08, 0.08, 0.08, 1)
+theme_override_font_sizes/font_size = 18
+text = "NPC 对话"
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+
+[node name="NpcTail" type="ColorRect" parent="." unique_id=1310273835]
+layout_mode = 0
+offset_left = 1114.0
+offset_top = 298.0
+offset_right = 1134.0
+offset_bottom = 318.0
+rotation = 0.785398
+mouse_filter = 2
+color = Color(0.98, 0.98, 0.94, 0.96)

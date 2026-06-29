@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://c71j658w77kwm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_panel"]
+bg_color = Color(0.6078117, 0.49399078, 0.37003753, 0.9411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.01, 0.34, 0.52, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="PlayerDialogueBubble" type="Control" unique_id=682510838]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PlayerBubble" type="Panel" parent="." unique_id=1157231623]
+layout_mode = 0
+offset_left = 746.0
+offset_top = 860.0
+offset_right = 1099.0
+offset_bottom = 952.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_player_panel")
+
+[node name="PlayerText" type="Label" parent="PlayerBubble" unique_id=742136359]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 337.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "玩家对话"
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+
+[node name="PlayerTail" type="ColorRect" parent="." unique_id=66466619]
+layout_mode = 0
+offset_left = 912.0
+offset_top = 946.0
+offset_right = 932.0
+offset_bottom = 966.0
+rotation = 0.785398
+pivot_offset = Vector2(10, 10)
+mouse_filter = 2
+color = Color(0.6358052, 0.48747295, 0.27077094, 0.9411765)

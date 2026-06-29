@@ -38,7 +38,7 @@ enum ObjectKind {
 		_sync_editor_nodes()
 @export var sprite_scale: Vector2 = Vector2.ONE:
 	set(value):
-		sprite_scale = value
+		sprite_scale = _sanitize_sprite_scale(value)
 		_sync_editor_nodes()
 @export var sprite_modulate: Color = Color.WHITE:
 	set(value):
@@ -46,6 +46,10 @@ enum ObjectKind {
 		_sync_editor_nodes()
 
 @export_group("Hotspot")
+@export var auto_hotspot_from_sprite: bool = false:
+	set(value):
+		auto_hotspot_from_sprite = value
+		_sync_editor_nodes()
 @export var hotspot_size: Vector2 = Vector2(64, 64):
 	set(value):
 		hotspot_size = value.max(Vector2.ONE)
@@ -156,6 +160,9 @@ const _ACTION_PROPERTIES_BY_KIND := {
 		"auto_build_actions": true
 	}
 }
+
+func _enter_tree() -> void:
+	_sync_editor_nodes()
 
 func _ready() -> void:
 	_sync_editor_nodes()
@@ -351,19 +358,73 @@ func _sync_editor_nodes() -> void:
 		return
 
 	var sprite := get_node_or_null("Sprite2D") as Sprite2D
+	if sprite == null:
+		sprite = Sprite2D.new()
+		sprite.name = "Sprite2D"
+		add_child(sprite)
+		_set_editor_owner(sprite)
 	if sprite != null:
+		if sprite_texture == null and sprite.texture != null:
+			sprite_texture = sprite.texture
 		sprite.texture = sprite_texture
 		sprite.offset = sprite_offset
 		sprite.scale = sprite_scale
-		sprite.modulate = sprite_modulate
+		if sprite_modulate != Color.WHITE or sprite.modulate == Color.WHITE:
+			sprite.modulate = sprite_modulate
 
 	var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
 	if collision == null:
-		return
-	collision.position = hotspot_offset
+		collision = CollisionShape2D.new()
+		collision.name = "CollisionShape2D"
+		add_child(collision)
+		_set_editor_owner(collision)
 
 	var rect_shape := collision.shape as RectangleShape2D
 	if rect_shape == null:
 		rect_shape = RectangleShape2D.new()
 		collision.shape = rect_shape
-	rect_shape.size = hotspot_size
+	rect_shape = _ensure_unique_collision_shape(collision, rect_shape)
+	rect_shape.resource_local_to_scene = true
+	rect_shape.size = _initial_collision_size()
+	collision.position = hotspot_offset
+
+func _sanitize_sprite_scale(value: Vector2) -> Vector2:
+	var sanitized := value
+	if is_zero_approx(sanitized.x):
+		sanitized.x = 1.0
+	if is_zero_approx(sanitized.y):
+		sanitized.y = 1.0
+	return sanitized
+
+func _initial_collision_size() -> Vector2:
+	if auto_hotspot_from_sprite and sprite_texture != null:
+		var texture_size := sprite_texture.get_size()
+		if texture_size.x > 0.0 and texture_size.y > 0.0:
+			return Vector2(
+				max(texture_size.x * abs(sprite_scale.x), 1.0),
+				max(texture_size.y * abs(sprite_scale.y), 1.0)
+			)
+	return hotspot_size.max(Vector2.ONE)
+
+func _ensure_unique_collision_shape(collision: CollisionShape2D, rect_shape: RectangleShape2D) -> RectangleShape2D:
+	if not Engine.is_editor_hint() or collision.has_meta("_interactive_collision_shape_unique"):
+		return rect_shape
+
+	var unique_shape := rect_shape.duplicate() as RectangleShape2D
+	if unique_shape == null:
+		return rect_shape
+
+	unique_shape.resource_local_to_scene = true
+	collision.shape = unique_shape
+	collision.set_meta("_interactive_collision_shape_unique", true)
+	return unique_shape
+
+func _set_editor_owner(node: Node) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	var edited_scene_root := get_tree().edited_scene_root
+	if edited_scene_root != null and (edited_scene_root == self or edited_scene_root.is_ancestor_of(self)):
+		node.owner = edited_scene_root
+	elif owner != null:
+		node.owner = owner
