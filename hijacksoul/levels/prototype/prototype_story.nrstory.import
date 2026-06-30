@@ -3,11 +3,12 @@
 importer="narrrail.nrstory_importer"
 type="Resource"
 uid="uid://ckmtjg4j11d0g"
-valid=false
+path="res://.godot/imported/prototype_story.nrstory-f4f498b3728c6e4c3bb096b9dd33d232.res"
 
 [deps]
 
 source_file="res://levels/prototype/prototype_story.nrstory"
+dest_files=["res://.godot/imported/prototype_story.nrstory-f4f498b3728c6e4c3bb096b9dd33d232.res"]
 
 [params]
 

@@ -11,31 +11,41 @@
 [ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
 [ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
 [ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="9_train_music"]
-[ext_resource type="Texture2D" uid="uid://b63jgupm2jaom" path="res://assets/ui/dialogue/narration_card.png" id="10_narration_card"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ti6s8"]
-resource_local_to_scene = true
-size = Vector2(520, 760)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfkm3"]
-resource_local_to_scene = true
-size = Vector2(400, 250)
+[ext_resource type="Texture2D" uid="uid://cpga1vu5fqjbe" path="res://assets/ui/dialogue/player_dialogue_bubble.png" id="12_bbvoe"]
+[ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="13_1kvv8"]
+[ext_resource type="Texture2D" uid="uid://5enkwtlmk3od" path="res://assets/ui/dialogue/npc_dialogue_bubble.png" id="14_risb3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbvoe"]
 resource_local_to_scene = true
-size = Vector2(393, 770)
+size = Vector2(520, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1kvv8"]
+resource_local_to_scene = true
+size = Vector2(400, 250)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_risb3"]
+resource_local_to_scene = true
+size = Vector2(393, 770)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5wkan"]
 resource_local_to_scene = true
 size = Vector2(1320, 223)
 
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
 font_color = Color(0.8, 0.78, 0.7, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r2kyi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d8wpw"]
+
 [node name="Train" type="Node2D" unique_id=1415883330]
 script = ExtResource("1_fr42t")
 view_id = "train"
 scene_path = "res://scenes/train.tscn"
+enter_actions = Array[Dictionary]([{
+"event_id": "train_story",
+"type": "emit_story_event"
+}])
 
 [node name="TrainMusic" type="AudioStreamPlayer" parent="." unique_id=707174431]
 stream = ExtResource("9_train_music")
@@ -75,7 +85,7 @@ toast_message = "窗外的原野被列车拉成一片柔和的光。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/left_window_view" index="1" unique_id=783993008]
 position = Vector2(-740, -5)
-shape = SubResource("RectangleShape2D_ti6s8")
+shape = SubResource("RectangleShape2D_bbvoe")
 
 [node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("3_o1hdh")]
 position = Vector2(960, 540)
@@ -88,18 +98,19 @@ toast_message = "另一侧的窗外掠过明亮的田野。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/right_window_view" index="1" unique_id=783993008]
 position = Vector2(755, -405)
-shape = SubResource("RectangleShape2D_tfkm3")
+shape = SubResource("RectangleShape2D_1kvv8")
 
 [node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
+visible = false
 position = Vector2(1080, 536)
 object_id = "train.girl"
 display_name = "女孩"
 hover_text = "交谈"
+initial_visible = false
 sprite_texture = ExtResource("2_train_background")
 sprite_scale = Vector2(0.8, 0.8)
 hotspot_size = Vector2(393, 770)
 hotspot_offset = Vector2(146, -75)
-story_event_on_click = "train_story"
 
 [node name="Sprite2D" parent="ObjectLayer/girl" index="0"]
 scale = Vector2(0.8, 0.8)
@@ -107,7 +118,7 @@ texture = ExtResource("2_train_background")
 
 [node name="CollisionShape2D" parent="ObjectLayer/girl" index="1"]
 position = Vector2(146, -75)
-shape = SubResource("RectangleShape2D_bbvoe")
+shape = SubResource("RectangleShape2D_risb3")
 metadata/_interactive_collision_shape_unique = true
 
 [node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("3_o1hdh")]
@@ -127,7 +138,7 @@ texture = ExtResource("4_fr42t")
 
 [node name="CollisionShape2D" parent="ObjectLayer/desk" index="1" unique_id=783993008]
 position = Vector2(190, 418.5)
-shape = SubResource("RectangleShape2D_1kvv8")
+shape = SubResource("RectangleShape2D_5wkan")
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
 script = ExtResource("5_m4isg")
@@ -162,18 +173,111 @@ label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
 
 [node name="DialogueOverlay" parent="." unique_id=103514923 instance=ExtResource("7_dialogue_overlay")]
-narration_position = Vector2(1518, 112)
-narration_size = Vector2(300, 231)
-narration_background_texture = ExtResource("10_narration_card")
-narration_background_color = Color(1, 1, 1, 0)
+layout_source = "scene_nodes"
 narration_text_color = Color(0.05, 0.045, 0.04, 1)
-narration_font_size = 13
-narration_text_margin_left = 26
-narration_text_margin_top = 44
-narration_text_margin_right = 36
-narration_text_margin_bottom = 36
+
+[node name="PlayerBubble" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble" parent_id_path=PackedInt32Array(103514923, 1286254889) index="0" unique_id=1157231623]
+offset_left = 1082.0
+offset_top = 858.0
+offset_right = 1602.0
+offset_bottom = 1074.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_r2kyi")
+
+[node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="0"]
+texture = ExtResource("12_bbvoe")
+
+[node name="PlayerText" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="1" unique_id=742136359]
+offset_left = 46.0
+offset_top = 56.0
+offset_right = 440.0
+offset_bottom = 170.0
+theme_override_colors/font_color = Color(0.35, 0.29, 0.29, 1)
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 20
+
+[node name="PlayerTail" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble" parent_id_path=PackedInt32Array(103514923, 1286254889) index="1" unique_id=66466619]
+visible = false
+
+[node name="NpcBubble" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble" parent_id_path=PackedInt32Array(103514923, 346014261) index="0" unique_id=1850627669]
+offset_left = 613.0
+offset_top = 462.0
+offset_right = 1133.0
+offset_bottom = 678.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_d8wpw")
+
+[node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="0"]
+texture = ExtResource("14_risb3")
+
+[node name="NpcName" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="1" unique_id=1679389401]
+visible = false
+theme_override_fonts/font = ExtResource("13_1kvv8")
+
+[node name="NpcText" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="2" unique_id=1729519819]
+offset_left = 40.0
+offset_top = 66.0
+offset_right = 470.0
+offset_bottom = 178.0
+theme_override_colors/font_color = Color(0.35, 0.29, 0.29, 1)
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 20
+
+[node name="NpcTail" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble" parent_id_path=PackedInt32Array(103514923, 346014261) index="1" unique_id=1310273835]
+visible = false
+
+[node name="NarrationBanner" parent="DialogueOverlay/DialogueStage" parent_id_path=PackedInt32Array(103514923, 1067672070) index="2" unique_id=144550745]
+anchors_preset = 0
+offset_left = 1539.0
+offset_top = 399.99997
+offset_right = 1839.0
+offset_bottom = 631.0
+scale = Vector2(1.16, 1.28)
+
+[node name="SerialLabel" parent="DialogueOverlay/DialogueStage/NarrationBanner" index="2"]
+offset_left = 16.615385
+offset_top = 10.164001
+offset_right = 102.46154
+offset_bottom = 28.644005
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 17
+
+[node name="TitleLabel" parent="DialogueOverlay/DialogueStage/NarrationBanner" index="3"]
+offset_left = 233.07692
+offset_top = 9.240002
+offset_right = 288.0
+offset_bottom = 29.568005
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 17
+
+[node name="BottomCodeLabel" parent="DialogueOverlay/DialogueStage/NarrationBanner" index="4"]
+offset_left = 14.769231
+offset_top = 200.04604
+offset_right = 86.76923
+offset_bottom = 219.91203
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 15
+
+[node name="QrTexture" parent="DialogueOverlay/DialogueStage/NarrationBanner" index="5"]
+offset_left = 227.53847
+offset_top = 160.77603
+offset_right = 287.53845
+offset_bottom = 220.83604
+
+[node name="Margin" parent="DialogueOverlay/DialogueStage/NarrationBanner" index="6"]
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 79
+
+[node name="NarrationText" parent="DialogueOverlay/DialogueStage/NarrationBanner/Margin" index="0"]
+theme_override_fonts/font = ExtResource("13_1kvv8")
+theme_override_font_sizes/font_size = 14
+text = "旁白预览"
 
 [editable path="ObjectLayer/left_window_view"]
 [editable path="ObjectLayer/right_window_view"]
 [editable path="ObjectLayer/girl"]
 [editable path="ObjectLayer/desk"]
+[editable path="DialogueOverlay"]
+[editable path="DialogueOverlay/DialogueStage/PlayerDialogueBubble"]
+[editable path="DialogueOverlay/DialogueStage/NpcDialogueBubble"]
+[editable path="DialogueOverlay/DialogueStage/NarrationBanner"]

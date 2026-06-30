@@ -106,3 +106,4 @@ mouse_filter = 2
 
 [editable path="DialogueStage/PlayerDialogueBubble"]
 [editable path="DialogueStage/NpcDialogueBubble"]
+[editable path="DialogueStage/NarrationBanner"]

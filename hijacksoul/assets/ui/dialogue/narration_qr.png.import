@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://daym40pebpnkt"
-path="res://.godot/imported/对话系统方案示意.png-8ff3e3be9986691f03206e6b53fbf6b8.ctex"
+uid="uid://cbjlhuqdddayy"
+path="res://.godot/imported/narration_qr.png-e5038df006fefd37b512fc143eee22eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Docs/对话系统方案示意.png"
-dest_files=["res://.godot/imported/对话系统方案示意.png-8ff3e3be9986691f03206e6b53fbf6b8.ctex"]
+source_file="res://assets/ui/dialogue/narration_qr.png"
+dest_files=["res://.godot/imported/narration_qr.png-e5038df006fefd37b512fc143eee22eb.ctex"]
 
 [params]
 

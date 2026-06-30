@@ -27,6 +27,18 @@ enum ObjectKind {
 @export var save_enabled: bool = true
 @export var default_state: String = "default"
 
+@export_group("Initial State")
+@export var initial_visible := true:
+	set(value):
+		initial_visible = value
+		if Engine.is_editor_hint():
+			visible = value
+@export var initial_enabled := true:
+	set(value):
+		initial_enabled = value
+		if Engine.is_editor_hint():
+			interaction_enabled = value
+
 @export_group("Visual")
 @export var sprite_texture: Texture2D:
 	set(value):
@@ -171,6 +183,8 @@ func _ready() -> void:
 
 	add_to_group("interactive_object")
 	current_state = default_state
+	visible = initial_visible
+	interaction_enabled = initial_enabled
 	_default_modulate = modulate
 	input_pickable = true
 	input_event.connect(_on_input_event)
@@ -313,6 +327,8 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 			_request_interaction()
 
 func _request_interaction() -> void:
+	if not is_interaction_enabled():
+		return
 	var payload := {
 		"object": self,
 		"object_id": object_id,

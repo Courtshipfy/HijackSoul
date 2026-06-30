@@ -1,4 +1,7 @@
-[gd_scene format=3 uid="uid://dhc1h1strgonb"]
+[gd_scene load_steps=3 format=3 uid="uid://dhc1h1strgonb"]
+
+[ext_resource type="Texture2D" uid="uid://b63jgupm2jaom" path="res://assets/ui/dialogue/narration_card.png" id="1_narration_card"]
+[ext_resource type="Texture2D" path="res://assets/ui/dialogue/narration_qr.png" id="2_narration_qr"]
 
 [node name="NarrationBanner" type="Control"]
 layout_mode = 0
@@ -16,7 +19,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.04, 0.04, 0.04, 0.72)
+color = Color(1, 1, 1, 0)
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
@@ -26,6 +29,52 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("1_narration_card")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SerialLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 22.0
+offset_right = 222.0
+offset_bottom = 62.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.71, 0.52, 0.47, 1)
+theme_override_font_sizes/font_size = 36
+text = "S004522"
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 505.0
+offset_top = 20.0
+offset_right = 624.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "旁白"
+horizontal_alignment = 1
+
+[node name="BottomCodeLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 433.0
+offset_right = 188.0
+offset_bottom = 476.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "361000"
+
+[node name="QrTexture" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 493.0
+offset_top = 348.0
+offset_right = 623.0
+offset_bottom = 478.0
+mouse_filter = 2
+texture = ExtResource("2_narration_qr")
 expand_mode = 1
 stretch_mode = 5
 
@@ -37,15 +86,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 170
 
 [node name="NarrationText" type="Label" parent="Margin"]
 layout_mode = 2
 text = "旁白"
 vertical_alignment = 1
 autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.05, 0.045, 0.04, 1)
+theme_override_font_sizes/font_size = 30
