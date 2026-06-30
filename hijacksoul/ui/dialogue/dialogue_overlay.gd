@@ -237,6 +237,12 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 		choice_button_size = value.max(Vector2.ONE)
 		_refresh_editor_layout()
 
+@export_group("Dialogue Motion")
+@export var bubble_fade_in_duration := 0.18
+@export var bubble_fade_out_duration := 0.14
+@export var bubble_fade_in_scale := 0.96
+@export var bubble_fade_out_scale := 0.98
+
 @export_group("Editor Preview")
 @export var show_editor_preview := true:
 	set(value):
@@ -293,11 +299,14 @@ var _last_player_bubble_rect := Rect2()
 var _last_npc_bubble_rect := Rect2()
 var _last_narration_rect := Rect2()
 var _active := false
+var _panel_tweens: Dictionary = {}
+var _panel_base_scales: Dictionary = {}
 
 func _ready() -> void:
 	_default_npc_position = npc_bubble_position
 	_apply_fixed_theme()
 	_apply_scene_style()
+	_cache_motion_base_scales()
 	if Engine.is_editor_hint():
 		_apply_editor_preview()
 		return
@@ -347,8 +356,6 @@ func _apply_fixed_theme() -> void:
 
 func _prepare_label(label: Label) -> void:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 func _connect_story_bridge() -> void:
@@ -412,23 +419,23 @@ func _on_npc_bubble_position_requested(payload: Dictionary) -> void:
 		_position_npc_bubble(speaker)
 
 func _show_player_line(text: String) -> void:
-	_hide_dialogue_panels()
+	_hide_dialogue_panels(_player_group)
 	_player_label.text = text
 	_fit_player_bubble()
-	_player_group.visible = true
+	_show_panel(_player_group)
 
 func _update_narration_line(text: String) -> void:
-	_hide_dialogue_panels()
+	_hide_dialogue_panels(_narration_panel)
 	_narration_label.text = text
-	_narration_panel.visible = true
+	_show_panel(_narration_panel)
 
 func _show_npc_line(speaker: String, text: String) -> void:
-	_hide_dialogue_panels()
+	_hide_dialogue_panels(_npc_group)
 	_npc_name_label.text = speaker if not speaker.is_empty() else "NPC"
 	_npc_text_label.text = text
 	_fit_npc_bubble()
 	_position_npc_bubble(speaker)
-	_npc_group.visible = true
+	_show_panel(_npc_group)
 
 func _position_npc_bubble(speaker: String) -> void:
 	var position: Vector2 = _speaker_positions.get(speaker, _default_npc_position)
@@ -453,16 +460,14 @@ func _position_npc_bubble(speaker: String) -> void:
 
 func _fit_player_bubble() -> void:
 	if player_background_texture != null:
-		var bubble_size := player_bubble_size
 		if _uses_scene_node_layout():
-			bubble_size = _player_panel.size
-		else:
-			_player_panel.position = Vector2(player_tail_center.x - player_bubble_size.x * 0.72, player_bubble_top)
-			_player_panel.size = player_bubble_size
+			return
+		_player_panel.position = Vector2(player_tail_center.x - player_bubble_size.x * 0.72, player_bubble_top)
+		_player_panel.size = player_bubble_size
 		_player_label.position = Vector2(player_text_margin_left, player_text_margin_top)
 		_player_label.size = Vector2(
-			maxf(1.0, bubble_size.x - player_text_margin_left - player_text_margin_right),
-			maxf(1.0, bubble_size.y - player_text_margin_top - player_text_margin_bottom)
+			maxf(1.0, player_bubble_size.x - player_text_margin_left - player_text_margin_right),
+			maxf(1.0, player_bubble_size.y - player_text_margin_top - player_text_margin_bottom)
 		)
 		return
 	var width: float = _bubble_width_for_text(_player_label, _player_label.text, PLAYER_BUBBLE_MIN_WIDTH, PLAYER_TEXT_INSET.x * 2.0)
@@ -472,16 +477,15 @@ func _fit_player_bubble() -> void:
 
 func _fit_npc_bubble() -> void:
 	if npc_background_texture != null:
-		var bubble_size := npc_bubble_size
 		if _uses_scene_node_layout():
-			bubble_size = _npc_panel.size
-		else:
-			_npc_panel.size = npc_bubble_size
+			_npc_name_label.visible = false
+			return
+		_npc_panel.size = npc_bubble_size
 		_npc_name_label.visible = false
 		_npc_text_label.position = Vector2(npc_text_margin_left, npc_text_margin_top)
 		_npc_text_label.size = Vector2(
-			maxf(1.0, bubble_size.x - npc_text_margin_left - npc_text_margin_right),
-			maxf(1.0, bubble_size.y - npc_text_margin_top - npc_text_margin_bottom)
+			maxf(1.0, npc_bubble_size.x - npc_text_margin_left - npc_text_margin_right),
+			maxf(1.0, npc_bubble_size.y - npc_text_margin_top - npc_text_margin_bottom)
 		)
 		return
 	_npc_name_label.visible = true
@@ -587,13 +591,107 @@ func _hide_all() -> void:
 	_hide_dialogue_panels()
 	_clear_choices()
 
-func _hide_dialogue_panels() -> void:
-	_hide_speech_bubbles()
-	_narration_panel.visible = false
+func _hide_dialogue_panels(except_panel: Control = null) -> void:
+	_hide_speech_bubbles(except_panel)
+	if _narration_panel != except_panel:
+		_hide_panel(_narration_panel)
 
-func _hide_speech_bubbles() -> void:
-	_player_group.visible = false
-	_npc_group.visible = false
+func _hide_speech_bubbles(except_panel: Control = null) -> void:
+	if _player_group != except_panel:
+		_hide_panel(_player_group)
+	if _npc_group != except_panel:
+		_hide_panel(_npc_group)
+
+func _cache_motion_base_scales() -> void:
+	for panel in [_player_panel, _npc_panel, _narration_panel]:
+		_panel_base_scales[panel] = panel.scale
+
+func _show_panel(panel: Control) -> void:
+	var visual := _motion_target_for(panel)
+	if Engine.is_editor_hint() or bubble_fade_in_duration <= 0.0:
+		_kill_panel_tween(visual)
+		panel.visible = true
+		_reset_panel_motion(visual)
+		return
+
+	_remember_panel_base_scale(visual)
+	_kill_panel_tween(visual)
+	panel.visible = true
+	visual.pivot_offset = visual.size * 0.5
+	visual.scale = _panel_base_scales[visual] * bubble_fade_in_scale
+	_set_control_alpha(visual, 0.0)
+
+	var tween := create_tween()
+	_panel_tweens[visual] = tween
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(visual, "modulate:a", 1.0, bubble_fade_in_duration)
+	tween.tween_property(visual, "scale", _panel_base_scales[visual], bubble_fade_in_duration)
+	tween.finished.connect(_on_panel_show_finished.bind(visual))
+
+func _hide_panel(panel: Control) -> void:
+	var visual := _motion_target_for(panel)
+	if not panel.visible:
+		_kill_panel_tween(visual)
+		_reset_panel_motion(visual)
+		return
+	if Engine.is_editor_hint() or bubble_fade_out_duration <= 0.0:
+		_kill_panel_tween(visual)
+		panel.visible = false
+		_reset_panel_motion(visual)
+		return
+
+	_remember_panel_base_scale(visual)
+	_kill_panel_tween(visual)
+	visual.pivot_offset = visual.size * 0.5
+
+	var tween := create_tween()
+	_panel_tweens[visual] = tween
+	tween.set_parallel(true)
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_IN)
+	tween.tween_property(visual, "modulate:a", 0.0, bubble_fade_out_duration)
+	tween.tween_property(visual, "scale", _panel_base_scales[visual] * bubble_fade_out_scale, bubble_fade_out_duration)
+	tween.finished.connect(_on_panel_hide_finished.bind(panel, visual))
+
+func _motion_target_for(panel: Control) -> Control:
+	if panel == _player_group:
+		return _player_panel
+	if panel == _npc_group:
+		return _npc_panel
+	return panel
+
+func _remember_panel_base_scale(visual: Control) -> void:
+	if not _panel_base_scales.has(visual):
+		_panel_base_scales[visual] = visual.scale
+
+func _reset_panel_motion(visual: Control) -> void:
+	_remember_panel_base_scale(visual)
+	_set_control_alpha(visual, 1.0)
+	visual.scale = _panel_base_scales[visual]
+
+func _set_control_alpha(control: Control, alpha: float) -> void:
+	var color := control.modulate
+	color.a = alpha
+	control.modulate = color
+
+func _kill_panel_tween(visual: Control) -> void:
+	if not _panel_tweens.has(visual):
+		return
+	var tween: Tween = _panel_tweens[visual]
+	if is_instance_valid(tween):
+		tween.kill()
+	_panel_tweens.erase(visual)
+
+func _on_panel_show_finished(visual: Control) -> void:
+	_panel_tweens.erase(visual)
+	_reset_panel_motion(visual)
+
+func _on_panel_hide_finished(panel: Control, visual: Control) -> void:
+	_panel_tweens.erase(visual)
+	panel.visible = false
+	_reset_panel_motion(visual)
 
 func _clear_choices() -> void:
 	for child in _choice_layer.get_children():

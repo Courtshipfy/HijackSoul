@@ -48,9 +48,9 @@ variation_embolden = 0.08
 base_font = ExtResource("16_d8wpw")
 variation_embolden = 0.05
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_risb3"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_txwux"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5wkan"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12qeo"]
 
 [node name="Train" type="Node2D" unique_id=1415883330]
 script = ExtResource("1_fr42t")
@@ -115,6 +115,7 @@ position = Vector2(755, -405)
 shape = SubResource("RectangleShape2D_5wkan")
 
 [node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
+visible = false
 position = Vector2(1080, 536)
 object_id = "train.girl"
 display_name = "女孩"
@@ -199,23 +200,19 @@ offset_left = 1026.0
 offset_top = 860.0
 offset_right = 1540.0
 offset_bottom = 1066.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_risb3")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_txwux")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="0"]
 texture = ExtResource("12_bbvoe")
 
 [node name="PlayerText" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="1" unique_id=742136359]
-offset_left = 44.0
-offset_top = 34.0
-offset_right = 490.0
-offset_bottom = 114.0
+offset_left = 43.0
+offset_top = 45.0
+offset_right = 489.0
+offset_bottom = 125.0
 theme_override_colors/font_color = Color(0.658824, 0.564706, 0.533333, 1)
 theme_override_fonts/font = SubResource("FontVariation_dialogue_train")
 theme_override_font_sizes/font_size = 20
-text = "这是一段文字。这是一段文字。这是一段文字。
-这是一段文字。这只是一段文字，没有意义的。
-阿巴巴巴•••••• 如你所见，只是测试字数。
-没了，不知道说什么。"
 vertical_alignment = 0
 
 [node name="PlayerTail" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble" parent_id_path=PackedInt32Array(103514923, 1286254889) index="1" unique_id=66466619]
@@ -226,7 +223,7 @@ offset_left = 880.0
 offset_top = 505.0
 offset_right = 1392.0
 offset_bottom = 721.0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_5wkan")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_12qeo")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="0"]
 offset_right = -45.0
@@ -236,19 +233,16 @@ texture = ExtResource("14_risb3")
 [node name="NpcName" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="1" unique_id=1679389401]
 visible = false
 theme_override_fonts/font = SubResource("FontVariation_dialogue_train")
+vertical_alignment = 0
 
 [node name="NpcText" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="2" unique_id=1729519819]
-offset_left = 33.0
-offset_top = 91.0
-offset_right = 477.0
-offset_bottom = 180.0
+offset_left = 47.0
+offset_top = 84.0
+offset_right = 437.0
+offset_bottom = 173.0
 theme_override_colors/font_color = Color(0.658824, 0.564706, 0.533333, 1)
 theme_override_fonts/font = SubResource("FontVariation_dialogue_train")
 theme_override_font_sizes/font_size = 20
-text = "这是一段文字。这是一段文字。这是一段文字。
-这是一段文字。这只是一段文字，没有意义的。
-阿巴巴巴•••••• 如你所见，只是测试字数。
-没了，不知道说什么。"
 vertical_alignment = 0
 
 [node name="NpcTail" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble" parent_id_path=PackedInt32Array(103514923, 346014261) index="1" unique_id=1310273835]
