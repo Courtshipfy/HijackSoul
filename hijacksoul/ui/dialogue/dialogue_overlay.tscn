@@ -10,37 +10,57 @@
 [ext_resource type="Texture2D" uid="uid://cx48ub1nrqcqo" path="res://assets/ui/dialogue/player_choice_button.png" id="8_choice_button"]
 [ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="9_simsun"]
 [ext_resource type="FontFile" uid="uid://casrnrlnqg4xq" path="res://assets/fonts/ui/huakang_fangyuan_w7.ttc" id="10_huakang"]
+[ext_resource type="FontFile" uid="uid://g148mjs36qeq" path="res://assets/fonts/ui/cascadia_code.ttf" id="11_cascadia"]
+[ext_resource type="FontFile" uid="uid://biyigmrfm8hit" path="res://assets/fonts/ui/simhei.ttf" id="12_simhei"]
+
+[sub_resource type="FontVariation" id="FontVariation_dialogue"]
+base_font = ExtResource("9_simsun")
+variation_embolden = 0.18
+
+[sub_resource type="FontVariation" id="FontVariation_choice"]
+base_font = ExtResource("10_huakang")
+variation_embolden = 0.12
+
+[sub_resource type="FontVariation" id="FontVariation_code"]
+base_font = ExtResource("11_cascadia")
+variation_embolden = 0.08
+
+[sub_resource type="FontVariation" id="FontVariation_title"]
+base_font = ExtResource("12_simhei")
+variation_embolden = 0.05
 
 [node name="DialogueOverlay" type="CanvasLayer" unique_id=1982759684]
 layer = 20
 script = ExtResource("1_dialogue_overlay")
-player_text_color = Color(0.35, 0.29, 0.29, 1)
+player_text_color = Color(0.658824, 0.564706, 0.533333, 1)
 player_font_size = 20
 player_background_texture = ExtResource("5_player_dialogue")
-player_text_font = ExtResource("9_simsun")
+player_text_font = SubResource("FontVariation_dialogue")
 player_bubble_size = Vector2(520, 216)
-player_text_margin_left = 46
-player_text_margin_top = 56
-player_text_margin_right = 80
-player_text_margin_bottom = 46
-npc_text_color = Color(0.35, 0.29, 0.29, 1)
+player_text_margin_left = 44
+player_text_margin_top = 34
+player_text_margin_right = 24
+player_text_margin_bottom = 92
+npc_text_color = Color(0.658824, 0.564706, 0.533333, 1)
 npc_text_font_size = 20
 npc_background_texture = ExtResource("6_npc_dialogue")
-npc_text_font = ExtResource("9_simsun")
+npc_text_font = SubResource("FontVariation_dialogue")
 npc_bubble_size = Vector2(520, 216)
-npc_text_margin_left = 40
-npc_text_margin_top = 66
-npc_text_margin_right = 50
-npc_text_margin_bottom = 38
+npc_text_margin_left = 33
+npc_text_margin_top = 91
+npc_text_margin_right = 35
+npc_text_margin_bottom = 36
 narration_background_texture = ExtResource("7_narration_card")
 narration_background_color = Color(1, 1, 1, 0)
 narration_text_color = Color(1, 1, 1, 1)
 narration_font_size = 18
-narration_text_font = ExtResource("9_simsun")
+narration_text_font = SubResource("FontVariation_dialogue")
+narration_code_font = SubResource("FontVariation_code")
+narration_title_font = SubResource("FontVariation_title")
 choice_background_texture = ExtResource("8_choice_button")
-choice_text_font = ExtResource("10_huakang")
-choice_text_color = Color(0.55, 0.38, 0.38, 1)
-choice_font_size = 36
+choice_text_font = SubResource("FontVariation_choice")
+choice_text_color = Color(0.658824, 0.564706, 0.533333, 1)
+choice_font_size = 32
 choice_button_size = Vector2(420, 130)
 
 [node name="DialogueStage" type="Control" parent="." unique_id=1067672070]

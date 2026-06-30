@@ -23,6 +23,8 @@ const NARRATION_TEXT_FONT_SIZE := 30
 const NARRATION_BOTTOM_CODE_FONT_SIZE := 32
 const NPC_RIGHT_TAIL_EDGE_OVERLAP := 6.0
 const NPC_LEFT_TAIL_EDGE_OVERLAP := 14.0
+const CHOICE_DESIGN_SIZE := Vector2(953, 295)
+const CHOICE_TEXT_RECT := Rect2(145, 113, 664, 67)
 const NPC_TAIL_OFFSET_BY_SIDE := {
 	"left": Vector2(-14, 38),
 	"right": Vector2(354, 38),
@@ -190,6 +192,14 @@ const NPC_TAIL_OFFSET_BY_SIDE := {
 	set(value):
 		narration_text_font = value
 		_refresh_editor_layout()
+@export var narration_code_font: Font:
+	set(value):
+		narration_code_font = value
+		_refresh_editor_layout()
+@export var narration_title_font: Font:
+	set(value):
+		narration_title_font = value
+		_refresh_editor_layout()
 @export var narration_text_margin_left := 22:
 	set(value):
 		narration_text_margin_left = maxi(0, value)
@@ -337,8 +347,9 @@ func _apply_fixed_theme() -> void:
 
 func _prepare_label(label: Label) -> void:
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 func _connect_story_bridge() -> void:
 	var story_bridge := get_tree().root.get_node_or_null("StoryBridge")
@@ -641,10 +652,11 @@ func _apply_scene_style() -> void:
 	_narration_serial_label.add_theme_color_override("font_color", Color(0.71, 0.52, 0.47, 1.0))
 	_narration_title_label.add_theme_color_override("font_color", Color.BLACK)
 	_narration_bottom_code_label.add_theme_color_override("font_color", Color.BLACK)
-	if narration_text_font != null:
-		_narration_serial_label.add_theme_font_override("font", narration_text_font)
-		_narration_title_label.add_theme_font_override("font", narration_text_font)
-		_narration_bottom_code_label.add_theme_font_override("font", narration_text_font)
+	if narration_code_font != null:
+		_narration_serial_label.add_theme_font_override("font", narration_code_font)
+		_narration_bottom_code_label.add_theme_font_override("font", narration_code_font)
+	if narration_title_font != null:
+		_narration_title_label.add_theme_font_override("font", narration_title_font)
 	_narration_label.add_theme_color_override("font_color", narration_text_color)
 	_narration_label.add_theme_font_size_override("font_size", narration_font_size)
 	if narration_text_font != null:
@@ -689,13 +701,14 @@ func _apply_panel_style(panel: Panel, fill: Color, border: Color) -> void:
 
 func _choice_texture_style(texture: Texture2D, modulate: Color) -> StyleBoxTexture:
 	var style := StyleBoxTexture.new()
+	var scale := Vector2(choice_button_size.x / CHOICE_DESIGN_SIZE.x, choice_button_size.y / CHOICE_DESIGN_SIZE.y)
 	style.texture = texture
 	style.modulate_color = modulate
 	style.draw_center = true
-	style.content_margin_left = 34
-	style.content_margin_top = 18
-	style.content_margin_right = 34
-	style.content_margin_bottom = 18
+	style.content_margin_left = roundi(CHOICE_TEXT_RECT.position.x * scale.x)
+	style.content_margin_top = roundi(CHOICE_TEXT_RECT.position.y * scale.y)
+	style.content_margin_right = roundi((CHOICE_DESIGN_SIZE.x - CHOICE_TEXT_RECT.end.x) * scale.x)
+	style.content_margin_bottom = roundi((CHOICE_DESIGN_SIZE.y - CHOICE_TEXT_RECT.end.y) * scale.y)
 	return style
 
 func _apply_editor_preview() -> void:
