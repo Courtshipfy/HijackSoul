@@ -13,6 +13,10 @@ const SESSION_SCRIPT := "res://addons/narrrail/runtime/narrrail_session.gd"
 const SETTING_STORY_RESOURCE_ROOT := "narrrail/story_resource_root"
 const DEFAULT_STORY_RESOURCE_ROOT := "res://narrrail_stories"
 const STORY_EVENT_ROUTER_NODE := "StoryEventRouter"
+const BLOCKING_STORY_EVENTS := {
+	"timeline.wait": true,
+	"wait": true
+}
 
 @export var story_event_map: Dictionary = {
 	"inspect_wall_note": DEFAULT_STORY_PATH
@@ -45,6 +49,7 @@ func start_story(story_path: String, initial_variables: Dictionary = {}) -> bool
 	_session = session_script.new()
 	_active_story_path = story_path
 	_active_story_data = load_result.get("story", {})
+	_configure_session(_session)
 	_connect_session(_session)
 	_session.start(_active_story_data, initial_variables)
 	return true
@@ -85,6 +90,7 @@ func restore_snapshot(snapshot: Dictionary) -> bool:
 	_session = session_script.new()
 	_active_story_path = story_path
 	_active_story_data = load_result.get("story", {})
+	_configure_session(_session)
 	_connect_session(_session)
 	return _session.restore_save_snapshot(_active_story_data, session_snapshot)
 
@@ -129,6 +135,10 @@ func _connect_session(session: RefCounted) -> void:
 	)
 	session.event_emitted.connect(_on_narrrail_event_emitted)
 
+func _configure_session(session: RefCounted) -> void:
+	if session.has_method("set_blocking_event_types"):
+		session.set_blocking_event_types(BLOCKING_STORY_EVENTS.keys())
+
 func _load_story_data(story_path: String) -> Dictionary:
 	var loader_path := DIRECT_STORY_LOADER_SCRIPT if story_path.ends_with(".nrstory") else STORY_LOADER_SCRIPT
 	var loader_script: Script = load(loader_path)
@@ -144,15 +154,29 @@ func _on_story_event_requested(event_id: String, _payload: Dictionary) -> void:
 	start_story(story_path)
 
 func _on_narrrail_event_emitted(payload: Dictionary) -> void:
+	var event_session := _session
+	var should_pause := _should_pause_for_story_event(payload)
 	var router := get_tree().root.get_node_or_null(STORY_EVENT_ROUTER_NODE)
 	if router == null:
+		if should_pause and event_session != null:
+			event_session.resume()
 		_raise_error("StoryEventRouter autoload is missing.")
 		return
+
+	if should_pause and event_session != null:
+		event_session.pause()
 
 	var handled: bool = await router.handle_event(payload)
 	if not handled:
 		var event_type := String(payload.get("eventType", payload.get("eventId", ""))).strip_edges()
 		_raise_error("NarrRail story event failed: %s" % event_type)
+
+	if should_pause and event_session != null:
+		event_session.resume()
+
+func _should_pause_for_story_event(payload: Dictionary) -> bool:
+	var event_type := String(payload.get("eventType", payload.get("eventId", ""))).strip_edges()
+	return BLOCKING_STORY_EVENTS.has(event_type)
 
 func _raise_error(message: String) -> void:
 	story_error.emit(message)

@@ -213,7 +213,7 @@ offset_bottom = 125.0
 theme_override_colors/font_color = Color(0.658824, 0.564706, 0.533333, 1)
 theme_override_fonts/font = SubResource("FontVariation_dialogue_train")
 theme_override_font_sizes/font_size = 20
-vertical_alignment = 0
+metadata/_edit_lock_ = true
 
 [node name="PlayerTail" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble" parent_id_path=PackedInt32Array(103514923, 1286254889) index="1" unique_id=66466619]
 visible = false
@@ -243,7 +243,6 @@ offset_bottom = 173.0
 theme_override_colors/font_color = Color(0.658824, 0.564706, 0.533333, 1)
 theme_override_fonts/font = SubResource("FontVariation_dialogue_train")
 theme_override_font_sizes/font_size = 20
-vertical_alignment = 0
 
 [node name="NpcTail" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble" parent_id_path=PackedInt32Array(103514923, 346014261) index="1" unique_id=1310273835]
 visible = false
