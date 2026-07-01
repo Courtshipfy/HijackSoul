@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdlhb86mjq6yg"
-path="res://.godot/imported/738C4418CC4C1F78135C6C0394A241C9.png-9973fd244bb1868496b42e1c41ff17b7.ctex"
+uid="uid://nxf3ct0l224h"
+path="res://.godot/imported/tunnel_dark_overlay.png-372dd21ee8fdc112061a6f9ea20aa111.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://arts/train/738C4418CC4C1F78135C6C0394A241C9.png"
-dest_files=["res://.godot/imported/738C4418CC4C1F78135C6C0394A241C9.png-9973fd244bb1868496b42e1c41ff17b7.ctex"]
+source_file="res://arts/train/environment/tunnel_dark_overlay.png"
+dest_files=["res://.godot/imported/tunnel_dark_overlay.png-372dd21ee8fdc112061a6f9ea20aa111.ctex"]
 
 [params]
 

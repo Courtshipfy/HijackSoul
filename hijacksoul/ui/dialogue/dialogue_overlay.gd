@@ -301,6 +301,10 @@ var _last_narration_rect := Rect2()
 var _active := false
 var _panel_tweens: Dictionary = {}
 var _panel_base_scales: Dictionary = {}
+var _is_transitioning := false
+var _current_dialogue_panel: Control = null
+var _pending_panel: Control = null
+var _pending_prepare: Callable
 
 func _ready() -> void:
 	_default_npc_position = npc_bubble_position
@@ -318,7 +322,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint():
 		return
-	if _should_advance_from_input(event):
+	if _should_advance_from_input(event, false):
 		_next_dialogue()
 		get_viewport().set_input_as_handled()
 
@@ -335,11 +339,11 @@ func _process(_delta: float) -> void:
 func _apply_fixed_theme() -> void:
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_choice_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_player_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_player_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_player_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_npc_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_npc_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_npc_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_narration_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_narration_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	_narration_background_color.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_narration_serial_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -369,9 +373,13 @@ func _connect_story_bridge() -> void:
 	story_bridge.dialogue_npc_bubble_position_requested.connect(_on_npc_bubble_position_requested)
 
 func _connect_stage_input() -> void:
-	var callback := Callable(self, "_on_stage_gui_input")
-	if not _stage.gui_input.is_connected(callback):
-		_stage.gui_input.connect(callback)
+	var stage_callback := Callable(self, "_on_stage_gui_input")
+	if not _stage.gui_input.is_connected(stage_callback):
+		_stage.gui_input.connect(stage_callback)
+	for panel in [_player_panel, _npc_panel, _narration_panel]:
+		var bubble_callback := Callable(self, "_on_bubble_gui_input")
+		if not panel.gui_input.is_connected(bubble_callback):
+			panel.gui_input.connect(bubble_callback)
 
 func _on_dialogue_line_requested(payload: Dictionary) -> void:
 	_begin_dialogue()
@@ -393,6 +401,7 @@ func _on_dialogue_line_requested(payload: Dictionary) -> void:
 func _on_dialogue_choices_requested(choices: Array) -> void:
 	_begin_dialogue()
 	_stage.mouse_filter = Control.MOUSE_FILTER_STOP
+	_clear_pending_transition()
 	_hide_dialogue_panels()
 	_clear_choices()
 
@@ -423,23 +432,26 @@ func _on_npc_bubble_position_requested(payload: Dictionary) -> void:
 		_position_npc_bubble(speaker)
 
 func _show_player_line(text: String) -> void:
-	_hide_dialogue_panels(_player_group)
+	_transition_to_panel(_player_group, Callable(self, "_prepare_player_line").bind(text))
+
+func _prepare_player_line(text: String) -> void:
 	_player_label.text = text
 	_fit_player_bubble()
-	_show_panel(_player_group)
 
 func _update_narration_line(text: String) -> void:
-	_hide_dialogue_panels(_narration_panel)
+	_transition_to_panel(_narration_panel, Callable(self, "_prepare_narration_line").bind(text))
+
+func _prepare_narration_line(text: String) -> void:
 	_narration_label.text = text
-	_show_panel(_narration_panel)
 
 func _show_npc_line(speaker: String, text: String) -> void:
-	_hide_dialogue_panels(_npc_group)
+	_transition_to_panel(_npc_group, Callable(self, "_prepare_npc_line").bind(speaker, text))
+
+func _prepare_npc_line(speaker: String, text: String) -> void:
 	_npc_name_label.text = speaker if not speaker.is_empty() else "NPC"
 	_npc_text_label.text = text
 	_fit_npc_bubble()
 	_position_npc_bubble(speaker)
-	_show_panel(_npc_group)
 
 func _position_npc_bubble(speaker: String) -> void:
 	var position: Vector2 = _speaker_positions.get(speaker, _default_npc_position)
@@ -567,16 +579,20 @@ func _add_choice_button(index: int, text: String) -> void:
 		button.grab_focus.call_deferred()
 
 func _on_stage_gui_input(event: InputEvent) -> void:
-	if _should_advance_from_input(event):
-		_next_dialogue()
+	if event is InputEventMouseButton:
 		_stage.accept_event()
 
-func _should_advance_from_input(event: InputEvent) -> bool:
-	if not _active or _choice_layer.get_child_count() > 0:
+func _on_bubble_gui_input(event: InputEvent) -> void:
+	if _should_advance_from_input(event, true):
+		_next_dialogue()
+		get_viewport().set_input_as_handled()
+
+func _should_advance_from_input(event: InputEvent, allow_mouse: bool) -> bool:
+	if not _active or _is_transitioning or _choice_layer.get_child_count() > 0:
 		return false
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
-		return mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT
+		return allow_mouse and mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT
 	return event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_select")
 
 func _on_choice_pressed(index: int) -> void:
@@ -592,8 +608,64 @@ func _next_dialogue() -> void:
 func _hide_all() -> void:
 	_active = false
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_clear_pending_transition()
 	_hide_dialogue_panels()
 	_clear_choices()
+
+func _transition_to_panel(target_panel: Control, prepare: Callable) -> void:
+	if Engine.is_editor_hint():
+		prepare.call()
+		_hide_dialogue_panels(target_panel)
+		_show_panel(target_panel)
+		_current_dialogue_panel = target_panel
+		return
+
+	_pending_panel = target_panel
+	_pending_prepare = prepare
+	if _is_transitioning:
+		return
+
+	var current_panel := _current_dialogue_panel
+	if current_panel == null or not current_panel.visible:
+		current_panel = _visible_dialogue_panel()
+
+	if current_panel != null:
+		_is_transitioning = true
+		_hide_panel(current_panel, Callable(self, "_show_pending_panel"))
+		return
+
+	_is_transitioning = true
+	_show_pending_panel()
+
+func _show_pending_panel() -> void:
+	if _pending_panel == null or not _pending_prepare.is_valid():
+		_is_transitioning = false
+		_current_dialogue_panel = null
+		return
+
+	var target_panel := _pending_panel
+	var prepare := _pending_prepare
+	_pending_panel = null
+	_pending_prepare = Callable()
+
+	_hide_dialogue_panels(target_panel)
+	prepare.call()
+	_show_panel(target_panel)
+	_current_dialogue_panel = target_panel
+	if Engine.is_editor_hint() or bubble_fade_in_duration <= 0.0:
+		_is_transitioning = false
+
+func _visible_dialogue_panel() -> Control:
+	for panel in [_player_group, _npc_group, _narration_panel]:
+		if panel.visible:
+			return panel
+	return null
+
+func _clear_pending_transition() -> void:
+	_is_transitioning = false
+	_pending_panel = null
+	_pending_prepare = Callable()
+	_current_dialogue_panel = null
 
 func _hide_dialogue_panels(except_panel: Control = null) -> void:
 	_hide_speech_bubbles(except_panel)
@@ -634,16 +706,20 @@ func _show_panel(panel: Control) -> void:
 	tween.tween_property(visual, "scale", _panel_base_scales[visual], bubble_fade_in_duration)
 	tween.finished.connect(_on_panel_show_finished.bind(visual))
 
-func _hide_panel(panel: Control) -> void:
+func _hide_panel(panel: Control, finished_callback: Callable = Callable()) -> void:
 	var visual := _motion_target_for(panel)
 	if not panel.visible:
 		_kill_panel_tween(visual)
 		_reset_panel_motion(visual)
+		if finished_callback.is_valid():
+			finished_callback.call()
 		return
 	if Engine.is_editor_hint() or bubble_fade_out_duration <= 0.0:
 		_kill_panel_tween(visual)
 		panel.visible = false
 		_reset_panel_motion(visual)
+		if finished_callback.is_valid():
+			finished_callback.call()
 		return
 
 	_remember_panel_base_scale(visual)
@@ -657,7 +733,7 @@ func _hide_panel(panel: Control) -> void:
 	tween.set_ease(Tween.EASE_IN)
 	tween.tween_property(visual, "modulate:a", 0.0, bubble_fade_out_duration)
 	tween.tween_property(visual, "scale", _panel_base_scales[visual] * bubble_fade_out_scale, bubble_fade_out_duration)
-	tween.finished.connect(_on_panel_hide_finished.bind(panel, visual))
+	tween.finished.connect(_on_panel_hide_finished.bind(panel, visual, finished_callback))
 
 func _motion_target_for(panel: Control) -> Control:
 	if panel == _player_group:
@@ -691,11 +767,22 @@ func _kill_panel_tween(visual: Control) -> void:
 func _on_panel_show_finished(visual: Control) -> void:
 	_panel_tweens.erase(visual)
 	_reset_panel_motion(visual)
+	_is_transitioning = false
+	if _pending_panel != null and _pending_prepare.is_valid():
+		var target_panel := _pending_panel
+		var prepare := _pending_prepare
+		_pending_panel = null
+		_pending_prepare = Callable()
+		_transition_to_panel(target_panel, prepare)
 
-func _on_panel_hide_finished(panel: Control, visual: Control) -> void:
+func _on_panel_hide_finished(panel: Control, visual: Control, finished_callback: Callable = Callable()) -> void:
 	_panel_tweens.erase(visual)
 	panel.visible = false
 	_reset_panel_motion(visual)
+	if panel == _current_dialogue_panel:
+		_current_dialogue_panel = null
+	if finished_callback.is_valid():
+		finished_callback.call()
 
 func _clear_choices() -> void:
 	for child in _choice_layer.get_children():

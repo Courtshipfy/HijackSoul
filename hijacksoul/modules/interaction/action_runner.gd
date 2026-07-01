@@ -45,6 +45,8 @@ func _run_action(action: Dictionary, context: Dictionary) -> bool:
 			return await _change_view(action, context)
 		"set_object_state":
 			return _set_object_state(action, context)
+		"set_environment_state":
+			return _set_environment_state(action, context)
 		"open_puzzle":
 			return _open_puzzle(action, context)
 		"show_toast":
@@ -132,6 +134,21 @@ func _set_object_state(action: Dictionary, context: Dictionary) -> bool:
 	var game_state := _game_state()
 	if game_state != null:
 		game_state.set_object_state(object_id, state)
+	return true
+
+func _set_environment_state(action: Dictionary, context: Dictionary) -> bool:
+	var environment_id := String(action.get("environment_id", action.get("environment", "")))
+	var state_id := String(action.get("state_id", action.get("state", "")))
+	if environment_id.is_empty() or state_id.is_empty():
+		_fail(action, context, "set_environment_state requires environment_id and state_id.")
+		return false
+
+	var bus := _event_bus()
+	if bus != null:
+		bus.environment_state_change_requested.emit(environment_id, state_id, {
+			"action": action.duplicate(true),
+			"context": context.duplicate(true)
+		})
 	return true
 
 func _open_puzzle(action: Dictionary, context: Dictionary) -> bool:

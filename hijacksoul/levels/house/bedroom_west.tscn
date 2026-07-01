@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
@@ -13,13 +13,10 @@ font_color = Color(0.8, 0.78, 0.7, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_turn"]
 size = Vector2(180, 720)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
-size = Vector2(260, 360)
-
-[node name="BedroomNorthView" type="Node2D"]
+[node name="BedroomWestView" type="Node2D"]
 script = ExtResource("1_room_view")
-view_id = "house.bedroom"
-scene_path = "res://levels/house/bedroom.tscn"
+view_id = "house.bedroom.west"
+scene_path = "res://levels/house/bedroom_west.tscn"
 
 [node name="ScreenLayer" type="CanvasLayer" parent="."]
 layer = -10
@@ -28,14 +25,14 @@ layer = -10
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-color = Color(0.13, 0.12, 0.105, 1)
+color = Color(0.105, 0.12, 0.125, 1)
 
 [node name="Title" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 54.0
 offset_right = 840.0
 offset_bottom = 114.0
-text = "Bedroom - North"
+text = "Bedroom - West"
 label_settings = SubResource("LabelSettings_title")
 
 [node name="Hint" type="Label" parent="ScreenLayer"]
@@ -48,61 +45,43 @@ label_settings = SubResource("LabelSettings_hint")
 
 [node name="ViewWall" type="Polygon2D" parent="."]
 position = Vector2(960, 555)
-color = Color(0.18, 0.155, 0.13, 1)
+color = Color(0.14, 0.165, 0.17, 1)
 polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
 [node name="ObjectLayer" type="Node2D" parent="."]
 
-[node name="TurnLeftToWest" type="Area2D" parent="ObjectLayer"]
+[node name="TurnLeftToSouth" type="Area2D" parent="ObjectLayer"]
 position = Vector2(105, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.bedroom.turn_left_to_west"
+object_id = "house.bedroom.west.turn_left_to_south"
 object_kind = 3
 display_name = "Turn Left"
 hover_text = "Turn left"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.bedroom.west"
-target_scene_path = "res://levels/house/bedroom_west.tscn"
+target_view_id = "house.bedroom.south"
+target_scene_path = "res://levels/house/bedroom_south.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToWest"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToSouth"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(58, -120, -58, 0, 58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToWest"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToSouth"]
 shape = SubResource("RectangleShape2D_turn")
 
-[node name="TurnRightToEast" type="Area2D" parent="ObjectLayer"]
+[node name="TurnRightToNorth" type="Area2D" parent="ObjectLayer"]
 position = Vector2(1815, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.bedroom.turn_right_to_east"
+object_id = "house.bedroom.west.turn_right_to_north"
 object_kind = 3
 display_name = "Turn Right"
 hover_text = "Turn right"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.bedroom.east"
-target_scene_path = "res://levels/house/bedroom_east.tscn"
+target_view_id = "house.bedroom"
+target_scene_path = "res://levels/house/bedroom.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToEast"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToNorth"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(-58, -120, 58, 0, -58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToEast"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToNorth"]
 shape = SubResource("RectangleShape2D_turn")
-
-[node name="ExitToStudy" type="Area2D" parent="ObjectLayer"]
-position = Vector2(960, 560)
-script = ExtResource("2_view_exit_object")
-object_id = "house.bedroom.exit_study"
-object_kind = 3
-display_name = "Study"
-hover_text = "Go through the door"
-hotspot_size = Vector2(260, 360)
-target_view_id = "house.study"
-target_scene_path = "res://levels/house/study.tscn"
-
-[node name="DoorBlock" type="Polygon2D" parent="ObjectLayer/ExitToStudy"]
-color = Color(0.34, 0.24, 0.18, 0.95)
-polygon = PackedVector2Array(-120, -180, 120, -180, 120, 180, -120, 180)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToStudy"]
-shape = SubResource("RectangleShape2D_door")

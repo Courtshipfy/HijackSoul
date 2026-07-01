@@ -10,10 +10,10 @@ font_color = Color(0.92, 0.9, 0.82, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
 font_color = Color(0.8, 0.78, 0.7, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
-size = Vector2(220, 170)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
+size = Vector2(180, 720)
 
-[node name="Kitchen" type="Node2D"]
+[node name="KitchenView" type="Node2D"]
 script = ExtResource("1_room_view")
 view_id = "house.kitchen"
 scene_path = "res://levels/house/kitchen.tscn"
@@ -30,7 +30,7 @@ color = Color(0.12, 0.13, 0.11, 1)
 [node name="Title" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 54.0
-offset_right = 780.0
+offset_right = 840.0
 offset_bottom = 114.0
 text = "Kitchen"
 label_settings = SubResource("LabelSettings_title")
@@ -38,27 +38,32 @@ label_settings = SubResource("LabelSettings_title")
 [node name="Hint" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 117.0
-offset_right = 1180.0
+offset_right = 1220.0
 offset_bottom = 162.0
-text = "Empty blockout scene. Click a blue doorway to move between rooms."
+text = "Single-view room blockout. Click side arrows to move."
 label_settings = SubResource("LabelSettings_hint")
+
+[node name="ViewWall" type="Polygon2D" parent="."]
+position = Vector2(960, 555)
+color = Color(0.18, 0.17, 0.13, 1)
+polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
 [node name="ObjectLayer" type="Node2D" parent="."]
 
-[node name="ExitToDiningRoom" type="Area2D" parent="ObjectLayer"]
-position = Vector2(1692, 540)
+[node name="GoRightToDiningRoom" type="Area2D" parent="ObjectLayer"]
+position = Vector2(1815, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.kitchen.exit_dining_room"
+object_id = "house.kitchen.go_right_to_dining_room"
 object_kind = 3
 display_name = "Dining Room"
-hover_text = "Go to Dining Room"
-hotspot_size = Vector2(220, 170)
+hover_text = "Go right to Dining Room"
+hotspot_size = Vector2(180, 720)
 target_view_id = "house.dining_room"
 target_scene_path = "res://levels/house/dining_room.tscn"
 
-[node name="DoorBlock" type="Polygon2D" parent="ObjectLayer/ExitToDiningRoom"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/GoRightToDiningRoom"]
 color = Color(0.25, 0.43, 0.58, 0.82)
-polygon = PackedVector2Array(-92, -70, 92, -70, 110, 0, 92, 70, -92, 70)
+polygon = PackedVector2Array(-58, -120, 58, 0, -58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/ExitToDiningRoom"]
-shape = SubResource("RectangleShape2D_door")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/GoRightToDiningRoom"]
+shape = SubResource("RectangleShape2D_side")
