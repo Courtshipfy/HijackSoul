@@ -3,6 +3,7 @@ extends Node
 const WAIT_STORY_PATH := "user://story_wait_runner.nrstory"
 
 var _line_times: Array[float] = []
+var _suspend_count := 0
 
 func _ready() -> void:
 	call_deferred("_run")
@@ -13,6 +14,9 @@ func _run() -> void:
 	var story_bridge: Node = get_tree().root.get_node("StoryBridge")
 	story_bridge.dialogue_line_requested.connect(func(_payload: Dictionary):
 		_line_times.append(Time.get_ticks_msec() / 1000.0)
+	)
+	story_bridge.dialogue_suspended.connect(func(_payload: Dictionary):
+		_suspend_count += 1
 	)
 
 	if not story_bridge.start_story(WAIT_STORY_PATH):
@@ -29,6 +33,11 @@ func _run() -> void:
 	var wait_started_at := Time.get_ticks_msec() / 1000.0
 	story_bridge.next()
 	await get_tree().create_timer(0.1).timeout
+	if _suspend_count != 1:
+		push_error("Expected timeline.wait to suspend visible dialogue once. Got: %s" % _suspend_count)
+		get_tree().quit(1)
+		return
+
 	story_bridge.next()
 	await get_tree().process_frame
 	if _line_times.size() != 1:

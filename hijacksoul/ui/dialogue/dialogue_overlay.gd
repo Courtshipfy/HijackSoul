@@ -365,6 +365,7 @@ func _connect_story_bridge() -> void:
 	story_bridge.dialogue_line_requested.connect(_on_dialogue_line_requested)
 	story_bridge.dialogue_choices_requested.connect(_on_dialogue_choices_requested)
 	story_bridge.dialogue_ended.connect(_on_dialogue_ended)
+	story_bridge.dialogue_suspended.connect(_on_dialogue_suspended)
 	story_bridge.dialogue_npc_bubble_position_requested.connect(_on_npc_bubble_position_requested)
 
 func _connect_stage_input() -> void:
@@ -403,6 +404,9 @@ func _on_dialogue_choices_requested(choices: Array) -> void:
 		_add_choice_button(i, text)
 
 func _on_dialogue_ended() -> void:
+	_hide_all()
+
+func _on_dialogue_suspended(_payload: Dictionary) -> void:
 	_hide_all()
 
 func _on_npc_bubble_position_requested(payload: Dictionary) -> void:

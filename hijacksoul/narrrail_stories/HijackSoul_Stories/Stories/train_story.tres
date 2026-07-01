@@ -158,16 +158,6 @@ story_data = {
 }, {
 "priority": 0,
 "sourceHandle": "",
-"sourceNodeId": "N_TrainStory_031",
-"targetNodeId": "N_TrainStory_032"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_032",
-"targetNodeId": "N_TrainStory_033"
-}, {
-"priority": 0,
-"sourceHandle": "",
 "sourceNodeId": "N_TrainStory_033",
 "targetNodeId": "N_TrainStory_034"
 }, {
@@ -175,26 +165,6 @@ story_data = {
 "sourceHandle": "",
 "sourceNodeId": "N_TrainStory_034",
 "targetNodeId": "N_TrainStory_035"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_035",
-"targetNodeId": "N_TrainStory_036"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_036",
-"targetNodeId": "N_TrainStory_037"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_037",
-"targetNodeId": "N_TrainStory_038"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_038",
-"targetNodeId": "N_TrainStory_039"
 }, {
 "priority": 0,
 "sourceHandle": "",
@@ -330,11 +300,6 @@ story_data = {
 "sourceHandle": "",
 "sourceNodeId": "N_TrainStory_065",
 "targetNodeId": "N_TrainStory_066"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_066",
-"targetNodeId": "N_TrainStory_067"
 }, {
 "priority": 0,
 "sourceHandle": "",
@@ -545,6 +510,56 @@ story_data = {
 "sourceHandle": "",
 "sourceNodeId": "N_TrainStory_108",
 "targetNodeId": "N_TrainStory_109"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_036",
+"targetNodeId": "node-1782914097110"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "node-1782914097110",
+"targetNodeId": "N_TrainStory_037"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "node-1782914813513",
+"targetNodeId": "N_TrainStory_039"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_066",
+"targetNodeId": "node-1782915347637"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "node-1782915347637",
+"targetNodeId": "N_TrainStory_067"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_035",
+"targetNodeId": "N_TrainStory_038"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_038",
+"targetNodeId": "N_TrainStory_036"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_037",
+"targetNodeId": "node-1782914813513"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_031",
+"targetNodeId": "node-1782916230941"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "node-1782916230941",
+"targetNodeId": "N_TrainStory_033"
 }],
 "meta": {
 "entryNodeId": "N_TrainStory_001",
@@ -827,15 +842,6 @@ story_data = {
 "nodeId": "N_TrainStory_031",
 "nodeType": "Dialogue"
 }, {
-"eventType": "object.set_state",
-"nodeId": "N_TrainStory_032",
-"nodeType": "EmitEvent",
-"params": {
-"enabled": true,
-"object": "train.orange",
-"visible": true
-}
-}, {
 "dialogue": {
 "speakerId": "女孩",
 "speechRate": 1,
@@ -869,9 +875,8 @@ story_data = {
 "nodeId": "N_TrainStory_036",
 "nodeType": "EmitEvent",
 "params": {
-"environment": "train.window_view",
-"state": "field",
-"transition_seconds": 12
+"environment": "train.LeftWindowViewVisual",
+"state": "field_left"
 }
 }, {
 "eventType": "dialogue.change_posture",
@@ -982,13 +987,12 @@ story_data = {
 "nodeId": "N_TrainStory_048",
 "nodeType": "Dialogue"
 }, {
-"eventType": "object.set_state",
+"eventType": "environment.set_state",
 "nodeId": "N_TrainStory_049",
 "nodeType": "EmitEvent",
 "params": {
-"enabled": false,
-"object": "train.book_biancheng",
-"visible": true
+"environment": "train.BookVisual",
+"state": "book"
 }
 }, {
 "dialogue": {
@@ -1136,9 +1140,8 @@ story_data = {
 "nodeId": "N_TrainStory_066",
 "nodeType": "EmitEvent",
 "params": {
-"environment": "train.window_view",
-"state": "sea",
-"transition_seconds": 20
+"environment": "train.LeftWindowViewVisual",
+"state": "sea_left"
 }
 }, {
 "eventType": "dialogue.change_posture",
@@ -1153,7 +1156,7 @@ story_data = {
 "nodeId": "N_TrainStory_068",
 "nodeType": "EmitEvent",
 "params": {
-"seconds": 20
+"seconds": 5
 }
 }, {
 "multiDialogue": {
@@ -1508,6 +1511,37 @@ story_data = {
 }, {
 "nodeId": "N_TrainStory_109",
 "nodeType": "End"
+}, {
+"eventType": "environment.set_state",
+"nodeId": "node-1782914097110",
+"nodeType": "EmitEvent",
+"params": {
+"environment": "train.RightWindowViewVisual",
+"state": "field_right"
+}
+}, {
+"eventType": "wait",
+"nodeId": "node-1782914813513",
+"nodeType": "EmitEvent",
+"params": {
+"seconds": 2
+}
+}, {
+"eventType": "environment.set_state",
+"nodeId": "node-1782915347637",
+"nodeType": "EmitEvent",
+"params": {
+"environment": "train.RightWindowViewVisual",
+"state": "sea_right"
+}
+}, {
+"eventType": "environment.set_state",
+"nodeId": "node-1782916230941",
+"nodeType": "EmitEvent",
+"params": {
+"environment": "train.OrangeVisual",
+"state": "orange"
+}
 }],
 "variables": []
 }

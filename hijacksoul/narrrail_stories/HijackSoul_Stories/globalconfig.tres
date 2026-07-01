@@ -8,9 +8,6 @@ preset_speakers = [{
 "id": "小红"
 }, {
 "id": "我"
-}, {
-"displayName": "boy",
-"id": "101"
 }]
 config_data = {
 "meta": {
@@ -21,9 +18,6 @@ config_data = {
 "id": "小红"
 }, {
 "id": "我"
-}, {
-"displayName": "boy",
-"id": "101"
 }],
 "variables": []
 }

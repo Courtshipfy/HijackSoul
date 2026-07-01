@@ -3,6 +3,7 @@ extends Node
 signal dialogue_line_requested(payload: Dictionary)
 signal dialogue_choices_requested(choices: Array)
 signal dialogue_ended
+signal dialogue_suspended(payload: Dictionary)
 signal dialogue_npc_bubble_position_requested(payload: Dictionary)
 signal story_error(message: String)
 
@@ -165,6 +166,7 @@ func _on_narrrail_event_emitted(payload: Dictionary) -> void:
 
 	if should_pause and event_session != null:
 		event_session.pause()
+		dialogue_suspended.emit(payload)
 
 	var handled: bool = await router.handle_event(payload)
 	if not handled:
