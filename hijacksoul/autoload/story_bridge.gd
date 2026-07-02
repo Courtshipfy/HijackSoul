@@ -109,6 +109,12 @@ func resolve_story_path(story_name_or_event_id: String) -> String:
 			return key
 		return ""
 
+	var loader_script: Script = load(STORY_LOADER_SCRIPT)
+	if loader_script != null and loader_script.has_method("resolve_story_path"):
+		var plugin_resolved := String(loader_script.call("resolve_story_path", key))
+		if not plugin_resolved.is_empty():
+			return plugin_resolved
+
 	var normalized_name := key
 	if normalized_name.ends_with(".tres") or normalized_name.ends_with(".res") or normalized_name.ends_with(".nrstory"):
 		normalized_name = normalized_name.get_basename()

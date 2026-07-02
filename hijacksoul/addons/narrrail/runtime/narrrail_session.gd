@@ -35,7 +35,6 @@ var _current_node_id: String = ""
 var _paused_event_node_id: String = ""
 var _current_choices: Array = []
 var _current_line_index: int = -1
-var _blocking_event_types: Dictionary = {}
 var _choice_timer: Dictionary = {
 	"enabled": false,
 	"durationSeconds": 0.0,
@@ -95,6 +94,7 @@ func next() -> void:
 	if _state == STATE_ENDED:
 		return
 	if _state == STATE_PAUSED:
+		_emit_error("Cannot next(): session is paused")
 		return
 	if _state == STATE_WAITING_CHOICE:
 		_emit_error("Cannot next(): waiting for choose(index)")
@@ -122,6 +122,7 @@ func next() -> void:
 
 func choose(index: int) -> void:
 	if _state == STATE_PAUSED:
+		_emit_error("Cannot choose(): session is paused")
 		return
 	if _state != STATE_WAITING_CHOICE:
 		_emit_error("Cannot choose(): not in waiting_choice state")
@@ -154,13 +155,6 @@ func advance_time(delta_seconds: float) -> void:
 		return
 
 	_timeout_current_choice()
-
-func set_blocking_event_types(event_types: Array) -> void:
-	_blocking_event_types.clear()
-	for event_type_value in event_types:
-		var event_type := String(event_type_value).strip_edges()
-		if not event_type.is_empty():
-			_blocking_event_types[event_type] = true
 
 func pause() -> void:
 	if _state == STATE_PAUSED:
@@ -1035,16 +1029,13 @@ func _emit_structured_event(data: Dictionary, phase: String, node_id: String, so
 	var payload: Dictionary = payload_check.get("payload", {})
 	_emitted_events.append(payload)
 	_trace("event", TRACE_LEVEL_INFO, payload)
-	if source == "node" and _should_block_for_event(payload):
-		pause()
 	event_emitted.emit(payload)
 	return {"ok": true, "error": ""}
 
 func _build_event_payload(data: Dictionary, phase: String, node_id: String, source: String) -> Dictionary:
 	var event_type := String(data.get("eventType", "")).strip_edges()
-	var event_id := String(data.get("eventId", "")).strip_edges()
-	if event_type.is_empty():
-		event_type = event_id
+	if data.has("eventId"):
+		return {"ok": false, "error": "EmitEvent %s eventId is no longer supported on node %s" % [source, node_id]}
 	if event_type.is_empty():
 		return {"ok": false, "error": "EmitEvent %s has empty eventType on node %s" % [source, node_id]}
 	if data.has("params") and typeof(data.get("params")) != TYPE_DICTIONARY:
@@ -1058,15 +1049,10 @@ func _build_event_payload(data: Dictionary, phase: String, node_id: String, sour
 		"payload": {
 			"nodeId": node_id,
 			"phase": phase,
-			"eventId": event_id if not event_id.is_empty() else event_type,
 			"eventType": event_type,
 			"params": params
 		}
 	}
-
-func _should_block_for_event(payload: Dictionary) -> bool:
-	var event_type := String(payload.get("eventType", payload.get("eventId", ""))).strip_edges()
-	return _blocking_event_types.has(event_type)
 
 func _resolve_condition_node_target(node: Dictionary) -> Dictionary:
 	var node_id := String(node.get("nodeId", ""))

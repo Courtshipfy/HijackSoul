@@ -169,9 +169,8 @@ static func _variable_ref_name(variable_ref: Dictionary) -> String:
 
 static func _validate_emit_event_fields(data: Dictionary, node_id: String, source: String, errors: Array[String]) -> void:
 	var event_type := String(data.get("eventType", "")).strip_edges()
-	var event_id := String(data.get("eventId", "")).strip_edges()
-	if event_type.is_empty():
-		event_type = event_id
+	if data.has("eventId"):
+		errors.append("EmitEvent %s eventId is no longer supported on node: %s" % [source, node_id])
 	if event_type.is_empty():
 		errors.append("EmitEvent %s missing eventType on node: %s" % [source, node_id])
 	if data.has("params") and typeof(data.get("params")) != TYPE_DICTIONARY:

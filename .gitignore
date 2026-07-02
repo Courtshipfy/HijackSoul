@@ -16,6 +16,7 @@ exports/
 export/
 builds/
 build/
+outputs/
 
 # Godot Android export workspace
 android/

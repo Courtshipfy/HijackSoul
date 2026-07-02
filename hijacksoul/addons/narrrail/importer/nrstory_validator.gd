@@ -115,12 +115,9 @@ static func _validate_node_actions(node: Dictionary, node_index: int) -> Array:
 static func _validate_emit_event_fields(data: Dictionary, path: String, is_action: bool) -> Array:
 	var diagnostics: Array = []
 	var event_type := String(data.get("eventType", "")).strip_edges()
-	var event_id := String(data.get("eventId", "")).strip_edges()
-	if event_type.is_empty():
-		event_type = event_id
 	if data.has("eventId"):
-		var legacy_code := "ACTION_EVENT_ID_LEGACY" if is_action else "EMIT_EVENT_ID_LEGACY"
-		diagnostics.append(_diag("warning", legacy_code, "%s.eventId" % path, "EmitEvent eventId is legacy-compatible", "Prefer eventType and params for new stories."))
+		var unsupported_code := "ACTION_EVENT_ID_UNSUPPORTED" if is_action else "EMIT_EVENT_ID_UNSUPPORTED"
+		diagnostics.append(_diag("error", unsupported_code, "%s.eventId" % path, "EmitEvent eventId is no longer supported", "Use eventType and params."))
 	if event_type.is_empty():
 		if is_action:
 			diagnostics.append(_diag("error", "ACTION_EVENT_TYPE_EMPTY", "%s.eventType" % path, "EmitEvent action eventType must not be empty", "Set eventType to the structured event type emitted by this action."))
