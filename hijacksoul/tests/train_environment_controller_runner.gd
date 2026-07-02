@@ -1,6 +1,6 @@
 extends SceneTree
 
-const TRAIN_SCENE := "res://scenes/train.tscn"
+const TRAIN_SCENE := "res://levels/train/train.tscn"
 const EXPECTED_LEFT_TEXTURE := "res://arts/train/environment/field_left.png"
 const EXPECTED_RIGHT_TEXTURE := "res://arts/train/environment/field_right.png"
 const EXPECTED_ORANGE_TEXTURE := "res://arts/train/environment/orange.png"

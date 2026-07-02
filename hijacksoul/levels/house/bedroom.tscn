@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" uid="uid://3u1mp3rdjttc" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
 [ext_resource type="Script" uid="uid://bk34yd4otcbsn" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
+[ext_resource type="Texture2D" path="res://arts/bedroom/bedroom.png" id="4_bedroom"]
+[ext_resource type="Texture2D" path="res://arts/bedroom/beedroom_pen.png" id="5_pen"]
+[ext_resource type="Texture2D" path="res://arts/bedroom/bedroom_book.png" id="6_book"]
 [ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="music_sink_daylight"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
@@ -14,11 +17,11 @@ font_color = Color(0.8, 0.78, 0.7, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lodph"]
 resource_local_to_scene = true
-size = Vector2(180, 140)
+size = Vector2(202, 126)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mon1b"]
 resource_local_to_scene = true
-size = Vector2(180, 140)
+size = Vector2(398, 128)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q17ws"]
 resource_local_to_scene = true
@@ -34,7 +37,7 @@ size = Vector2(180, 720)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nlmf3"]
 resource_local_to_scene = true
-size = Vector2(260, 360)
+size = Vector2(500, 760)
 
 [node name="BedroomNorthView" type="Node2D" unique_id=1215407864]
 script = ExtResource("1_room_view")
@@ -45,13 +48,16 @@ music_stream = ExtResource("music_sink_daylight")
 [node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=1745992062]
 layer = -10
 
-[node name="Background" type="ColorRect" parent="ScreenLayer" unique_id=161818019]
+[node name="Background" type="TextureRect" parent="ScreenLayer" unique_id=161818019]
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-color = Color(0.13, 0.12, 0.105, 1)
+texture = ExtResource("4_bedroom")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Title" type="Label" parent="ScreenLayer" unique_id=1726046508]
+visible = false
 offset_left = 72.0
 offset_top = 54.0
 offset_right = 840.0
@@ -60,6 +66,7 @@ text = "Bedroom - North"
 label_settings = SubResource("LabelSettings_title")
 
 [node name="Hint" type="Label" parent="ScreenLayer" unique_id=127422976]
+visible = false
 offset_left = 72.0
 offset_top = 117.0
 offset_right = 1220.0
@@ -68,6 +75,7 @@ text = "First-person blockout view. Click side arrows to turn."
 label_settings = SubResource("LabelSettings_hint")
 
 [node name="ViewWall" type="Polygon2D" parent="." unique_id=40714441]
+visible = false
 position = Vector2(960, 555)
 color = Color(0.18, 0.155, 0.13, 1)
 polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
@@ -75,19 +83,19 @@ polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 [node name="ObjectLayer" type="Node2D" parent="." unique_id=1059676321]
 
 [node name="SpringPen" type="Area2D" parent="ObjectLayer" unique_id=1870572467]
-position = Vector2(642, 533)
+position = Vector2(557, 852)
 script = ExtResource("3_interactive_object")
 object_id = "house.bedroom.spring_pen"
 display_name = "弹簧笔"
 hover_text = "查看弹簧笔"
-hotspot_size = Vector2(180, 140)
+hotspot_size = Vector2(202, 126)
 default_actions = Array[Dictionary]([{
 "completion_actions": [{
 "once_flag": "house.bedroom.spring_pen_train_done",
 "return_scene_path": "res://levels/house/bedroom.tscn",
 "return_view_id": "house.bedroom",
 "scene_id": "train",
-"scene_path": "res://scenes/train.tscn",
+"scene_path": "res://levels/train/train.tscn",
 "story_id": "train_story",
 "type": "start_subscene_story"
 }],
@@ -103,22 +111,26 @@ default_actions = Array[Dictionary]([{
 auto_build_actions = false
 
 [node name="Block" type="Polygon2D" parent="ObjectLayer/SpringPen" unique_id=894377955]
+visible = false
 color = Color(0.62, 0.5, 0.28, 0.95)
 polygon = PackedVector2Array(-90, -28, 90, -28, 90, 28, -90, 28)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/SpringPen" unique_id=1496714892]
+position = Vector2(5, 0)
 shape = SubResource("RectangleShape2D_lodph")
 metadata/_interactive_collision_shape_unique = true
 
 [node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/SpringPen" unique_id=833679449]
+scale = Vector2(1.11111, 1.11111)
+texture = ExtResource("5_pen")
 
 [node name="Notebook" type="Area2D" parent="ObjectLayer" unique_id=731165758]
-position = Vector2(1275, 482)
+position = Vector2(806, 871)
 script = ExtResource("3_interactive_object")
 object_id = "house.bedroom.notebook"
 display_name = "笔记本"
 hover_text = "查看笔记本"
-hotspot_size = Vector2(180, 140)
+hotspot_size = Vector2(398, 128)
 default_actions = Array[Dictionary]([{
 "inspect_id": "house.bedroom.notebook",
 "pages": ["想要去看海的尽头", "我不知道这算不算夸奖。但她说这话的方式让我觉得，她认识我很久了，而不是一个小时。"],
@@ -128,6 +140,7 @@ default_actions = Array[Dictionary]([{
 auto_build_actions = false
 
 [node name="Block" type="Polygon2D" parent="ObjectLayer/Notebook" unique_id=1322595750]
+visible = false
 color = Color(0.36, 0.45, 0.5, 0.95)
 polygon = PackedVector2Array(-76, -54, 76, -54, 76, 54, -76, 54)
 
@@ -136,6 +149,8 @@ shape = SubResource("RectangleShape2D_mon1b")
 metadata/_interactive_collision_shape_unique = true
 
 [node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/Notebook" unique_id=1296033051]
+scale = Vector2(1.11111, 1.11111)
+texture = ExtResource("6_book")
 
 [node name="MobilePhone" type="Area2D" parent="ObjectLayer" unique_id=729061619]
 position = Vector2(1266, 693)
@@ -154,6 +169,7 @@ default_actions = Array[Dictionary]([{
 auto_build_actions = false
 
 [node name="Block" type="Polygon2D" parent="ObjectLayer/MobilePhone" unique_id=1459081176]
+visible = false
 color = Color(0.08, 0.09, 0.1, 0.95)
 polygon = PackedVector2Array(-42, -72, 42, -72, 42, 72, -42, 72)
 
@@ -206,17 +222,18 @@ metadata/_interactive_collision_shape_unique = true
 [node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/TurnRightToEast" unique_id=699275259]
 
 [node name="ExitToStudy" type="Area2D" parent="ObjectLayer" unique_id=209216952]
-position = Vector2(960, 560)
+position = Vector2(1604, 677)
 script = ExtResource("2_view_exit_object")
 object_id = "house.bedroom.exit_study"
 object_kind = 3
 display_name = "Study"
 hover_text = "Go through the door"
-hotspot_size = Vector2(260, 360)
+hotspot_size = Vector2(500, 760)
 target_view_id = "house.study"
 target_scene_path = "res://levels/house/study.tscn"
 
 [node name="DoorBlock" type="Polygon2D" parent="ObjectLayer/ExitToStudy" unique_id=310187928]
+visible = false
 color = Color(0.34, 0.24, 0.18, 0.95)
 polygon = PackedVector2Array(-120, -180, 120, -180, 120, 180, -120, 180)
 

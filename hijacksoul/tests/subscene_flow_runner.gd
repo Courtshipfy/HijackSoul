@@ -15,13 +15,13 @@ func _run() -> void:
 		await process_frame
 
 	scene_flow.register_view("house.bedroom", "res://levels/house/bedroom.tscn")
-	scene_flow.register_view("train", "res://scenes/train.tscn")
+	scene_flow.register_view("train", "res://levels/train/train.tscn")
 	game_state.set_current_view("house.bedroom")
 
 	var ok: bool = await runner.run_actions([{
 		"type": "start_subscene_story",
 		"scene_id": "train",
-		"scene_path": "res://scenes/train.tscn",
+		"scene_path": "res://levels/train/train.tscn",
 		"story_id": "train_story",
 		"return_view_id": "house.bedroom",
 		"return_scene_path": "res://levels/house/bedroom.tscn",

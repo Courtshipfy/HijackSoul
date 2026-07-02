@@ -1,6 +1,6 @@
 extends SceneTree
 
-const TRAIN_SCENE := "res://scenes/train.tscn"
+const TRAIN_SCENE := "res://levels/train/train.tscn"
 const TUNNEL_LEFT := "res://arts/train/environment/tunnel_left.png"
 const TUNNEL_RIGHT := "res://arts/train/environment/tunnel_right.png"
 const TUNNEL_TRAIN := "res://arts/train/environment/tunnel_train.png"

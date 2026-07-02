@@ -1,6 +1,6 @@
 extends SceneTree
 
-const TRAIN_SCENE := "res://scenes/train.tscn"
+const TRAIN_SCENE := "res://levels/train/train.tscn"
 
 var _orange_event_seen := false
 

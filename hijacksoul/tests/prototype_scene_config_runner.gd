@@ -2,7 +2,7 @@ extends Node
 
 const FRONT_SCENE := "res://levels/prototype/prototype_room_front.tscn"
 const LEFT_SCENE := "res://levels/prototype/prototype_room_left.tscn"
-const TRAIN_SCENE := "res://scenes/train.tscn"
+const TRAIN_SCENE := "res://levels/train/train.tscn"
 const INTERACTION_PREFABS := [
 	"res://modules/interaction/prefabs/inspect_object.tscn",
 	"res://modules/interaction/prefabs/pickup_object.tscn",

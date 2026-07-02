@@ -1,7 +1,7 @@
 extends SceneTree
 
 const BEDROOM_SCENE := "res://levels/house/bedroom.tscn"
-const TRAIN_SCENE := "res://scenes/train.tscn"
+const TRAIN_SCENE := "res://levels/train/train.tscn"
 const EXPECTED_MAIN_SCENE_MUSIC := "res://music/Sink into the Daylight.ogg"
 
 func _initialize() -> void:

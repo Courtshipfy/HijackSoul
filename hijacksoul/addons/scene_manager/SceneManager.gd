@@ -45,6 +45,8 @@ func _ready() -> void:
 
 func _set_singleton_entities() -> void:
 	singleton_entities = {}
+	if not is_instance_valid(_current_scene):
+		return
 	var entities = _current_scene.get_tree().get_nodes_in_group(
 		SceneManagerConstants.SINGLETON_GROUP_NAME
 	)
@@ -125,9 +127,13 @@ func fade_in_place(setted_options: Dictionary = {}) -> void:
 	await change_scene(null, setted_options)
 
 func _replace_scene(path: Variant, options: Dictionary) -> void:
-	_current_scene.queue_free()
-	scene_unloaded.emit()
+	if is_instance_valid(_current_scene):
+		_current_scene.queue_free()
+		scene_unloaded.emit()
 	var following_scene: PackedScene = _load_scene_resource(path)
+	if following_scene == null:
+		push_error("Failed to load scene resource: %s" % str(path))
+		return
 	_current_scene = following_scene.instantiate()
 	_current_scene.tree_entered.connect(options["on_tree_enter"].bind(_current_scene))
 	_current_scene.ready.connect(options["on_ready"].bind(_current_scene))

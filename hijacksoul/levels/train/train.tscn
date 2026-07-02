@@ -1,34 +1,34 @@
 [gd_scene format=3 uid="uid://bpgc6uujodga3"]
 
-[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_fr42t"]
-[ext_resource type="Texture2D" uid="uid://dsxjwct3naobw" path="res://arts/train/8D5E6E3CE12DF4E789BE3921397E8211.png" id="2_6b7q7"]
-[ext_resource type="Texture2D" uid="uid://bmi6h6umveufl" path="res://arts/train/338F5AA995AEBF79121E9FE967EEAF79.png" id="2_train_background"]
-[ext_resource type="PackedScene" uid="uid://dv7l2settdbon" path="res://modules/interaction/prefabs/inspect_object.tscn" id="3_o1hdh"]
-[ext_resource type="Texture2D" uid="uid://bn8slxe7krk7j" path="res://arts/train/BA7F37276F41DD4A53EBD45748CEB013.png" id="4_fr42t"]
-[ext_resource type="Texture2D" uid="uid://b4cw3n35mewgp" path="res://arts/train/6FD7F6A83DAD17452424E59CD3E94BC5.png" id="5_left_window_view"]
-[ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="5_m4isg"]
-[ext_resource type="PackedScene" path="res://modules/interaction/prefabs/story_trigger_object.tscn" id="6_story_trigger"]
-[ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
-[ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
-[ext_resource type="Texture2D" uid="uid://cpga1vu5fqjbe" path="res://assets/ui/dialogue/player_dialogue_bubble.png" id="12_bbvoe"]
-[ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="13_1kvv8"]
-[ext_resource type="Texture2D" uid="uid://5enkwtlmk3od" path="res://assets/ui/dialogue/npc_dialogue_bubble.png" id="14_risb3"]
-[ext_resource type="FontFile" uid="uid://g148mjs36qeq" path="res://assets/fonts/ui/cascadia_code.ttf" id="15_r2kyi"]
-[ext_resource type="FontFile" uid="uid://biyigmrfm8hit" path="res://assets/fonts/ui/simhei.ttf" id="16_d8wpw"]
+[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_aorwg"]
+[ext_resource type="Texture2D" uid="uid://b4cw3n35mewgp" path="res://arts/train/6FD7F6A83DAD17452424E59CD3E94BC5.png" id="2_35n6g"]
+[ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="3_vuarx"]
+[ext_resource type="Texture2D" uid="uid://dsxjwct3naobw" path="res://arts/train/8D5E6E3CE12DF4E789BE3921397E8211.png" id="4_m7g1p"]
+[ext_resource type="PackedScene" uid="uid://dv7l2settdbon" path="res://modules/interaction/prefabs/inspect_object.tscn" id="5_an23y"]
+[ext_resource type="PackedScene" path="res://modules/interaction/prefabs/story_trigger_object.tscn" id="6_142nh"]
+[ext_resource type="Texture2D" uid="uid://bmi6h6umveufl" path="res://arts/train/338F5AA995AEBF79121E9FE967EEAF79.png" id="7_sj73r"]
+[ext_resource type="Texture2D" uid="uid://bn8slxe7krk7j" path="res://arts/train/BA7F37276F41DD4A53EBD45748CEB013.png" id="8_ypt7j"]
+[ext_resource type="Script" uid="uid://b1wd5nhpy0ekc" path="res://ui/debug/prototype_debug_hud.gd" id="9_g3kt4"]
+[ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="10_hpa7t"]
+[ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="11_jlute"]
+[ext_resource type="FontFile" uid="uid://g148mjs36qeq" path="res://assets/fonts/ui/cascadia_code.ttf" id="12_w5cpj"]
+[ext_resource type="FontFile" uid="uid://biyigmrfm8hit" path="res://assets/fonts/ui/simhei.ttf" id="13_fk3a5"]
+[ext_resource type="Texture2D" uid="uid://cpga1vu5fqjbe" path="res://assets/ui/dialogue/player_dialogue_bubble.png" id="14_ygl32"]
+[ext_resource type="Texture2D" uid="uid://5enkwtlmk3od" path="res://assets/ui/dialogue/npc_dialogue_bubble.png" id="15_vn51q"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1kvv8"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u00is"]
 resource_local_to_scene = true
 size = Vector2(520, 760)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_risb3"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pr874"]
 resource_local_to_scene = true
 size = Vector2(400, 250)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5wkan"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2878s"]
 resource_local_to_scene = true
 size = Vector2(393, 770)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r2kyi"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjkh5"]
 resource_local_to_scene = true
 size = Vector2(1320, 223)
 
@@ -36,25 +36,25 @@ size = Vector2(1320, 223)
 font_color = Color(0.8, 0.78, 0.7, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_dialogue_train"]
-base_font = ExtResource("13_1kvv8")
+base_font = ExtResource("11_jlute")
 variation_embolden = 0.18
 
 [sub_resource type="FontVariation" id="FontVariation_code_train"]
-base_font = ExtResource("15_r2kyi")
+base_font = ExtResource("12_w5cpj")
 variation_embolden = 0.08
 
 [sub_resource type="FontVariation" id="FontVariation_title_train"]
-base_font = ExtResource("16_d8wpw")
+base_font = ExtResource("13_fk3a5")
 variation_embolden = 0.05
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d8wpw"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t4b2n"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_txwux"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nxbly"]
 
 [node name="Train" type="Node2D" unique_id=1415883330]
-script = ExtResource("1_fr42t")
+script = ExtResource("1_aorwg")
 view_id = "train"
-scene_path = "res://scenes/train.tscn"
+scene_path = "res://levels/train/train.tscn"
 
 [node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=519110502]
 layer = -10
@@ -62,24 +62,24 @@ layer = -10
 [node name="LeftWindowViewVisual" type="Sprite2D" parent="ScreenLayer" unique_id=1035006168]
 position = Vector2(960, 540)
 scale = Vector2(0.82317, 0.82317)
-texture = ExtResource("5_left_window_view")
+texture = ExtResource("2_35n6g")
 
 [node name="RightWindowViewVisual" type="Sprite2D" parent="ScreenLayer" unique_id=1833412738]
 position = Vector2(960, 540)
 scale = Vector2(0.82317, 0.82317)
-texture = ExtResource("8_right_window_view")
+texture = ExtResource("3_vuarx")
 
 [node name="Background" type="TextureRect" parent="ScreenLayer" unique_id=69845171]
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-texture = ExtResource("2_6b7q7")
+texture = ExtResource("4_m7g1p")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="ObjectLayer" type="Node2D" parent="." unique_id=710579114]
 
-[node name="left_window_view" parent="ObjectLayer" unique_id=1722916672 instance=ExtResource("3_o1hdh")]
+[node name="left_window_view" parent="ObjectLayer" unique_id=1722916672 instance=ExtResource("5_an23y")]
 position = Vector2(960, 540)
 object_id = "train.left_window_view"
 display_name = "左侧窗景"
@@ -90,9 +90,9 @@ toast_message = "窗外的原野被列车拉成一片柔和的光。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/left_window_view" index="1" unique_id=783993008]
 position = Vector2(-740, -5)
-shape = SubResource("RectangleShape2D_1kvv8")
+shape = SubResource("RectangleShape2D_u00is")
 
-[node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("3_o1hdh")]
+[node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("5_an23y")]
 position = Vector2(960, 540)
 object_id = "train.right_window_view"
 display_name = "右侧窗景"
@@ -103,16 +103,16 @@ toast_message = "另一侧的窗外掠过明亮的田野。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/right_window_view" index="1" unique_id=783993008]
 position = Vector2(755, -405)
-shape = SubResource("RectangleShape2D_risb3")
+shape = SubResource("RectangleShape2D_pr874")
 
-[node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
+[node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_142nh")]
 visible = false
 position = Vector2(1080, 536)
 object_id = "train.girl"
 display_name = "女孩"
 hover_text = "交谈"
 initial_visible = false
-sprite_texture = ExtResource("2_train_background")
+sprite_texture = ExtResource("7_sj73r")
 sprite_scale = Vector2(0.8, 0.8)
 hotspot_size = Vector2(393, 770)
 hotspot_offset = Vector2(146, -75)
@@ -120,38 +120,38 @@ story_event_on_click = "train_story"
 
 [node name="Sprite2D" parent="ObjectLayer/girl" index="0"]
 scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_train_background")
+texture = ExtResource("7_sj73r")
 
 [node name="CollisionShape2D" parent="ObjectLayer/girl" index="1"]
 position = Vector2(146, -75)
-shape = SubResource("RectangleShape2D_5wkan")
+shape = SubResource("RectangleShape2D_2878s")
 metadata/_interactive_collision_shape_unique = true
 
-[node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("3_o1hdh")]
+[node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("5_an23y")]
 position = Vector2(1038, 549)
 scale = Vector2(1.0399997, 1)
 object_id = "train.desk"
 display_name = "桌子"
 hover_text = "查看"
-sprite_texture = ExtResource("4_fr42t")
+sprite_texture = ExtResource("8_ypt7j")
 sprite_scale = Vector2(0.8, 0.8)
 hotspot_size = Vector2(1320, 223)
 hotspot_offset = Vector2(190, 418.5)
 
 [node name="Sprite2D" parent="ObjectLayer/desk" index="0" unique_id=667952097]
 scale = Vector2(0.8, 0.8)
-texture = ExtResource("4_fr42t")
+texture = ExtResource("8_ypt7j")
 
 [node name="CollisionShape2D" parent="ObjectLayer/desk" index="1" unique_id=783993008]
 position = Vector2(190, 418.5)
-shape = SubResource("RectangleShape2D_r2kyi")
+shape = SubResource("RectangleShape2D_wjkh5")
 
 [node name="OrangeVisual" type="Sprite2D" parent="ObjectLayer" unique_id=1812619142]
 visible = false
 position = Vector2(760, 938)
 scale = Vector2(0.78, 0.78)
 
-[node name="orange" parent="ObjectLayer" unique_id=1784862145 instance=ExtResource("3_o1hdh")]
+[node name="orange" parent="ObjectLayer" unique_id=1784862145 instance=ExtResource("5_an23y")]
 visible = false
 position = Vector2(760, 938)
 object_id = "train.orange"
@@ -175,7 +175,7 @@ position = Vector2(1552.0001, 953.00006)
 scale = Vector2(0.68, 0.68)
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
-script = ExtResource("5_m4isg")
+script = ExtResource("9_g3kt4")
 
 [node name="StateLabel" type="Label" parent="PrototypeDebugHud" unique_id=1431213428]
 unique_name_in_owner = true
@@ -206,7 +206,7 @@ text = "tooltip"
 label_settings = SubResource("LabelSettings_hint")
 horizontal_alignment = 1
 
-[node name="DialogueOverlay" parent="." unique_id=103514923 instance=ExtResource("7_dialogue_overlay")]
+[node name="DialogueOverlay" parent="." unique_id=103514923 instance=ExtResource("10_hpa7t")]
 layout_source = "scene_nodes"
 player_text_font = SubResource("FontVariation_dialogue_train")
 npc_text_font = SubResource("FontVariation_dialogue_train")
@@ -221,10 +221,10 @@ offset_top = 851.0
 offset_right = 1402.0
 offset_bottom = 1057.0
 mouse_filter = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_d8wpw")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_t4b2n")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="0"]
-texture = ExtResource("12_bbvoe")
+texture = ExtResource("14_ygl32")
 
 [node name="PlayerText" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="1" unique_id=742136359]
 offset_left = 43.0
@@ -245,12 +245,12 @@ offset_top = 505.0
 offset_right = 1392.0
 offset_bottom = 721.0
 mouse_filter = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_txwux")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_nxbly")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="0"]
 offset_right = -45.0
 offset_bottom = -36.0
-texture = ExtResource("14_risb3")
+texture = ExtResource("15_vn51q")
 
 [node name="NpcName" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="1" unique_id=1679389401]
 visible = false
