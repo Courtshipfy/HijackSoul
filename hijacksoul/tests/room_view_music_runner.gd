@@ -1,34 +1,17 @@
 extends SceneTree
 
+const BEDROOM_SCENE := "res://levels/house/bedroom.tscn"
 const TRAIN_SCENE := "res://scenes/train.tscn"
-const EXPECTED_TRAIN_MUSIC := "res://music/Sink into the Daylight.ogg"
+const EXPECTED_MAIN_SCENE_MUSIC := "res://music/Sink into the Daylight.ogg"
 
 func _initialize() -> void:
 	call_deferred("_run")
 
 func _run() -> void:
-	var train: Node = load(TRAIN_SCENE).instantiate()
-	train.set("enter_actions", [])
-	root.add_child(train)
+	var bedroom: Node = load(BEDROOM_SCENE).instantiate()
+	bedroom.set("enter_actions", [])
+	root.add_child(bedroom)
 	await process_frame
-
-	var configured_stream := train.get("music_stream") as AudioStream
-	if configured_stream == null or configured_stream.resource_path != EXPECTED_TRAIN_MUSIC:
-		push_error("Expected train music_stream to be %s, got %s" % [
-			EXPECTED_TRAIN_MUSIC,
-			configured_stream.resource_path if configured_stream != null else ""
-		])
-		quit(1)
-		return
-
-	if train.get_node_or_null("TrainMusic") != null:
-		push_error("Train scene should not use the legacy TrainMusic node.")
-		quit(1)
-		return
-	if train.get_node_or_null("SceneMusic") != null:
-		push_error("Train scene should not create a local SceneMusic node when SceneMusicManager is available.")
-		quit(1)
-		return
 
 	var music_manager := root.get_node_or_null("SceneMusicManager")
 	if music_manager == null:
@@ -41,19 +24,40 @@ func _run() -> void:
 		push_error("Expected SceneMusicManager to create SceneMusic.")
 		quit(1)
 		return
-	if player.stream == null or player.stream.resource_path != EXPECTED_TRAIN_MUSIC:
-		push_error("Expected SceneMusic stream to be %s, got %s" % [
-			EXPECTED_TRAIN_MUSIC,
+	if player.stream == null or player.stream.resource_path != EXPECTED_MAIN_SCENE_MUSIC:
+		push_error("Expected main scene music stream to be %s, got %s" % [
+			EXPECTED_MAIN_SCENE_MUSIC,
 			player.stream.resource_path if player.stream != null else ""
 		])
 		quit(1)
 		return
-	if not player.autoplay:
-		push_error("Expected SceneMusic to autoplay.")
+	if not player.playing:
+		push_error("Expected main scene music to play before entering train.")
 		quit(1)
 		return
-	if int(music_manager.get("stream_change_count")) != 1:
-		push_error("Expected first train entry to start one music stream.")
+
+	var train: Node = load(TRAIN_SCENE).instantiate()
+	train.set("enter_actions", [])
+	root.add_child(train)
+	await process_frame
+
+	var configured_stream := train.get("music_stream") as AudioStream
+	if configured_stream != null:
+		push_error("Expected train music_stream to be empty, got %s" % configured_stream.resource_path)
+		quit(1)
+		return
+
+	if train.get_node_or_null("TrainMusic") != null:
+		push_error("Train scene should not use the legacy TrainMusic node.")
+		quit(1)
+		return
+	if train.get_node_or_null("SceneMusic") != null:
+		push_error("Train scene should not create a local SceneMusic node when SceneMusicManager is available.")
+		quit(1)
+		return
+
+	if player.stream != null or player.playing:
+		push_error("Expected train scene without music_stream to stop SceneMusic.")
 		quit(1)
 		return
 
@@ -62,8 +66,8 @@ func _run() -> void:
 	root.add_child(second_train)
 	await process_frame
 
-	if int(music_manager.get("stream_change_count")) != 1:
-		push_error("Expected same scene music to continue without restarting.")
+	if player.stream != null or player.playing:
+		push_error("Expected repeated train scene entry to keep SceneMusic stopped.")
 		quit(1)
 		return
 

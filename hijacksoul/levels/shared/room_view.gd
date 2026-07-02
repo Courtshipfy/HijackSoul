@@ -30,10 +30,12 @@ func _ready() -> void:
 			await runner.run_actions(enter_actions, {"view_id": view_id, "save_reason": "view_enter"})
 
 func _configure_scene_music() -> void:
+	var music_manager := get_tree().root.get_node_or_null("SceneMusicManager")
 	if music_stream == null:
+		if music_manager != null and music_manager.has_method("stop_scene_music"):
+			music_manager.stop_scene_music()
 		return
 
-	var music_manager := get_tree().root.get_node_or_null("SceneMusicManager")
 	if music_manager != null and music_manager.has_method("play_scene_music"):
 		music_manager.play_scene_music(music_stream, music_autoplay, music_bus)
 		return

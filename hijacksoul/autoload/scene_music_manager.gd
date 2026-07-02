@@ -10,6 +10,7 @@ func _ready() -> void:
 
 func play_scene_music(stream: AudioStream, autoplay: bool = true, bus: String = "Master") -> void:
 	if stream == null:
+		stop_scene_music()
 		return
 
 	var stream_path := stream.resource_path
@@ -29,6 +30,14 @@ func play_scene_music(stream: AudioStream, autoplay: bool = true, bus: String = 
 		player.play()
 	else:
 		player.stop()
+
+func stop_scene_music() -> void:
+	var player := _ensure_player()
+	if player.playing:
+		player.stop()
+	player.stream = null
+	player.autoplay = false
+	current_music_path = ""
 
 func _ensure_player() -> AudioStreamPlayer:
 	var player := get_node_or_null(PLAYER_NAME) as AudioStreamPlayer

@@ -48,7 +48,7 @@ func _run() -> void:
 	_assert_interaction_kind(train, "ObjectLayer/girl", 4)
 	_assert_interaction_kind(train, "ObjectLayer/desk", 1)
 	_assert_story_event(train, "ObjectLayer/girl", "train_story")
-	_assert_scene_music(train, "res://music/Sink into the Daylight.ogg")
+	_assert_scene_music_stopped(train)
 	_assert_scene_manager_group_is_absent(train)
 	if train.get_node_or_null("DialogueOverlay") == null:
 		push_error("Train scene is missing DialogueOverlay.")
@@ -107,13 +107,10 @@ func _assert_scene_manager_group_is_absent(root: Node) -> void:
 	for child in root.get_children():
 		_assert_scene_manager_group_is_absent(child)
 
-func _assert_scene_music(root: Node, expected_stream_path: String) -> void:
+func _assert_scene_music_stopped(root: Node) -> void:
 	var configured_stream := root.get("music_stream") as AudioStream
-	if configured_stream == null or configured_stream.resource_path != expected_stream_path:
-		push_error("Unexpected scene music stream: expected %s got %s" % [
-			expected_stream_path,
-			configured_stream.resource_path if configured_stream != null else ""
-		])
+	if configured_stream != null:
+		push_error("Train scene should not have a configured music_stream: %s" % configured_stream.resource_path)
 		get_tree().quit(1)
 		return
 
@@ -128,15 +125,8 @@ func _assert_scene_music(root: Node, expected_stream_path: String) -> void:
 		push_error("Expected SceneMusicManager AudioStreamPlayer.")
 		get_tree().quit(1)
 		return
-	if player.stream == null or player.stream.resource_path != expected_stream_path:
-		push_error("Unexpected generated scene music stream: expected %s got %s" % [
-			expected_stream_path,
-			player.stream.resource_path if player.stream != null else ""
-		])
-		get_tree().quit(1)
-		return
-	if not player.autoplay:
-		push_error("Expected generated SceneMusic to autoplay.")
+	if player.stream != null or player.playing:
+		push_error("Expected train scene without music_stream to stop SceneMusic.")
 		get_tree().quit(1)
 
 func _assert_interaction_prefabs() -> void:
