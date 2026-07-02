@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://0mepw08hg5rd"]
+[gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
-[ext_resource type="Script" uid="uid://3u1mp3rdjttc" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
+[ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
+[ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
+[ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 36
@@ -10,89 +11,102 @@ font_color = Color(0.92, 0.9, 0.82, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
 font_color = Color(0.8, 0.78, 0.7, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jxf71"]
-resource_local_to_scene = true
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_turn"]
 size = Vector2(180, 720)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2gg2"]
-resource_local_to_scene = true
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
 size = Vector2(260, 360)
 
-[node name="CentralHallView" type="Node2D" unique_id=1841315392]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
+size = Vector2(220, 180)
+
+[node name="CentralHallNorthView" type="Node2D"]
 script = ExtResource("1_room_view")
 view_id = "house.central_hall"
 scene_path = "res://levels/house/central_hall.tscn"
 
-[node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=1974378415]
+[node name="ScreenLayer" type="CanvasLayer" parent="."]
 layer = -10
 
-[node name="Background" type="ColorRect" parent="ScreenLayer" unique_id=1661098481]
+[node name="Background" type="ColorRect" parent="ScreenLayer"]
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-color = Color(0.11, 0.115, 0.135, 1)
+color = Color(0.11, 0.12, 0.13, 1)
 
-[node name="Title" type="Label" parent="ScreenLayer" unique_id=2073021229]
+[node name="Title" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 54.0
 offset_right = 840.0
 offset_bottom = 114.0
-text = "Central Hall"
+text = "Central Hall - North"
 label_settings = SubResource("LabelSettings_title")
 
-[node name="Hint" type="Label" parent="ScreenLayer" unique_id=679389515]
+[node name="Hint" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 117.0
 offset_right = 1220.0
 offset_bottom = 162.0
-text = "Single-view room blockout. Click side arrows to move."
+text = "First-person blockout view. Click side arrows to turn."
 label_settings = SubResource("LabelSettings_hint")
 
-[node name="ViewWall" type="Polygon2D" parent="." unique_id=1893051158]
+[node name="ViewWall" type="Polygon2D" parent="."]
 position = Vector2(960, 555)
-color = Color(0.15, 0.155, 0.18, 1)
+color = Color(0.145, 0.155, 0.17, 1)
 polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
-[node name="ObjectLayer" type="Node2D" parent="." unique_id=582404059]
+[node name="ObjectLayer" type="Node2D" parent="."]
 
-[node name="GoLeftToStudy" type="Area2D" parent="ObjectLayer" unique_id=62952916]
+[node name="TurnLeftToWest" type="Area2D" parent="ObjectLayer"]
 position = Vector2(105, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.central_hall.go_left_to_study"
+object_id = "house.central_hall.turn_left_to_west"
 object_kind = 3
-display_name = "Study"
-hover_text = "Go left to Study"
+display_name = "Turn Left"
+hover_text = "Turn left"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.study"
-target_scene_path = "res://levels/house/study.tscn"
+target_view_id = "house.central_hall.west"
+target_scene_path = "res://levels/house/central_hall_west.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/GoLeftToStudy" unique_id=1989280212]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToWest"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(58, -120, -58, 0, 58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/GoLeftToStudy" unique_id=1961567551]
-shape = SubResource("RectangleShape2D_jxf71")
-metadata/_interactive_collision_shape_unique = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToWest"]
+shape = SubResource("RectangleShape2D_turn")
 
-[node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/GoLeftToStudy" unique_id=317672024]
+[node name="TurnRightToEast" type="Area2D" parent="ObjectLayer"]
+position = Vector2(1815, 540)
+script = ExtResource("2_view_exit_object")
+object_id = "house.central_hall.turn_right_to_east"
+object_kind = 3
+display_name = "Turn Right"
+hover_text = "Turn right"
+hotspot_size = Vector2(180, 720)
+target_view_id = "house.central_hall.east"
+target_scene_path = "res://levels/house/central_hall_east.tscn"
 
-[node name="DoorToParlour" type="Area2D" parent="ObjectLayer" unique_id=1310422793]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToEast"]
+color = Color(0.25, 0.43, 0.58, 0.82)
+polygon = PackedVector2Array(-58, -120, 58, 0, -58, 120)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToEast"]
+shape = SubResource("RectangleShape2D_turn")
+
+[node name="DoorToDiningRoom" type="Area2D" parent="ObjectLayer"]
 position = Vector2(960, 560)
 script = ExtResource("2_view_exit_object")
-object_id = "house.central_hall.door_to_parlour"
+object_id = "house.central_hall.doorToDiningRoom"
 object_kind = 3
-display_name = "Parlour"
-hover_text = "Go through to Parlour"
+display_name = "Dining Room"
+hover_text = "Go through to Dining Room"
 hotspot_size = Vector2(260, 360)
-target_view_id = "house.parlour"
-target_scene_path = "res://levels/house/parlour.tscn"
+target_view_id = "house.dining_room"
+target_scene_path = "res://levels/house/dining_room.tscn"
 
-[node name="DoorBlock" type="Polygon2D" parent="ObjectLayer/DoorToParlour" unique_id=26694800]
+[node name="DoorBlock" type="Polygon2D" parent="ObjectLayer/DoorToDiningRoom"]
 color = Color(0.34, 0.24, 0.18, 0.95)
 polygon = PackedVector2Array(-120, -180, 120, -180, 120, 180, -120, 180)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/DoorToParlour" unique_id=1388813072]
-shape = SubResource("RectangleShape2D_p2gg2")
-metadata/_interactive_collision_shape_unique = true
-
-[node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/DoorToParlour" unique_id=421069566]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/DoorToDiningRoom"]
+shape = SubResource("RectangleShape2D_door")

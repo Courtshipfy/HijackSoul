@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca75xmu3cf4c4"
-path="res://.godot/imported/tunnel_right.png-d321ab912283e06f2824ae66d506a30f.ctex"
+uid="uid://bjt25auq7mhe1"
+path="res://.godot/imported/tunnel_book.png-0e19851a7abc9f5275faf48385a93bab.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://arts/train/environment/tunnel_right.png"
-dest_files=["res://.godot/imported/tunnel_right.png-d321ab912283e06f2824ae66d506a30f.ctex"]
+source_file="res://arts/train/environment/tunnel_book.png"
+dest_files=["res://.godot/imported/tunnel_book.png-0e19851a7abc9f5275faf48385a93bab.ctex"]
 
 [params]
 

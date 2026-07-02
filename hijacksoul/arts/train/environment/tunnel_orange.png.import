@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca75xmu3cf4c4"
-path="res://.godot/imported/tunnel_right.png-d321ab912283e06f2824ae66d506a30f.ctex"
+uid="uid://cox1socohajsd"
+path="res://.godot/imported/tunnel_orange.png-b3018977e6f6f0f370fa40c8bed32dc3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://arts/train/environment/tunnel_right.png"
-dest_files=["res://.godot/imported/tunnel_right.png-d321ab912283e06f2824ae66d506a30f.ctex"]
+source_file="res://arts/train/environment/tunnel_orange.png"
+dest_files=["res://.godot/imported/tunnel_orange.png-b3018977e6f6f0f370fa40c8bed32dc3.ctex"]
 
 [params]
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
+[ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 36
@@ -12,6 +13,9 @@ font_color = Color(0.8, 0.78, 0.7, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_turn"]
 size = Vector2(180, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
+size = Vector2(190, 140)
 
 [node name="BedroomSouthView" type="Node2D"]
 script = ExtResource("1_room_view")
@@ -49,6 +53,50 @@ color = Color(0.17, 0.145, 0.18, 1)
 polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
 [node name="ObjectLayer" type="Node2D" parent="."]
+
+[node name="BianchengBook" type="Area2D" parent="ObjectLayer"]
+position = Vector2(820, 660)
+script = ExtResource("3_interactive_object")
+object_id = "house.bedroom.biancheng"
+display_name = "《边城》"
+hover_text = "查看《边城》"
+hotspot_size = Vector2(190, 140)
+default_actions = Array[Dictionary]([{
+"inspect_id": "house.bedroom.biancheng",
+"pages": ["书页自动翻到结尾。", "这个人也许永远不回来了，也许“明天”回来。"],
+"title": "《边城》",
+"type": "open_item_inspect"
+}])
+auto_build_actions = false
+
+[node name="Block" type="Polygon2D" parent="ObjectLayer/BianchengBook"]
+color = Color(0.42, 0.28, 0.2, 0.95)
+polygon = PackedVector2Array(-84, -54, 84, -54, 84, 54, -84, 54)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/BianchengBook"]
+shape = SubResource("RectangleShape2D_item")
+
+[node name="PaperNote" type="Area2D" parent="ObjectLayer"]
+position = Vector2(1100, 660)
+script = ExtResource("3_interactive_object")
+object_id = "house.bedroom.paper_note"
+display_name = "纸条"
+hover_text = "查看纸条"
+hotspot_size = Vector2(190, 140)
+default_actions = Array[Dictionary]([{
+"inspect_id": "house.bedroom.paper_note",
+"pages": ["二周目出现占位。", "一个邮箱地址。"],
+"title": "纸条",
+"type": "open_item_inspect"
+}])
+auto_build_actions = false
+
+[node name="Block" type="Polygon2D" parent="ObjectLayer/PaperNote"]
+color = Color(0.76, 0.72, 0.58, 0.95)
+polygon = PackedVector2Array(-80, -45, 80, -45, 80, 45, -80, 45)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/PaperNote"]
+shape = SubResource("RectangleShape2D_item")
 
 [node name="TurnLeftToEast" type="Area2D" parent="ObjectLayer"]
 position = Vector2(105, 540)

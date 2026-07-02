@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
+[ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 36
@@ -10,10 +11,16 @@ font_color = Color(0.92, 0.9, 0.82, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_hint"]
 font_color = Color(0.8, 0.78, 0.7, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_side"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_turn"]
 size = Vector2(180, 720)
 
-[node name="DiningRoomView" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(260, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
+size = Vector2(220, 180)
+
+[node name="DiningRoomNorthView" type="Node2D"]
 script = ExtResource("1_room_view")
 view_id = "house.dining_room"
 scene_path = "res://levels/house/dining_room.tscn"
@@ -32,7 +39,7 @@ offset_left = 72.0
 offset_top = 54.0
 offset_right = 840.0
 offset_bottom = 114.0
-text = "Dining Room"
+text = "Dining Room - North"
 label_settings = SubResource("LabelSettings_title")
 
 [node name="Hint" type="Label" parent="ScreenLayer"]
@@ -40,7 +47,7 @@ offset_left = 72.0
 offset_top = 117.0
 offset_right = 1220.0
 offset_bottom = 162.0
-text = "Single-view room blockout. Click side arrows to move."
+text = "First-person blockout view. Click side arrows to turn."
 label_settings = SubResource("LabelSettings_hint")
 
 [node name="ViewWall" type="Polygon2D" parent="."]
@@ -50,38 +57,70 @@ polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
 [node name="ObjectLayer" type="Node2D" parent="."]
 
-[node name="GoLeftToKitchen" type="Area2D" parent="ObjectLayer"]
+[node name="Telephone" type="Area2D" parent="ObjectLayer"]
+position = Vector2(960, 650)
+script = ExtResource("3_interactive_object")
+object_id = "house.dining_room.telephone"
+display_name = "电话"
+hover_text = "查看电话"
+hotspot_size = Vector2(220, 160)
+default_actions = Array[Dictionary]([{
+"completion_actions": [{
+"flag_id": "house.dining_room.telephone_story_placeholder",
+"type": "set_flag",
+"value": true
+}],
+"completion_message": "剧情占位：电话",
+"detail_label": "按下拨号键",
+"detail_messages": ["先是待机声，随后是无人接听的语音播报。"],
+"detail_required_clicks": 1,
+"detail_sounds": ["telephone_dial_wait"],
+"inspect_id": "house.dining_room.telephone",
+"pages": ["一部餐厅里的电话。绿色拨号键还亮着。"],
+"title": "电话",
+"type": "open_item_inspect"
+}])
+auto_build_actions = false
+
+[node name="Block" type="Polygon2D" parent="ObjectLayer/Telephone"]
+color = Color(0.18, 0.4, 0.28, 0.95)
+polygon = PackedVector2Array(-100, -52, 100, -52, 100, 52, -100, 52)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/Telephone"]
+shape = SubResource("RectangleShape2D_item")
+
+[node name="TurnLeftToWest" type="Area2D" parent="ObjectLayer"]
 position = Vector2(105, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.dining_room.go_left_to_kitchen"
+object_id = "house.dining_room.turn_left_to_west"
 object_kind = 3
-display_name = "Kitchen"
-hover_text = "Go left to Kitchen"
+display_name = "Turn Left"
+hover_text = "Turn left"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.kitchen"
-target_scene_path = "res://levels/house/kitchen.tscn"
+target_view_id = "house.dining_room.west"
+target_scene_path = "res://levels/house/dining_room_west.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/GoLeftToKitchen"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToWest"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(58, -120, -58, 0, 58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/GoLeftToKitchen"]
-shape = SubResource("RectangleShape2D_side")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToWest"]
+shape = SubResource("RectangleShape2D_turn")
 
-[node name="GoRightToCentralHall" type="Area2D" parent="ObjectLayer"]
+[node name="TurnRightToEast" type="Area2D" parent="ObjectLayer"]
 position = Vector2(1815, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.dining_room.go_right_to_central_hall"
+object_id = "house.dining_room.turn_right_to_east"
 object_kind = 3
-display_name = "Central Hall"
-hover_text = "Go right to Central Hall"
+display_name = "Turn Right"
+hover_text = "Turn right"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.central_hall"
-target_scene_path = "res://levels/house/central_hall.tscn"
+target_view_id = "house.dining_room.east"
+target_scene_path = "res://levels/house/dining_room_east.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/GoRightToCentralHall"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToEast"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(-58, -120, 58, 0, -58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/GoRightToCentralHall"]
-shape = SubResource("RectangleShape2D_side")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToEast"]
+shape = SubResource("RectangleShape2D_turn")

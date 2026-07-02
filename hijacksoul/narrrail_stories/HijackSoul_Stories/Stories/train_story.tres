@@ -333,11 +333,6 @@ story_data = {
 }, {
 "priority": 0,
 "sourceHandle": "",
-"sourceNodeId": "N_TrainStory_076",
-"targetNodeId": "N_TrainStory_077"
-}, {
-"priority": 0,
-"sourceHandle": "",
 "sourceNodeId": "N_TrainStory_077",
 "targetNodeId": "N_TrainStory_078"
 }, {
@@ -553,28 +548,23 @@ story_data = {
 }, {
 "priority": 0,
 "sourceHandle": "",
-"sourceNodeId": "node-1782915347637",
-"targetNodeId": "N_TrainStory_076"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "N_TrainStory_075",
-"targetNodeId": "N_TrainStory_066"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "node-1782923488811",
-"targetNodeId": "node-1782923549509"
-}, {
-"priority": 0,
-"sourceHandle": "",
-"sourceNodeId": "node-1782923549509",
+"sourceNodeId": "N_TrainStory_069",
 "targetNodeId": "N_TrainStory_070"
 }, {
 "priority": 0,
 "sourceHandle": "",
-"sourceNodeId": "N_TrainStory_069",
-"targetNodeId": "node-1782923488811"
+"sourceNodeId": "N_TrainStory_075",
+"targetNodeId": "N_TrainStory_076"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "N_TrainStory_076",
+"targetNodeId": "N_TrainStory_066"
+}, {
+"priority": 0,
+"sourceHandle": "",
+"sourceNodeId": "node-1782915347637",
+"targetNodeId": "N_TrainStory_077"
 }],
 "meta": {
 "entryNodeId": "N_TrainStory_001",
@@ -1191,7 +1181,7 @@ story_data = {
 "params": {
 "environment": "train.lighting",
 "state": "dark_tunnel",
-"transition_seconds": 0.8
+"transition_seconds": 1.2
 }
 }, {
 "eventType": "timeline.wait",
@@ -1234,7 +1224,7 @@ story_data = {
 "nodeId": "N_TrainStory_075",
 "nodeType": "EmitEvent",
 "params": {
-"seconds": 15
+"seconds": 5
 }
 }, {
 "eventType": "environment.set_state",
@@ -1567,22 +1557,6 @@ story_data = {
 "enabled": true,
 "object": "train.orange",
 "visible": true
-}
-}, {
-"eventType": "environment.set_state",
-"nodeId": "node-1782923488811",
-"nodeType": "EmitEvent",
-"params": {
-"environment": "train.LeftWindowViewVisual",
-"state": "tunnel_left"
-}
-}, {
-"eventType": "environment.set_state",
-"nodeId": "node-1782923549509",
-"nodeType": "EmitEvent",
-"params": {
-"environment": "train.RightWindowViewVisual",
-"state": "tunnel_right"
 }
 }],
 "variables": []

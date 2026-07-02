@@ -10,27 +10,27 @@
 [ext_resource type="PackedScene" path="res://modules/interaction/prefabs/story_trigger_object.tscn" id="6_story_trigger"]
 [ext_resource type="PackedScene" uid="uid://dov6x1yvtmpxh" path="res://ui/dialogue/dialogue_overlay.tscn" id="7_dialogue_overlay"]
 [ext_resource type="Texture2D" uid="uid://cfnos0icdg0w8" path="res://arts/train/9C1914BAB45DFE81674BD7402D56D832.png" id="8_right_window_view"]
+[ext_resource type="Texture2D" uid="uid://d5f1qquiqopd" path="res://arts/train/CF6D03AA89B447DCBA508819874B8305.png" id="9_5wkan"]
 [ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="9_train_music"]
 [ext_resource type="Texture2D" uid="uid://cpga1vu5fqjbe" path="res://assets/ui/dialogue/player_dialogue_bubble.png" id="12_bbvoe"]
 [ext_resource type="FontFile" uid="uid://86iho6ado7g4" path="res://assets/fonts/ui/simsun.ttc" id="13_1kvv8"]
 [ext_resource type="Texture2D" uid="uid://5enkwtlmk3od" path="res://assets/ui/dialogue/npc_dialogue_bubble.png" id="14_risb3"]
 [ext_resource type="FontFile" uid="uid://g148mjs36qeq" path="res://assets/fonts/ui/cascadia_code.ttf" id="15_r2kyi"]
 [ext_resource type="FontFile" uid="uid://biyigmrfm8hit" path="res://assets/fonts/ui/simhei.ttf" id="16_d8wpw"]
-[ext_resource type="Texture2D" uid="uid://nxf3ct0l224h" path="res://arts/train/environment/tunnel_dark_overlay.png" id="17_tunnel_dark_overlay"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5wkan"]
-resource_local_to_scene = true
-size = Vector2(520, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r2kyi"]
 resource_local_to_scene = true
-size = Vector2(400, 250)
+size = Vector2(520, 760)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d8wpw"]
 resource_local_to_scene = true
-size = Vector2(393, 770)
+size = Vector2(400, 250)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txwux"]
+resource_local_to_scene = true
+size = Vector2(393, 770)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_12qeo"]
 resource_local_to_scene = true
 size = Vector2(1320, 223)
 
@@ -49,9 +49,9 @@ variation_embolden = 0.08
 base_font = ExtResource("16_d8wpw")
 variation_embolden = 0.05
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12qeo"]
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lmhll"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0504k"]
 
 [node name="Train" type="Node2D" unique_id=1415883330]
 script = ExtResource("1_fr42t")
@@ -100,7 +100,7 @@ toast_message = "窗外的原野被列车拉成一片柔和的光。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/left_window_view" index="1" unique_id=783993008]
 position = Vector2(-740, -5)
-shape = SubResource("RectangleShape2D_5wkan")
+shape = SubResource("RectangleShape2D_r2kyi")
 
 [node name="right_window_view" parent="ObjectLayer" unique_id=1113968700 instance=ExtResource("3_o1hdh")]
 position = Vector2(960, 540)
@@ -113,7 +113,7 @@ toast_message = "另一侧的窗外掠过明亮的田野。"
 
 [node name="CollisionShape2D" parent="ObjectLayer/right_window_view" index="1" unique_id=783993008]
 position = Vector2(755, -405)
-shape = SubResource("RectangleShape2D_r2kyi")
+shape = SubResource("RectangleShape2D_d8wpw")
 
 [node name="girl" parent="ObjectLayer" unique_id=1575039868 instance=ExtResource("6_story_trigger")]
 visible = false
@@ -129,11 +129,11 @@ hotspot_offset = Vector2(146, -75)
 
 [node name="Sprite2D" parent="ObjectLayer/girl" index="0"]
 scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_train_background")
+texture = ExtResource("9_5wkan")
 
 [node name="CollisionShape2D" parent="ObjectLayer/girl" index="1"]
 position = Vector2(146, -75)
-shape = SubResource("RectangleShape2D_d8wpw")
+shape = SubResource("RectangleShape2D_txwux")
 metadata/_interactive_collision_shape_unique = true
 
 [node name="desk" parent="ObjectLayer" unique_id=1242919155 instance=ExtResource("3_o1hdh")]
@@ -153,7 +153,7 @@ texture = ExtResource("4_fr42t")
 
 [node name="CollisionShape2D" parent="ObjectLayer/desk" index="1" unique_id=783993008]
 position = Vector2(190, 418.5)
-shape = SubResource("RectangleShape2D_txwux")
+shape = SubResource("RectangleShape2D_12qeo")
 
 [node name="OrangeVisual" type="Sprite2D" parent="ObjectLayer" unique_id=1812619142]
 visible = false
@@ -182,15 +182,6 @@ auto_build_actions = false
 visible = false
 position = Vector2(1552.0001, 953.00006)
 scale = Vector2(0.68, 0.68)
-
-[node name="LightingOverlay" type="TextureRect" parent="." unique_id=1294380428]
-visible = false
-offset_right = 1920.0
-offset_bottom = 1080.0
-mouse_filter = 2
-texture = ExtResource("17_tunnel_dark_overlay")
-expand_mode = 1
-stretch_mode = 6
 
 [node name="PrototypeDebugHud" type="CanvasLayer" parent="." unique_id=740369205]
 script = ExtResource("5_m4isg")
@@ -239,7 +230,7 @@ offset_top = 851.0
 offset_right = 1402.0
 offset_bottom = 1057.0
 mouse_filter = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_12qeo")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lmhll")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/PlayerDialogueBubble/PlayerBubble" index="0"]
 texture = ExtResource("12_bbvoe")
@@ -263,7 +254,7 @@ offset_top = 505.0
 offset_right = 1392.0
 offset_bottom = 721.0
 mouse_filter = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_lmhll")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0504k")
 
 [node name="BackgroundTexture" parent="DialogueOverlay/DialogueStage/NpcDialogueBubble/NpcBubble" index="0"]
 offset_right = -45.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
@@ -14,13 +14,16 @@ font_color = Color(0.8, 0.78, 0.7, 1)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_turn"]
 size = Vector2(180, 720)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
-size = Vector2(220, 170)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(260, 360)
 
-[node name="BedroomEastView" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_item"]
+size = Vector2(220, 180)
+
+[node name="ParlourWestView" type="Node2D"]
 script = ExtResource("1_room_view")
-view_id = "house.bedroom.east"
-scene_path = "res://levels/house/bedroom_east.tscn"
+view_id = "house.parlour.west"
+scene_path = "res://levels/house/parlour_west.tscn"
 
 [node name="ScreenLayer" type="CanvasLayer" parent="."]
 layer = -10
@@ -29,14 +32,14 @@ layer = -10
 offset_right = 1920.0
 offset_bottom = 1080.0
 mouse_filter = 2
-color = Color(0.115, 0.125, 0.13, 1)
+color = Color(0.12, 0.105, 0.125, 1)
 
 [node name="Title" type="Label" parent="ScreenLayer"]
 offset_left = 72.0
 offset_top = 54.0
 offset_right = 840.0
 offset_bottom = 114.0
-text = "Bedroom - East"
+text = "Parlour - West"
 label_settings = SubResource("LabelSettings_title")
 
 [node name="Hint" type="Label" parent="ScreenLayer"]
@@ -49,65 +52,43 @@ label_settings = SubResource("LabelSettings_hint")
 
 [node name="ViewWall" type="Polygon2D" parent="."]
 position = Vector2(960, 555)
-color = Color(0.145, 0.17, 0.18, 1)
+color = Color(0.17, 0.14, 0.18, 1)
 polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 
 [node name="ObjectLayer" type="Node2D" parent="."]
 
-[node name="Map" type="Area2D" parent="ObjectLayer"]
-position = Vector2(960, 520)
-script = ExtResource("3_interactive_object")
-object_id = "house.bedroom.map"
-display_name = "地图"
-hover_text = "查看地图"
-hotspot_size = Vector2(220, 170)
-default_actions = Array[Dictionary]([{
-"inspect_id": "house.bedroom.map",
-"pages": ["一张中国地图，被图钉钉在墙上。地图上标着一个红点。", "就是在这个地方，我遇见了一个自由的女孩......我们还会再见面吗？"],
-"title": "地图",
-"type": "open_item_inspect"
-}])
-auto_build_actions = false
-
-[node name="Block" type="Polygon2D" parent="ObjectLayer/Map"]
-color = Color(0.58, 0.52, 0.37, 0.95)
-polygon = PackedVector2Array(-110, -85, 110, -85, 110, 85, -110, 85)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/Map"]
-shape = SubResource("RectangleShape2D_item")
-
-[node name="TurnLeftToNorth" type="Area2D" parent="ObjectLayer"]
+[node name="TurnLeftToSouth" type="Area2D" parent="ObjectLayer"]
 position = Vector2(105, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.bedroom.east.turn_left_to_north"
+object_id = "house.parlour.west.turn_left_to_south"
 object_kind = 3
 display_name = "Turn Left"
 hover_text = "Turn left"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.bedroom"
-target_scene_path = "res://levels/house/bedroom.tscn"
+target_view_id = "house.parlour.south"
+target_scene_path = "res://levels/house/parlour_south.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToNorth"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnLeftToSouth"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(58, -120, -58, 0, 58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToNorth"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnLeftToSouth"]
 shape = SubResource("RectangleShape2D_turn")
 
-[node name="TurnRightToSouth" type="Area2D" parent="ObjectLayer"]
+[node name="TurnRightToNorth" type="Area2D" parent="ObjectLayer"]
 position = Vector2(1815, 540)
 script = ExtResource("2_view_exit_object")
-object_id = "house.bedroom.east.turn_right_to_south"
+object_id = "house.parlour.west.turn_right_to_north"
 object_kind = 3
 display_name = "Turn Right"
 hover_text = "Turn right"
 hotspot_size = Vector2(180, 720)
-target_view_id = "house.bedroom.south"
-target_scene_path = "res://levels/house/bedroom_south.tscn"
+target_view_id = "house.parlour"
+target_scene_path = "res://levels/house/parlour.tscn"
 
-[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToSouth"]
+[node name="ArrowBlock" type="Polygon2D" parent="ObjectLayer/TurnRightToNorth"]
 color = Color(0.25, 0.43, 0.58, 0.82)
 polygon = PackedVector2Array(-58, -120, 58, 0, -58, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToSouth"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectLayer/TurnRightToNorth"]
 shape = SubResource("RectangleShape2D_turn")

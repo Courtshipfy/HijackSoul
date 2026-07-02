@@ -47,6 +47,8 @@ func _run_action(action: Dictionary, context: Dictionary) -> bool:
 			return _set_object_state(action, context)
 		"set_environment_state":
 			return _set_environment_state(action, context)
+		"open_item_inspect":
+			return _open_item_inspect(action, context)
 		"open_puzzle":
 			return _open_puzzle(action, context)
 		"show_toast":
@@ -149,6 +151,24 @@ func _set_environment_state(action: Dictionary, context: Dictionary) -> bool:
 			"action": action.duplicate(true),
 			"context": context.duplicate(true)
 		})
+	return true
+
+func _open_item_inspect(action: Dictionary, context: Dictionary) -> bool:
+	var inspect_id := String(action.get("inspect_id", action.get("id", "")))
+	if inspect_id.is_empty():
+		inspect_id = String(context.get("object_id", ""))
+	if inspect_id.is_empty():
+		_fail(action, context, "open_item_inspect requires inspect_id.")
+		return false
+
+	var config := action.duplicate(true)
+	config["inspect_id"] = inspect_id
+	config.erase("type")
+	config.erase("action_type")
+
+	var bus := _event_bus()
+	if bus != null:
+		bus.item_inspect_requested.emit(config, context.duplicate(true))
 	return true
 
 func _open_puzzle(action: Dictionary, context: Dictionary) -> bool:
