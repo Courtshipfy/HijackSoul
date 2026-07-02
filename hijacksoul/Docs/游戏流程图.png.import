@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c3orqmj4g6cfl"
-path="res://.godot/imported/游戏流程图.png-1bb4bb25c338de203fae858ab7747f5c.ctex"
+path="res://.godot/imported/游戏流程图.png-19ead76fd580bf309008bdcc9c7e8bde.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Docs/游戏流程图.png"
-dest_files=["res://.godot/imported/游戏流程图.png-1bb4bb25c338de203fae858ab7747f5c.ctex"]
+source_file="res://docs/游戏流程图.png"
+dest_files=["res://.godot/imported/游戏流程图.png-19ead76fd580bf309008bdcc9c7e8bde.ctex"]
 
 [params]
 

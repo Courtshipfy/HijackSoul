@@ -73,7 +73,7 @@ polygon = PackedVector2Array(-540, -255, 540, -255, 420, 255, -420, 255)
 [node name="ObjectLayer" type="Node2D" parent="." unique_id=1059676321]
 
 [node name="SpringPen" type="Area2D" parent="ObjectLayer" unique_id=1870572467]
-position = Vector2(760, 680)
+position = Vector2(642, 533)
 script = ExtResource("3_interactive_object")
 object_id = "house.bedroom.spring_pen"
 display_name = "弹簧笔"
@@ -108,7 +108,7 @@ metadata/_interactive_collision_shape_unique = true
 [node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/SpringPen" unique_id=833679449]
 
 [node name="Notebook" type="Area2D" parent="ObjectLayer" unique_id=731165758]
-position = Vector2(1140, 680)
+position = Vector2(1275, 482)
 script = ExtResource("3_interactive_object")
 object_id = "house.bedroom.notebook"
 display_name = "笔记本"
@@ -133,7 +133,7 @@ metadata/_interactive_collision_shape_unique = true
 [node name="Sprite2D" type="Sprite2D" parent="ObjectLayer/Notebook" unique_id=1296033051]
 
 [node name="MobilePhone" type="Area2D" parent="ObjectLayer" unique_id=729061619]
-position = Vector2(960, 780)
+position = Vector2(1266, 693)
 script = ExtResource("3_interactive_object")
 object_id = "house.bedroom.mobile_phone"
 display_name = "手机"
