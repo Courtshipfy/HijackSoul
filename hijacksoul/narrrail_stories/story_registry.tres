@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="NarrRailStoryRegistry" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="NarrRailStoryRegistry" format=3 uid="uid://dgbehoejuxut0"]
 
-[ext_resource type="Script" path="res://addons/narrrail/narrrail_story_registry_resource.gd" id="1_registry"]
+[ext_resource type="Script" uid="uid://cuiljsnptcrcu" path="res://addons/narrrail/narrrail_story_registry_resource.gd" id="1_registry"]
 
 [resource]
 script = ExtResource("1_registry")
 resource_root = "res://narrrail_stories"
-generated_at_unix = 0
+generated_at_unix = 1783007224
 story_paths = {
 "train_story": "res://narrrail_stories/HijackSoul_Stories/Stories/train_story.tres"
 }
@@ -16,9 +16,9 @@ story_metadata = {
 "train_story": {
 "basename": "train_story",
 "path": "res://narrrail_stories/HijackSoul_Stories/Stories/train_story.tres",
-"source_path": "",
-"source_relative_path": "",
+"source_path": "/Users/courtship/Projects/HijackSoul_Stories/Stories/train_story.nrstory",
+"source_relative_path": "Stories/train_story.nrstory",
 "title": "",
-"updated_at_unix": 0
+"updated_at_unix": 1783007224.331419
 }
 }

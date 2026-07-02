@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bs27m7hjxd8o2" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" uid="uid://3u1mp3rdjttc" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
 [ext_resource type="Script" uid="uid://bk34yd4otcbsn" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
+[ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="music_sink_daylight"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 36
@@ -39,6 +40,7 @@ size = Vector2(260, 360)
 script = ExtResource("1_room_view")
 view_id = "house.bedroom"
 scene_path = "res://levels/house/bedroom.tscn"
+music_stream = ExtResource("music_sink_daylight")
 
 [node name="ScreenLayer" type="CanvasLayer" parent="." unique_id=1745992062]
 layer = -10
@@ -81,11 +83,14 @@ hover_text = "查看弹簧笔"
 hotspot_size = Vector2(180, 140)
 default_actions = Array[Dictionary]([{
 "completion_actions": [{
-"flag_id": "house.bedroom.spring_pen_story_placeholder",
-"type": "set_flag",
-"value": true
+"once_flag": "house.bedroom.spring_pen_train_done",
+"return_scene_path": "res://levels/house/bedroom.tscn",
+"return_view_id": "house.bedroom",
+"scene_id": "train",
+"scene_path": "res://scenes/train.tscn",
+"story_id": "train_story",
+"type": "start_subscene_story"
 }],
-"completion_message": "剧情占位：弹簧笔",
 "detail_label": "拨动弹簧头",
 "detail_messages": ["弹簧卡住了。", "还是没有弹开。", "弹簧终于弹开了。"],
 "detail_required_clicks": 3,

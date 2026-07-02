@@ -49,6 +49,8 @@ func _run_action(action: Dictionary, context: Dictionary) -> bool:
 			return _set_environment_state(action, context)
 		"open_item_inspect":
 			return _open_item_inspect(action, context)
+		"start_subscene_story":
+			return await _start_subscene_story(action, context)
 		"open_puzzle":
 			return _open_puzzle(action, context)
 		"show_toast":
@@ -170,6 +172,16 @@ func _open_item_inspect(action: Dictionary, context: Dictionary) -> bool:
 	if bus != null:
 		bus.item_inspect_requested.emit(config, context.duplicate(true))
 	return true
+
+func _start_subscene_story(action: Dictionary, context: Dictionary) -> bool:
+	var flow_manager := get_tree().root.get_node_or_null("SubSceneFlowManager")
+	if flow_manager == null:
+		_fail(action, context, "SubSceneFlowManager autoload is missing.")
+		return false
+	if not flow_manager.has_method("start_subscene_story"):
+		_fail(action, context, "SubSceneFlowManager cannot start subscene stories.")
+		return false
+	return await flow_manager.start_subscene_story(action, context)
 
 func _open_puzzle(action: Dictionary, context: Dictionary) -> bool:
 	var puzzle_id := String(action.get("puzzle_id", ""))

@@ -9,9 +9,14 @@ func _run() -> void:
 	var overlay := root.get_node("ItemInspectOverlay")
 	var game_state := root.get_node("GameState")
 	var sounds: Array[String] = []
+	var completion_overlay_visibility: Array[bool] = []
 
 	bus.sound_play_requested.connect(func(_object_id: String, sound_id: String, _payload: Dictionary):
 		sounds.append(sound_id)
+	)
+	runner.action_started.connect(func(action: Dictionary, _context: Dictionary):
+		if String(action.get("type", "")) == "set_flag" and String(action.get("flag_id", "")) == "test.inspect.complete":
+			completion_overlay_visibility.append(overlay.visible)
 	)
 
 	var ok: bool = await runner.run_actions([{
@@ -51,6 +56,10 @@ func _run() -> void:
 	await process_frame
 	if game_state.get_flag("test.inspect.complete", false) != true:
 		push_error("Expected completion flag after required clicks.")
+		quit(1)
+		return
+	if completion_overlay_visibility != [false]:
+		push_error("Expected inspect overlay to be hidden before completion actions. Got: %s" % str(completion_overlay_visibility))
 		quit(1)
 		return
 

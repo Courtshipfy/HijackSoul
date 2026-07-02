@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="hijacksoul"
-run/main_scene="uid://bpgc6uujodga3"
+run/main_scene="uid://cyuafly2qt6sv"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -22,8 +22,10 @@ GameState="*res://autoload/game_state.gd"
 SaveManager="*res://autoload/save_manager.gd"
 SceneFlowManager="*res://autoload/scene_flow_manager.gd"
 InventoryManager="*res://autoload/inventory_manager.gd"
+SceneMusicManager="*res://autoload/scene_music_manager.gd"
 StoryEventRouter="*res://autoload/story_event_router.gd"
 StoryBridge="*res://autoload/story_bridge.gd"
+SubSceneFlowManager="*res://autoload/sub_scene_flow_manager.gd"
 EnvironmentVisualController="*res://autoload/environment_visual_controller.gd"
 ActionRunner="*res://modules/interaction/action_runner.gd"
 InteractionManager="*res://modules/interaction/interaction_manager.gd"

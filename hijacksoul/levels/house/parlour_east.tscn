@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://levels/shared/room_view.gd" id="1_room_view"]
 [ext_resource type="Script" path="res://modules/interaction/view_exit_object.gd" id="2_view_exit_object"]
 [ext_resource type="Script" path="res://modules/interaction/interactive_object.gd" id="3_interactive_object"]
+[ext_resource type="AudioStream" uid="uid://c5e3h5cldh2uh" path="res://music/Sink into the Daylight.ogg" id="music_sink_daylight"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font_size = 36
@@ -24,6 +25,7 @@ size = Vector2(220, 180)
 script = ExtResource("1_room_view")
 view_id = "house.parlour.east"
 scene_path = "res://levels/house/parlour_east.tscn"
+music_stream = ExtResource("music_sink_daylight")
 
 [node name="ScreenLayer" type="CanvasLayer" parent="."]
 layer = -10

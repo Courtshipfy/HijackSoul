@@ -188,8 +188,11 @@ func _on_target_pressed() -> void:
 
 	_completion_running = true
 	_target_button.disabled = true
-	await _run_completion_actions()
-	_hide_overlay()
+	var config := _config.duplicate(true)
+	var context := _context.duplicate(true)
+	visible = false
+	await _run_completion_actions(config, context)
+	_clear_overlay_state()
 
 func _emit_detail_sound() -> void:
 	var sounds: Array = []
@@ -218,12 +221,12 @@ func _show_detail_feedback() -> void:
 	if _detail_clicks - 1 < messages.size():
 		_body_label.text = String(messages[_detail_clicks - 1])
 
-func _run_completion_actions() -> void:
+func _run_completion_actions(config: Dictionary, base_context: Dictionary) -> void:
 	var actions: Array = []
-	var raw_actions: Variant = _config.get("completion_actions", [])
+	var raw_actions: Variant = config.get("completion_actions", [])
 	if typeof(raw_actions) == TYPE_ARRAY:
 		actions = raw_actions
-	var completion_message := String(_config.get("completion_message", "")).strip_edges()
+	var completion_message := String(config.get("completion_message", "")).strip_edges()
 	if not completion_message.is_empty():
 		actions.append({"type": "show_toast", "message": completion_message})
 	if actions.is_empty():
@@ -231,13 +234,16 @@ func _run_completion_actions() -> void:
 	var runner := get_tree().root.get_node_or_null("ActionRunner")
 	if runner == null:
 		return
-	var context := _context.duplicate(true)
-	context["inspect_id"] = String(_config.get("inspect_id", ""))
+	var context := base_context.duplicate(true)
+	context["inspect_id"] = String(config.get("inspect_id", ""))
 	context["save_reason"] = "item_inspect"
 	await runner.run_actions(actions, context)
 
 func _hide_overlay() -> void:
 	visible = false
+	_clear_overlay_state()
+
+func _clear_overlay_state() -> void:
 	_config.clear()
 	_context.clear()
 	_pages.clear()
